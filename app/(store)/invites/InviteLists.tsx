@@ -126,6 +126,8 @@ export default function InviteLists({ invites, filters }: InviteListsProps) {
     return () => observer.disconnect();
   }, [filteredInvites.length]);
  
+  console.log("invites data", invites);
+  
   return (
     <PageLayout>
       <Header />
