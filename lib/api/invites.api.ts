@@ -5,12 +5,19 @@ import API from "./config";
    FETCH ALL INVITES
 ---------------------------- */
 export async function fetchInvites() {
+  console.log("API URL:", `${API}/invites`);
+
   const res = await fetch(`${API}/invites`, {
-    next: { revalidate: 3600 },
+    cache: "no-store",
   });
 
-  if (!res.ok) throw new Error("Failed to fetch invites");
-  return res.json();
+  console.log("Status:", res.status);
+
+  const data = await res.json();
+
+  console.log("Response:", data);
+
+  return data;
 }
 
 /* ---------------------------
