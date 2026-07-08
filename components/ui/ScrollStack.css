@@ -1,0 +1,11 @@
+.scroll-stack {
+  width: 100%;
+}
+
+.scroll-stack-card {
+  /* height: 20rem; */
+  margin-bottom: 80px;
+  transform-origin: top center;
+  will-change: transform;
+}
+

@@ -1,0 +1,25 @@
+/* baseLayers.css */
+:root {
+  --layer-xs: 120px;
+  --layer-sm: 180px;
+  --layer-md: 260px;
+  --layer-lg: 360px;
+  --layer-xl: 520px;
+}
+
+/* semantic mapping */
+.layer-xs {
+  width: var(--layer-xs);
+}
+.layer-sm {
+  width: var(--layer-sm);
+}
+.layer-md {
+  width: var(--layer-md);
+}
+.layer-lg {
+  width: var(--layer-lg);
+}
+.layer-xl {
+  width: var(--layer-xl);
+}
