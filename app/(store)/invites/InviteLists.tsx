@@ -58,6 +58,7 @@ export default function InviteLists({ invites, filters }: InviteListsProps) {
   const [search, setSearch] = useState("");
   const { categories, types, styles } = filters;
   const PAGE_SIZE = 10;
+  console.log("invites data 1", invites);
 
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
