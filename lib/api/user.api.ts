@@ -1,5 +1,6 @@
-const API = process.env.NEXT_PUBLIC_API!;
+import API from "./config";
 
+ 
 export const fetchMyProfile = async (token: string) => {
   const res = await fetch(`${API}/user/me`, {
     headers: {

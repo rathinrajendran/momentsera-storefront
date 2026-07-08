@@ -1,4 +1,4 @@
-const API = process.env.NEXT_PUBLIC_API!;
+import API from "./config";
 
 export const fetchAccounts = async () => {
   const res = await fetch(`${API}/accounts`);

@@ -1,5 +1,6 @@
-const API = process.env.NEXT_PUBLIC_API;
+import API from "./config";
 
+ 
 /* ---------------------------
    FETCH ALL INVITES
 ---------------------------- */
@@ -41,8 +42,7 @@ export async function fetchInviteByKey(inviteKey: string) {
 export async function updateEventKey(eventId: number, eventKey: string) {
   const base = process.env.NEXT_PUBLIC_API?.replace(/\/$/, "");
 
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   const res = await fetch(`${base}/events/${eventId}/event-key`, {
     method: "PATCH",
