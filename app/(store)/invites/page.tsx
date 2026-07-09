@@ -13,6 +13,9 @@ export default async function Invites() {
 
   try {
     invites = await fetchInvites();
+
+    console.log("PAGE INVITES", invites);
+    console.log("IS ARRAY", Array.isArray(invites));
   } catch (error) {
     console.error("Failed to fetch invites:", error);
   }
