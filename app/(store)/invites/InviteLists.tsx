@@ -278,11 +278,11 @@ export default function InviteLists({ invites, filters }: InviteListsProps) {
                 variants={itemVariants}
                 initial="hidden"
                 animate="show"
-                className="group w-full rounded-md bg-white sm:w-[calc(50%-0.375rem)] md:w-[calc(33.333%-0.5rem)] lg:w-[calc(25%-0.5625rem)] xl:w-[calc(20%-0.6rem)]"
+                className="group w-[calc(50%-0.375rem)] rounded-md bg-white md:w-[calc(33.333%-0.5rem)] lg:w-[calc(25%-0.5625rem)] xl:w-[calc(20%-0.6rem)]"
               >
                 {/* CARD */}
                 <div
-                  className="relative overflow-hidden rounded-md transition-all duration-500 cursor-pointer"
+                  className="relative cursor-pointer overflow-hidden rounded-md transition-all duration-500"
                   onClick={() => router.push(`/invites/${invite.main_category}/${invite.invite_key}`)}
                 >
                   <div className="relative aspect-[16/18]">
@@ -309,16 +309,16 @@ export default function InviteLists({ invites, filters }: InviteListsProps) {
                   </div>
                 </div>
                 {/* METADATA */}
-                <div className="flex flex-col items-start justify-between rounded-lg bg-white p-4">
+                <div className="flex flex-col items-start justify-between rounded-lg bg-white pt-1 pb-4">
                   <div>
-                    <h3 className="text-md font-bold tracking-tighter text-[var(--text-primary)] capitalize transition-colors group-hover:text-[var(--accent-primary)]">
+                    <h3 className="text-xs md:text-md font-bold tracking-tighter text-[var(--text-primary)] capitalize transition-colors group-hover:text-[var(--accent-primary)]">
                       {invite.shortname}
                     </h3>
                   </div>
                   {/* PRICE */}
                   <div className="flex items-center gap-2">
                     <p className="text-xs font-bold tracking-normal text-[var(--text-secondary)]">₹{invite.price}</p>
-                    <p className="text-xs tracking-normal text-[var(--text-light)]">Access from</p>
+                    <p className="text-xs tracking-normal text-[var(--text-light)]">Starting from</p>
                   </div>
                   <div className="mt-1 flex items-center gap-3">
                     <span className="text-[0.6rem] tracking-[0.2rem] text-[var(--text-muted)] capitalize uppercase">
