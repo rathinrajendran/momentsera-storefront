@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import AuthLayout from "../../components/auth/AuthLayout";
 import PasswordInput from "../../components/auth/PasswordInput";
 import PasswordStrength from "../../components/auth/PasswordStrength";
 
-export default function ResetPasswordPage() {
+// 1. Move the form logic into its own inner component
+function ResetPasswordForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const token = searchParams.get("token");
@@ -53,7 +54,7 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <AuthLayout title="Choose New Password">
+    <>
       {success ? (
         <div className="w-full space-y-2 text-center">
           <div className="rounded-md border border-green-200 bg-green-50 p-4 text-sm font-medium text-green-600">
@@ -85,6 +86,17 @@ export default function ResetPasswordPage() {
           </button>
         </form>
       )}
+    </>
+  );
+}
+
+// 2. The main page component wraps everything in Suspense
+export default function ResetPasswordPage() {
+  return (
+    <AuthLayout title="Choose New Password">
+      <Suspense fallback={<div className="text-center text-sm text-gray-500">Loading form...</div>}>
+        <ResetPasswordForm />
+      </Suspense>
     </AuthLayout>
   );
 }

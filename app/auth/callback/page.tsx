@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { setAccessToken } from "../../../utils/apiClient";
 
-export default function AuthCallbackPage() {
+// 1. Move the search params and authentication logic into an inner component
+function AuthCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
@@ -38,5 +39,20 @@ export default function AuthCallbackPage() {
     <div className="flex h-screen w-screen items-center justify-center bg-zinc-50">
       <p className="animate-pulse text-sm font-medium text-zinc-500">Authenticating...</p>
     </div>
+  );
+}
+
+// 2. Wrap the dynamic component inside a Suspense boundary in the default export
+export default function AuthCallbackPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex h-screen w-screen items-center justify-center bg-zinc-50">
+          <p className="animate-pulse text-sm font-medium text-zinc-400">Loading authentication handler...</p>
+        </div>
+      }
+    >
+      <AuthCallbackContent />
+    </Suspense>
   );
 }

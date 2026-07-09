@@ -9,11 +9,16 @@ const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
 
 export async function apiClient(endpoint: string, options: RequestInit & { skipAuth?: boolean } = {}) {
   const { skipAuth = false, headers, ...customConfig } = options;
-  const reqHeaders: HeadersInit = { "Content-Type": "application/json", ...headers };
+
+  // Change type from HeadersInit to Record<string, string>
+  const reqHeaders: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...(headers as Record<string, string>),
+  };
 
   const token = getAccessToken();
   if (token && !skipAuth) {
-    reqHeaders["Authorization"] = `Bearer ${token}`;
+    reqHeaders["Authorization"] = `Bearer ${token}`; // No more error!
   }
 
   const config: RequestInit = { ...customConfig, headers: reqHeaders, credentials: "include" };
