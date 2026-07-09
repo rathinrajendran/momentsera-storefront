@@ -1,23 +1,15 @@
-import API from "./config";
+const API = process.env.NEXT_PUBLIC_API;
 
- 
 /* ---------------------------
    FETCH ALL INVITES
 ---------------------------- */
 export async function fetchInvites() {
-  console.log("API URL:", `${API}/invites`);
-
   const res = await fetch(`${API}/invites`, {
-    cache: "no-store",
+    next: { revalidate: 3600 },
   });
 
-  console.log("Status:", res.status);
-
-  const data = await res.json();
-
-  console.log("Response:", data);
-
-  return data;
+  if (!res.ok) throw new Error("Failed to fetch invites");
+  return res.json();
 }
 
 /* ---------------------------

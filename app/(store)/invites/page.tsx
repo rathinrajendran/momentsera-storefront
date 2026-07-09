@@ -6,24 +6,15 @@ export const metadata = {
   description: "Browse premium invitation invites",
 };
 
-export const dynamic = "force-dynamic";
-
 export default async function Invites() {
-  let invites: any[] = [];
-
-  try {
-    invites = await fetchInvites();
-
-    console.log("PAGE INVITES", invites);
-    console.log("IS ARRAY", Array.isArray(invites));
-  } catch (error) {
-    console.error("Failed to fetch invites:", error);
-  }
+  const invites = await fetchInvites();
 
   const filters = {
-    categories: ["all", ...new Set(invites.map((item) => item.main_category))],
-    types: ["all", ...new Set(invites.map((item) => item.type))],
-    styles: ["all", ...new Set(invites.map((item) => item.style_category))],
+    categories: ["all", ...Array.from(new Set<string>(invites.map((item: any) => item.main_category)))],
+
+    types: ["all", ...Array.from(new Set<string>(invites.map((item: any) => item.type)))],
+
+    styles: ["all", ...Array.from(new Set<string>(invites.map((item: any) => item.style_category)))],
   };
 
   return <InviteLists invites={invites} filters={filters} />;
