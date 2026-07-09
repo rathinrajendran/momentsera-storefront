@@ -6,7 +6,7 @@ export function useSession() {
 
     const refresh = async () => {
       try {
-        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/refresh`, {
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`, {
           method: "POST",
           credentials: "include",
         });

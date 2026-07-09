@@ -14,6 +14,8 @@ import { Button } from "../../../../../components/ui/button";
 import { H2 } from "../../../../../components/ui/H2";
 import { H6 } from "../../../../../components/ui/H6";
 import { Para } from "../../../../../components/ui/Para";
+import { apiClient } from "../../../../../utils/apiClient";
+import { useAuth } from "../../../../hooks/useAuth";
 
 /* ──────────────────────────────────────────
    TOKENS
@@ -47,6 +49,7 @@ export default function InviteInner({ invite }: any) {
   const [mounted, setMounted] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(0);
   const targetDate = useMemo(() => addDays(new Date(), 5), []);
+  const { user, loading } = useAuth();
   useEffect(() => {
     setMounted(true);
     const initialDiff = differenceInSeconds(targetDate, new Date());
@@ -82,14 +85,7 @@ export default function InviteInner({ invite }: any) {
     );
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        router.push("/account/login");
-        return;
-      }
+      await apiClient("/auth/me");
 
       router.push(`/invites/${invite.main_category}/${invite.invite_key}/onboarding`);
     } catch {

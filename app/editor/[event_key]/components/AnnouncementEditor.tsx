@@ -20,6 +20,7 @@ import { themeAnnouncementMedia, AnnouncementImageKey } from "../../../../utils/
 import { cn } from "../../../../utils/utils";
 import { LabelForm } from "../../../../components/ui/LabelForm";
 import EditorHeader from "./EditorHeader";
+import { getAccessToken } from "../../../../utils/apiClient";
 
 /* ---------------- SCHEMA ---------------- */
 
@@ -55,9 +56,8 @@ export default function AnnouncementEditor({ onBack, eventKey }: { onBack: () =>
   const eventId = draft.invite.id;
   const mutation = useSaveEventSection(eventKey, eventId);
 
-
   console.log("draft data", draft);
-  
+
   // Derived values
   const themeKey = draft?.invite?.invite_key ?? "aura";
   const announcement: Announcement = draft.announcement ?? {};
@@ -134,7 +134,6 @@ export default function AnnouncementEditor({ onBack, eventKey }: { onBack: () =>
       return;
     }
 
-    // ✅ fall back to current crop if user never dragged
     const cropToUse: PixelCrop =
       completedCrop ??
       (() => {
@@ -153,16 +152,22 @@ export default function AnnouncementEditor({ onBack, eventKey }: { onBack: () =>
       quality: 0.85,
       maxWidth: activeRule.width,
     });
+
     const tempUrl = URL.createObjectURL(croppedFile);
     const tempId = crypto.randomUUID();
 
     const formData = new FormData();
     formData.append("image", croppedFile);
 
+    const token = getAccessToken();
+
     const res = await fetch(`${process.env.NEXT_PUBLIC_API}/gallery/upload`, {
       method: "POST",
+      credentials: "include",
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        ...(token && {
+          Authorization: `Bearer ${token}`,
+        }),
       },
       body: formData,
     });
@@ -192,7 +197,6 @@ export default function AnnouncementEditor({ onBack, eventKey }: { onBack: () =>
     setActiveImage(null);
     setCompletedCrop(null);
   }
-
   function removeAnnouncementImage(key: AnnouncementImageKey) {
     const nextMedia = { ...announcementMedia };
     if (!nextMedia[key]) return;

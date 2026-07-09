@@ -8,8 +8,10 @@ export const getAccessToken = () => memoizedAccessToken;
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
 
-export async function apiClient(endpoint: string, options: RequestInit & { skipAuth?: boolean } = {}) {
-  const { skipAuth = false, headers, ...customConfig } = options;
+// Added requireAuth to the options type
+export async function apiClient(endpoint: string, options: RequestInit & { skipAuth?: boolean; requireAuth?: boolean } = {}) {
+  // requireAuth defaults to false so public storefront pages don't force login redirects
+  const { skipAuth = false, requireAuth = false, headers, ...customConfig } = options;
 
   const requestHeaders: Record<string, string> = {
     "Content-Type": "application/json",
@@ -28,20 +30,21 @@ export async function apiClient(endpoint: string, options: RequestInit & { skipA
     credentials: "include",
   });
 
-  // Access token expired
+  // Access token expired or missing
   if (response.status === 401 && !skipAuth) {
     const refreshedToken = await attemptTokenRefresh();
 
     if (!refreshedToken) {
       setAccessToken(null);
 
-      if (typeof window !== "undefined") {
+      // ONLY redirect to login if the page or request explicitly requires authentication
+      if (requireAuth && typeof window !== "undefined") {
         sessionStorage.clear();
-        // window.location.replace("/account/login?error=session_expired");
         window.location.replace("/account/login?error=session_expired");
       }
 
-      throw new Error("Session expired");
+      // If auth is not required, throw the error silently or catch it below to let the UI handle it gracefully
+      throw new Error("Session expired or unauthorized");
     }
 
     response = await fetch(`${BASE_URL}${endpoint}`, {
@@ -56,7 +59,6 @@ export async function apiClient(endpoint: string, options: RequestInit & { skipA
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
-
     throw new Error(error.message ?? error.error ?? `HTTP ${response.status}`);
   }
 
@@ -69,7 +71,7 @@ export async function apiClient(endpoint: string, options: RequestInit & { skipA
 
 async function attemptTokenRefresh(): Promise<string | null> {
   try {
-    const response = await fetch(`${BASE_URL}/api/auth/refresh`, {
+    const response = await fetch(`${BASE_URL}/auth/refresh`, {
       method: "POST",
       credentials: "include",
     });
@@ -85,7 +87,6 @@ async function attemptTokenRefresh(): Promise<string | null> {
     }
 
     setAccessToken(data.accessToken);
-
     return data.accessToken;
   } catch {
     return null;

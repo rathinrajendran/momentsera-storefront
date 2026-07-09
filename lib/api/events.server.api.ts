@@ -1,5 +1,7 @@
 // events.server.api.ts
 
+import { getAccessToken } from "../../utils/apiClient";
+
 export async function fetchEventByKey(eventKey: string) {
   if (!eventKey) return null;
 
@@ -16,26 +18,28 @@ export async function fetchEventByKey(eventKey: string) {
 // events.server.api.ts
 
 export async function deleteEvent(eventId: number) {
-  if (!eventId) return null;
+  if (!eventId) {
+    return null;
+  }
 
-  const base = process.env.NEXT_PUBLIC_API?.replace(/\/$/, "");
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const base = process.env.NEXT_PUBLIC_API!.replace(/\/$/, "");
+  const token = getAccessToken();
 
   const res = await fetch(`${base}/events/${eventId}`, {
     method: "DELETE",
+    credentials: "include",
+    cache: "no-store",
     headers: {
       "Content-Type": "application/json",
       ...(token && {
         Authorization: `Bearer ${token}`,
       }),
     },
-    cache: "no-store",
   });
 
   if (!res.ok) {
     const err = await res.json().catch(() => null);
-    throw new Error(err?.error ?? "Failed to delete event");
+    throw new Error(err?.message ?? "Failed to delete event");
   }
 
   return res.json();

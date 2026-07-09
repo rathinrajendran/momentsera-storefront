@@ -1,39 +1,49 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { apiClient } from "../../utils/apiClient";
 
 interface AuthUser {
-  name: string;
+  id: number;
+  full_name: string;
   email: string;
   role: "admin" | "user" | "guest";
 }
 
 export function useAuth() {
   const [user, setUser] = useState<AuthUser | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Attempt to verify the presence of a valid runtime session
-    const token = localStorage.getItem("access_token");
-    if (!token) {
-      setLoading(false);
-      return;
-    }
+    let mounted = true;
 
-    // Optional: Decode JWT in frontend to set user info locally, or fetch user profile data
-    // Here we assume a fast verification/profile endpoint
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data && data.success) {
+    const loadUser = async () => {
+      try {
+        const data = await apiClient("/auth/me");
+
+        if (mounted) {
           setUser(data.user);
-        } else {
-          localStorage.removeItem("access_token");
         }
-      })
-      .catch(() => localStorage.removeItem("access_token"))
-      .finally(() => setLoading(false));
+      } catch {
+        if (mounted) {
+          setUser(null);
+        }
+      } finally {
+        if (mounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadUser();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
-  return { user, loading, isAuthenticated: !!user, setUser };
+  return {
+    user,
+    loading,
+    isAuthenticated: !!user,
+    setUser,
+  };
 }

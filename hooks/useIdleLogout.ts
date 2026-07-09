@@ -17,7 +17,7 @@ export function useIdleLogout({ enabled }: { enabled: boolean }) {
     isLoggingOut.current = true;
 
     try {
-      await fetch(`${API}/api/auth/logout`, {
+      await fetch(`${API}/auth/logout`, {
         method: "POST",
         credentials: "include",
       });

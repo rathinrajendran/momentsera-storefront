@@ -3,7 +3,7 @@ import React from "react";
 export default function GoogleButton() {
   const handleGoogleRedirect = () => {
     // Redirect context window to your Google OAuth client URL initialization route
-    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/google/redirect`;
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google/redirect`;
   };
 
   return (

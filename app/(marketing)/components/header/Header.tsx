@@ -9,7 +9,8 @@ import { useRouter } from "next/navigation";
 import { H2 } from "../../../../components/ui/H2";
 import { H6 } from "../../../../components/ui/H6";
 import { FullScreenMenu } from "./FullScreenMenu";
-import { apiClient } from "../../../../utils/apiClient";
+import { logout } from "../../../../utils/apiClient";
+import { useAuth } from "../../../../hooks/useAuth";
 type headerProps = {
   className?: string;
 };
@@ -20,37 +21,10 @@ export function Header({ className }: headerProps) {
   const [profileOpen, setProfileOpen] = React.useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const lastScrollY = React.useRef(0);
+  const { user, loading, isLoggedIn, refreshUser } = useAuth();
 
-  /* ─────────────────────────────
-     AUTH STATE
-  ───────────────────────────── */
-
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-
-  React.useEffect(() => {
-    let mounted = true;
-
-    const checkSession = async () => {
-      try {
-        const user = await apiClient("/api/auth/me");
-
-        if (mounted) {
-          setIsLoggedIn(!!user);
-        }
-      } catch {
-        if (mounted) {
-          setIsLoggedIn(false);
-        }
-      }
-    };
-
-    checkSession();
-
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
+  console.log("isLoggedIn", isLoggedIn);
+  
   /* ─────────────────────────────
      SCROLL HIDE
   ───────────────────────────── */
@@ -78,18 +52,11 @@ export function Header({ className }: headerProps) {
 
   const handleLogout = async () => {
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
-        method: "POST",
-        credentials: "include",
-      });
-    } catch (err) {
-      console.error(err);
+      await logout();
+    } finally {
+      router.replace("/account/login");
+      router.refresh();
     }
-
-    sessionStorage.clear();
-
-    router.replace("/account/login");
-    router.refresh();
   };
 
   return (
