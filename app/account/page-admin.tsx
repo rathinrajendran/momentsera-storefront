@@ -138,7 +138,7 @@ export default function Dashboard() {
       {/* Sidebar */}
       <aside className="hidden w-72 border-r border-neutral-200 bg-white lg:flex lg:flex-col">
         <div className="border-b border-neutral-200 p-6">
-          <h1 className="text-xl font-bold">Evllyne Studio</h1>
+          <h1 className="text-xl font-bold">Momentsera Studio</h1>
           <p className="mt-1 text-sm text-neutral-500">Admin Dashboard</p>
         </div>
 
@@ -169,7 +169,7 @@ export default function Dashboard() {
 
             <div>
               <p className="text-sm font-semibold">Admin User</p>
-              <p className="text-xs text-neutral-500">admin@evllyne.com</p>
+              <p className="text-xs text-neutral-500">admin@momentsera.com</p>
             </div>
           </div>
         </div>
