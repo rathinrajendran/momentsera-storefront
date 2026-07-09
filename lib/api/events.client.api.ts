@@ -2,70 +2,59 @@
 
 const base = process.env.NEXT_PUBLIC_API!.replace(/\/$/, "");
 
+/* ---------- COMMON FETCH ---------- */
+
+async function apiFetch(url: string, options: RequestInit = {}) {
+  const res = await fetch(`${base}${url}`, {
+    credentials: "include",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.headers || {}),
+    },
+  });
+
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({}));
+    throw new Error(error.message || "Request failed");
+  }
+
+  return res.json();
+}
+
 /* ---------- CREATE / ONBOARDING ---------- */
+
 export type UpsertOnboardingPayload = {
   invite_key: string;
   event_type: string;
-  stage: string; // UI progress marker only
-  data?: Record<string, any>; // 👈 generic seed data
+  stage: string;
+  data?: Record<string, any>;
 };
 
-export async function upsertOnboarding(
-  payload: UpsertOnboardingPayload
-) {
-  const res = await fetch(`${base}/events/onboarding`, {
+export function upsertOnboarding(payload: UpsertOnboardingPayload) {
+  return apiFetch("/events/onboarding", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
     body: JSON.stringify(payload),
   });
-
-  if (!res.ok) throw new Error("Onboarding failed");
-
-  return res.json();
 }
 
-/* ---------- SAVE SECTION (UNIVERSAL) ---------- */
+/* ---------- SAVE SECTION ---------- */
 
-export async function saveEventSection(
-  eventId: number,
-  path: string,
-  data: Record<string, any>,
-  stage?: string
-) {
-  const res = await fetch(
-    `${base}/events/${eventId}/section`,
-    {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify({ path, data, stage }),
-    }
-  );
-
-  if (!res.ok) throw new Error("Save failed");
-
-  return res.json();
+export function saveEventSection(eventId: number, path: string, data: Record<string, any>, stage?: string) {
+  return apiFetch(`/events/${eventId}/section`, {
+    method: "PATCH",
+    body: JSON.stringify({
+      path,
+      data,
+      stage,
+    }),
+  });
 }
-
 
 /* ---------- PUBLISH ---------- */
-export async function publishEvent(eventId: number) {
-  const res = await fetch(
-    `${base}/events/${eventId}/publish`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    }
-  );
 
-  if (!res.ok) throw new Error("Publish failed");
-
-  return res.json();
+export function publishEvent(eventId: number) {
+  return apiFetch(`/events/${eventId}/publish`, {
+    method: "POST",
+  });
 }

@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { H2 } from "../../../../components/ui/H2";
 import { H6 } from "../../../../components/ui/H6";
 import { FullScreenMenu } from "./FullScreenMenu";
+import { apiClient } from "../../../../utils/apiClient";
 type headerProps = {
   className?: string;
 };
@@ -24,14 +25,31 @@ export function Header({ className }: headerProps) {
      AUTH STATE
   ───────────────────────────── */
 
-  const [token, setToken] = React.useState("");
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+
   React.useEffect(() => {
-    const t = localStorage.getItem("token") || "";
+    let mounted = true;
 
-    setToken(t);
+    const checkSession = async () => {
+      try {
+        const user = await apiClient("/api/auth/me");
+
+        if (mounted) {
+          setIsLoggedIn(!!user);
+        }
+      } catch {
+        if (mounted) {
+          setIsLoggedIn(false);
+        }
+      }
+    };
+
+    checkSession();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
-
-  const isLoggedIn = !!token;
 
   /* ─────────────────────────────
      SCROLL HIDE
@@ -58,10 +76,20 @@ export function Header({ className }: headerProps) {
      LOGOUT
   ───────────────────────────── */
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    router.push("/account/login");
-    window.location.reload();
+  const handleLogout = async () => {
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (err) {
+      console.error(err);
+    }
+
+    sessionStorage.clear();
+
+    router.replace("/account/login");
+    router.refresh();
   };
 
   return (

@@ -16,6 +16,6 @@ export async function submitOnboarding(
     ...data,
   });
 
-  localStorage.setItem("active_event_key", result.event_key);
+  sessionStorage.setItem("active_event_key", result.event_key);
   return result;
 }

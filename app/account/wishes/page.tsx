@@ -60,8 +60,8 @@ export default function WishPage() {
       invitation: item.groom_name && item.bride_name ? `${item.groom_name} & ${item.bride_name}` : item.event_key,
       message: item.wishes,
       type: item.wishes_type,
-      audio_url: item.media ? `${process.env.NEXT_PUBLIC_API_URL}/${item.media}` : "",
-      video_url: item.media ? `${process.env.NEXT_PUBLIC_API_URL}/${item.media}` : "",
+      audio_url: item.media ? `${process.env.NEXT_PUBLIC_API}/${item.media}` : "",
+      video_url: item.media ? `${process.env.NEXT_PUBLIC_API}/${item.media}` : "",
       duration: item.duration,
       status: item.status,
       date: new Date(item.created_at).toLocaleDateString("en-GB", {

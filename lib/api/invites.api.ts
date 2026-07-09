@@ -41,15 +41,11 @@ export async function fetchInviteByKey(inviteKey: string) {
 export async function updateEventKey(eventId: number, eventKey: string) {
   const base = process.env.NEXT_PUBLIC_API?.replace(/\/$/, "");
 
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-
   const res = await fetch(`${base}/events/${eventId}/event-key`, {
     method: "PATCH",
+    credentials: "include", // ✅ Send HttpOnly cookie
     headers: {
       "Content-Type": "application/json",
-      ...(token && {
-        Authorization: `Bearer ${token}`,
-      }),
     },
     body: JSON.stringify({
       event_key: eventKey,
@@ -59,7 +55,7 @@ export async function updateEventKey(eventId: number, eventKey: string) {
   if (!res.ok) {
     const err = await res.json().catch(() => null);
 
-    throw new Error(err?.error ?? "Failed to update event key");
+    throw new Error(err?.message ?? err?.error ?? "Failed to update event key");
   }
 
   return res.json();

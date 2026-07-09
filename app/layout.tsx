@@ -75,6 +75,8 @@ import {
 import Providers from "./providers";
 import StyledComponentsRegistry from "./(store)/invites/[eventType]/[inviteKey]/onboarding/styled-registry";
 import SmoothScroll from "../components/ui/SmoothScroll";
+import { useEffect } from "react";
+import { setAccessToken } from "../utils/apiClient";
 
 /* ─────────────────────────────────────────
    BODY / UI
@@ -465,6 +467,29 @@ const fontClasses = [
 ].join(" ");
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    const init = async () => {
+      try {
+        const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
+
+        const res = await fetch(`${API}/api/auth/refresh`, {
+          method: "POST",
+          credentials: "include",
+        });
+
+        if (!res.ok) {
+          console.log("Refresh skipped:", res.status);
+          return;
+        }
+
+        const data = await res.json();
+
+        setAccessToken(data.accessToken);
+      } catch {}
+    };
+
+    init();
+  }, []);
   return (
     <html lang="en" data-qb-installed="true">
       <body className={`${fontClasses} antialiased`}>

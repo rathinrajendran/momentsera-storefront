@@ -2,68 +2,70 @@
 
 import { useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import API from "../lib/api/config";
 
 const IDLE_LIMIT = 60 * 60 * 1000; // 1 hour
 
 export function useIdleLogout({ enabled }: { enabled: boolean }) {
   const router = useRouter();
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const logout = useCallback(() => {
-    console.log("Auto logout due to inactivity");
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isLoggingOut = useRef(false);
 
-    // Clear ONLY auth-related keys
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    localStorage.removeItem("uid");
-    localStorage.removeItem("active_event_key");
-    localStorage.removeItem("pending_event");
-    localStorage.removeItem("last_activity");
+  const logout = useCallback(async () => {
+    if (isLoggingOut.current) return;
+    isLoggingOut.current = true;
 
-    router.replace("/account/login");
-  }, [router]);
+    try {
+      await fetch(`${API}/api/auth/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
 
-  const resetTimer = useCallback(() => {
-    localStorage.setItem("last_activity", Date.now().toString());
+    sessionStorage.clear();
 
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
 
-    timeoutRef.current = setTimeout(logout, IDLE_LIMIT);
+    router.replace("/account/login");
+  }, [router]);
+
+  const resetTimer = useCallback(() => {
+    sessionStorage.setItem("last_activity", Date.now().toString());
+
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      logout();
+    }, IDLE_LIMIT);
   }, [logout]);
 
   useEffect(() => {
     if (!enabled) return;
 
-    // 🔐 Cold-start inactivity check
-    const lastActivity = Number(
-      localStorage.getItem("last_activity")
-    );
+    const lastActivity = Number(sessionStorage.getItem("last_activity") ?? "0");
 
-    if (
-      lastActivity &&
-      Date.now() - lastActivity > IDLE_LIMIT
-    ) {
+    if (lastActivity && Date.now() - lastActivity > IDLE_LIMIT) {
       logout();
       return;
     }
 
-    const events = [
-      "mousedown",
-      "mousemove",
-      "keydown",
-      "scroll",
-      "touchstart",
-    ];
+    const events = ["mousedown", "mousemove", "keydown", "scroll", "touchstart", "click"];
 
     events.forEach((event) =>
-      document.addEventListener(event, resetTimer, true)
+      window.addEventListener(event, resetTimer, {
+        passive: true,
+      }),
     );
 
     document.addEventListener("visibilitychange", resetTimer);
 
-    // Start fresh timer
     resetTimer();
 
     return () => {
@@ -71,14 +73,9 @@ export function useIdleLogout({ enabled }: { enabled: boolean }) {
         clearTimeout(timeoutRef.current);
       }
 
-      events.forEach((event) =>
-        document.removeEventListener(event, resetTimer, true)
-      );
+      events.forEach((event) => window.removeEventListener(event, resetTimer));
 
-      document.removeEventListener(
-        "visibilitychange",
-        resetTimer
-      );
+      document.removeEventListener("visibilitychange", resetTimer);
     };
-  }, [enabled, resetTimer, logout]);
+  }, [enabled, logout, resetTimer]);
 }

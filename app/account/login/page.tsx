@@ -32,9 +32,19 @@ export default function LoginPage() {
         throw new Error(data.message || "Invalid credentials");
       }
 
-      // Store Access Token in memory or context, Refresh Token is handled in HttpOnly cookies
-      localStorage.setItem("access_token", data.accessToken);
-      router.push("/dashboard");
+      // Backend already created HttpOnly cookie.
+
+      const pending = sessionStorage.getItem("pending_event");
+
+      if (pending) {
+        const invite = JSON.parse(pending);
+
+        sessionStorage.removeItem("pending_event");
+
+        router.replace(`/invites/${invite.event_type}/${invite.invite_key}/onboarding`);
+      } else {
+        router.replace("/dashboard");
+      }
     } catch (err: any) {
       setError(err.message);
     } finally {

@@ -71,24 +71,31 @@ export default function InviteInner({ invite }: any) {
 
   if (!mounted) return null;
 
-function handleBuy() {
-  localStorage.setItem(
-    "pending_event",
-    JSON.stringify({
-      invite_key: invite.invite_key,
-      event_type: invite.main_category,
-    }),
-  );
+  const handleBuy = async () => {
+    sessionStorage.setItem(
+      "pending_event",
+      JSON.stringify({
+        invite_key: invite.invite_key,
+        event_type: invite.main_category,
+        created_at: Date.now(),
+      }),
+    );
 
-  const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/me`, {
+        credentials: "include",
+      });
 
-  if (!token) {
-    router.push("/account/login");
-    return;
-  }
+      if (!response.ok) {
+        router.push("/account/login");
+        return;
+      }
 
-  router.push(`/invites/${invite.main_category}/${invite.invite_key}/onboarding`);
-}
+      router.push(`/invites/${invite.main_category}/${invite.invite_key}/onboarding`);
+    } catch {
+      router.push("/account/login");
+    }
+  };
 
   return (
     <main className="relative min-h-screen w-full overflow-hidden bg-[var(--background)] text-[var(--text-primary)] selection:bg-[var(--accent-primary)] selection:text-white">
