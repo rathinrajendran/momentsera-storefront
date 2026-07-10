@@ -14,8 +14,7 @@ import { Button } from "../../../../../components/ui/button";
 import { H2 } from "../../../../../components/ui/H2";
 import { H6 } from "../../../../../components/ui/H6";
 import { Para } from "../../../../../components/ui/Para";
-import { useAuth } from "../../../../../hooks/useAuth";
-import { apiClient } from "../../../../../lib/api/apiClient";
+import { useSession } from "../../../../../hooks/useSession";
 
 /* ──────────────────────────────────────────
    TOKENS
@@ -49,7 +48,7 @@ export default function InviteInner({ invite }: any) {
   const [mounted, setMounted] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(0);
   const targetDate = useMemo(() => addDays(new Date(), 5), []);
-  const { user, loading } = useAuth();
+  const { user, isAuthenticated: isLoggedIn, loading, refresh } = useSession();
   useEffect(() => {
     setMounted(true);
     const initialDiff = differenceInSeconds(targetDate, new Date());
@@ -74,24 +73,22 @@ export default function InviteInner({ invite }: any) {
 
   if (!mounted) return null;
 
-  const handleBuy = async () => {
-    sessionStorage.setItem(
-      "pending_event",
-      JSON.stringify({
-        invite_key: invite.invite_key,
-        event_type: invite.main_category,
-        created_at: Date.now(),
-      }),
-    );
+const handleBuy = () => {
+  sessionStorage.setItem(
+    "pending_event",
+    JSON.stringify({
+      invite_key: invite.invite_key,
+      event_type: invite.main_category,
+      created_at: Date.now(),
+    }),
+  );
 
-    try {
-      await apiClient("/auth/me");
-
-      router.push(`/invites/${invite.main_category}/${invite.invite_key}/onboarding`);
-    } catch {
-      router.push("/account/login");
-    }
-  };
+  if (isLoggedIn) {
+    router.push(`/invites/${invite.main_category}/${invite.invite_key}/onboarding`);
+  } else {
+    router.push("/account/login");
+  }
+};
 
   return (
     <main className="relative min-h-screen w-full overflow-hidden bg-[var(--background)] text-[var(--text-primary)] selection:bg-[var(--accent-primary)] selection:text-white">

@@ -9,8 +9,8 @@ import { useRouter } from "next/navigation";
 import { H2 } from "../../../../components/ui/H2";
 import { H6 } from "../../../../components/ui/H6";
 import { FullScreenMenu } from "./FullScreenMenu";
-import { useAuth } from "../../../../hooks/useAuth";
-import { logout } from "../../../../lib/api/apiClient";
+import { useLogout } from "../../../../hooks/useLogout";
+import { useSession } from "../../../../hooks/useSession";
 type headerProps = {
   className?: string;
 };
@@ -21,10 +21,10 @@ export function Header({ className }: headerProps) {
   const [profileOpen, setProfileOpen] = React.useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const lastScrollY = React.useRef(0);
-  const { user, loading, isLoggedIn, refreshUser } = useAuth();
-
+  const { user, isAuthenticated: isLoggedIn, loading, refresh } = useSession();
+  const { logout } = useLogout();
   console.log("isLoggedIn", isLoggedIn);
-  
+
   /* ─────────────────────────────
      SCROLL HIDE
   ───────────────────────────── */
@@ -50,13 +50,8 @@ export function Header({ className }: headerProps) {
      LOGOUT
   ───────────────────────────── */
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-    } finally {
-      router.replace("/account/login");
-      router.refresh();
-    }
+  const handleLogout = () => {
+    logout();
   };
 
   return (

@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getMyEvents, getProfile, updateProfile } from "../lib/api/user.api";
+import { QUERY_KEYS } from "../lib/queryKeys";
 
 /* ---------------------------------
    GET MY PROFILE
@@ -7,7 +8,7 @@ import { getMyEvents, getProfile, updateProfile } from "../lib/api/user.api";
 
 export function useMyProfile() {
   return useQuery({
-    queryKey: ["me"],
+    queryKey: QUERY_KEYS.me,
     queryFn: getProfile,
     staleTime: 1000 * 60 * 5,
   });
@@ -23,13 +24,13 @@ export function useUpdateMyProfile() {
   return useMutation({
     mutationFn: updateProfile,
 
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["me"],
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.me,
       });
 
-      queryClient.invalidateQueries({
-        queryKey: ["session"],
+      await queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.session,
       });
     },
   });
@@ -41,7 +42,7 @@ export function useUpdateMyProfile() {
 
 export function useMyEvents() {
   return useQuery({
-    queryKey: ["me-events"],
+    queryKey: QUERY_KEYS.myEvents,
     queryFn: getMyEvents,
     staleTime: 1000 * 60,
   });
