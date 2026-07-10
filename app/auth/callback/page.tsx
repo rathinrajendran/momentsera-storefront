@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
-import { setAccessToken } from "../../../utils/apiClient";
+import { setAccessToken } from "../../../lib/api/apiClient";
 
 function AuthCallbackContent() {
   const router = useRouter();

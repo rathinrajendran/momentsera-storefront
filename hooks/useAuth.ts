@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { getCurrentUser } from "../lib/api/auth.api";
+import { getCurrentUser } from "../auth/session";
 
 export function useAuth() {
   const {
@@ -18,7 +18,7 @@ export function useAuth() {
   return {
     user: user ?? null,
     loading: isLoading,
-    isLoggedIn: !!user,
+    isLoggedIn: user !== null,
     refreshUser: refetch,
   };
 }

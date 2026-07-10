@@ -223,9 +223,8 @@ export default function Dashboard() {
     if (!t) router.replace("/account/login");
   }, [router]);
 
-  const { data: me, isLoading: meLoading } = useMyProfile(token);
-  const { data: events, isLoading: eventsLoading } = useMyEvents(token);
- 
+   const { data: me, isLoading: meLoading } = useMyProfile();
+   const { data: events, isLoading: eventsLoading } = useMyEvents();
 
   const myInvites = useMemo(() => events ?? [], [events]);
   const publishedCount = myInvites.filter((e: any) => e.status?.toLowerCase() === "published").length;

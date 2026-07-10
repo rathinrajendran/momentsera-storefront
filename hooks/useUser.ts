@@ -1,33 +1,36 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  fetchMyProfile,
-  updateMyProfile,
-  fetchMyEvents,
-} from "../lib/api/user.api";
+import { getMyEvents, getProfile, updateProfile } from "../lib/api/user.api";
 
 /* ---------------------------------
    GET MY PROFILE
 ---------------------------------- */
-export const useMyProfile = (token: string) =>
-  useQuery({
+
+export function useMyProfile() {
+  return useQuery({
     queryKey: ["me"],
-    queryFn: () => fetchMyProfile(token),
-    enabled: !!token,
-    staleTime: Infinity,
+    queryFn: getProfile,
+    staleTime: 1000 * 60 * 5,
   });
+}
 
 /* ---------------------------------
    UPDATE MY PROFILE
 ---------------------------------- */
-export function useUpdateMyProfile(token: string) {
-  const qc = useQueryClient();
+
+export function useUpdateMyProfile() {
+  const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (patch: { full_name?: string; phone?: string }) =>
-      updateMyProfile(token, patch),
+    mutationFn: updateProfile,
 
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["me"] });
+      queryClient.invalidateQueries({
+        queryKey: ["me"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["session"],
+      });
     },
   });
 }
@@ -35,10 +38,11 @@ export function useUpdateMyProfile(token: string) {
 /* ---------------------------------
    GET MY EVENTS
 ---------------------------------- */
-export const useMyEvents = (token: string) =>
-  useQuery({
+
+export function useMyEvents() {
+  return useQuery({
     queryKey: ["me-events"],
-    queryFn: () => fetchMyEvents(token),
-    enabled: !!token,
-    staleTime: 0,
+    queryFn: getMyEvents,
+    staleTime: 1000 * 60,
   });
+}

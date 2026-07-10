@@ -1,17 +1,30 @@
-import { apiClient } from "../../utils/apiClient";
+import { User } from "../../types/auth";
 
-export async function login(payload: { email: string; password: string }) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API}/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
-
-  if (!res.ok) throw new Error("Login failed");
-  return res.json();
+export interface LoginPayload {
+  email: string;
+  password: string;
 }
 
-export async function getCurrentUser() {
-  const data = await apiClient("/auth/me");
-  return data.user;
+export interface RegisterPayload {
+  full_name: string;
+  email: string;
+  password: string;
+}
+
+export interface ForgotPasswordPayload {
+  email: string;
+}
+
+export interface ResetPasswordPayload {
+  token: string;
+  password: string;
+}
+
+export interface VerifyEmailPayload {
+  token: string;
+}
+
+export interface AuthResponse {
+  accessToken: string;
+  user: User;
 }

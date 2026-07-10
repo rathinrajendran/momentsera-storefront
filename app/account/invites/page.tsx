@@ -15,6 +15,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import AccountHeader from "../components/AccountHeader";
 import Heading from "../../../components/ui/Heading";
+import { useRequireAuth } from "../../../hooks/useRequireAuth";
 
 export default function MyInvitesPage() {
   const terms = [
@@ -36,19 +37,12 @@ export default function MyInvitesPage() {
       text: "Purchase of an Invite grants a single-event license. Commercial redistribution or reverse-engineering of the UI/UX architecture is strictly prohibited.",
     },
   ];
-  const router = useRouter();
-  const [token, setToken] = useState("");
   const [tab, setTab] = useState<"invites" | "profile">("invites");
+  const { loading } = useRequireAuth();
 
-  useEffect(() => {
-    const t = localStorage.getItem("token") || "";
-    setToken(t);
-    if (!t) router.replace("/account/login");
-  }, [router]);
-
-  const { data: me, isLoading: meLoading } = useMyProfile(token);
-  const { data: events, isLoading: eventsLoading } = useMyEvents(token);
-  const updateMutation = useUpdateMyProfile(token);
+  const { data: me, isLoading: meLoading } = useMyProfile();
+  const { data: events, isLoading: eventsLoading } = useMyEvents();
+  const updateMutation = useUpdateMyProfile();
 
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
@@ -63,7 +57,7 @@ export default function MyInvitesPage() {
   const myInvites = useMemo(() => events ?? [], [events]);
   const publishedCount = myInvites.filter((e: any) => e.status?.toLowerCase() === "published").length;
 
-  if (!token || meLoading) return <div className="min-h-screen bg-[#fafafa]" />;
+  if (loading || meLoading || eventsLoading) return <div className="min-h-screen bg-[#fafafa]" />;
   return (
     <main className="relative min-h-screen overflow-hidden bg-[var(--background)] text-[var(--text-primary)]">
       <Header />
@@ -190,7 +184,7 @@ export default function MyInvitesPage() {
                       </div>
                     </div>
                     <button
-                      onClick={() => updateMutation.mutate({ full_name: fullName, phone })}
+                      onClick={() => updateMutation.mutate({ name: fullName, phone })}
                       className="w-full rounded-2xl bg-[#84a59d] py-5 text-xs font-bold tracking-widest text-[#08090a] uppercase transition-colors hover:bg-white"
                     >
                       {updateMutation.isPending ? "Syncing..." : "Update Studio Profile"}

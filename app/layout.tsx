@@ -71,13 +71,12 @@ import {
   /* Mono */
   JetBrains_Mono,
 } from "next/font/google";
-
-import Providers from "./providers";
+// import "@fontsource-variable/plus-jakarta-sans";
 import StyledComponentsRegistry from "./(store)/invites/[eventType]/[inviteKey]/onboarding/styled-registry";
 import SmoothScroll from "../components/ui/SmoothScroll";
 import { useEffect } from "react";
-import { setAccessToken } from "../utils/apiClient";
-
+import QueryProvider from "../providers/QueryProvider";
+import "./globals.css";
 /* ─────────────────────────────────────────
    BODY / UI
 ───────────────────────────────────────── */
@@ -471,10 +470,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" data-qb-installed="true">
       <body className={`${fontClasses} antialiased`}>
         <StyledComponentsRegistry>
-          <Providers>
+          <QueryProvider>
             {/* <SmoothScroll /> */}
             {children}
-          </Providers>
+          </QueryProvider>
         </StyledComponentsRegistry>
       </body>
     </html>

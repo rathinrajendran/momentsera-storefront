@@ -1,6 +1,8 @@
 // events.server.api.ts
 
-import { getAccessToken } from "../../utils/apiClient";
+import { getAccessToken } from "./apiClient";
+
+
 
 export async function fetchEventByKey(eventKey: string) {
   if (!eventKey) return null;

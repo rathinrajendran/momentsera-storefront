@@ -9,8 +9,8 @@ import { useRouter } from "next/navigation";
 import { H2 } from "../../../../components/ui/H2";
 import { H6 } from "../../../../components/ui/H6";
 import { FullScreenMenu } from "./FullScreenMenu";
-import { logout } from "../../../../utils/apiClient";
 import { useAuth } from "../../../../hooks/useAuth";
+import { logout } from "../../../../lib/api/apiClient";
 type headerProps = {
   className?: string;
 };

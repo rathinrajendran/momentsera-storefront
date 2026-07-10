@@ -14,8 +14,8 @@ import { Button } from "../../../../../components/ui/button";
 import { H2 } from "../../../../../components/ui/H2";
 import { H6 } from "../../../../../components/ui/H6";
 import { Para } from "../../../../../components/ui/Para";
-import { apiClient } from "../../../../../utils/apiClient";
-import { useAuth } from "../../../../hooks/useAuth";
+import { useAuth } from "../../../../../hooks/useAuth";
+import { apiClient } from "../../../../../lib/api/apiClient";
 
 /* ──────────────────────────────────────────
    TOKENS

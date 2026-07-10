@@ -23,8 +23,8 @@ const token = useToken();
 const [fullName, setFullName] = useState("");
 const [phone, setPhone] = useState("");
 
-const { data: me } = useMyProfile(token);
-const updateMutation = useUpdateMyProfile(token);
+  const { data: me, isLoading: meLoading } = useMyProfile();
+  const updateMutation = useUpdateMyProfile();
 
 useEffect(() => {
   if (!me) return;
@@ -238,7 +238,7 @@ const initials = useMemo(() => {
                 <button
                   onClick={() =>
                     updateMutation.mutate({
-                      full_name: fullName,
+                      name: fullName,
 
                       phone,
                     })

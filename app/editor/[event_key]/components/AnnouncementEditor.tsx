@@ -20,7 +20,7 @@ import { themeAnnouncementMedia, AnnouncementImageKey } from "../../../../utils/
 import { cn } from "../../../../utils/utils";
 import { LabelForm } from "../../../../components/ui/LabelForm";
 import EditorHeader from "./EditorHeader";
-import { getAccessToken } from "../../../../utils/apiClient";
+import { getAccessToken } from "../../../../lib/api/apiClient";
 
 /* ---------------- SCHEMA ---------------- */
 

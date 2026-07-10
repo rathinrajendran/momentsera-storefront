@@ -117,9 +117,9 @@ export default function Dashboard() {
     if (!t) router.replace("/account/login");
   }, [router]);
 
-  const { data: me, isLoading: meLoading } = useMyProfile(token);
-  const { data: events, isLoading: eventsLoading } = useMyEvents(token);
-  const updateMutation = useUpdateMyProfile(token);
+  const { data: me, isLoading: meLoading } = useMyProfile();
+  const { data: events, isLoading: eventsLoading } = useMyEvents();
+  const updateMutation = useUpdateMyProfile();
 
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
