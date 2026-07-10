@@ -7,12 +7,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { ChevronLeft, Sparkles } from "lucide-react";
-import { useLogin } from "../../hooks/useAuth";
 import { Header } from "../(marketing)/components/header/Header";
 import GridMotion from "../../components/ui/GridMotion";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../components/ui/form";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
+import { useLogin } from "../../hooks/useLogin";
 
 /* ---------------- GRID DATA ---------------- */
 

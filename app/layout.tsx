@@ -77,7 +77,6 @@ import StyledComponentsRegistry from "./(store)/invites/[eventType]/[inviteKey]/
 import SmoothScroll from "../components/ui/SmoothScroll";
 import { useEffect } from "react";
 import { setAccessToken } from "../utils/apiClient";
-import AuthProvider from "./providers/AuthProvider";
 
 /* ─────────────────────────────────────────
    BODY / UI
@@ -472,12 +471,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" data-qb-installed="true">
       <body className={`${fontClasses} antialiased`}>
         <StyledComponentsRegistry>
-          <AuthProvider>
           <Providers>
             {/* <SmoothScroll /> */}
             {children}
           </Providers>
-          </AuthProvider>
         </StyledComponentsRegistry>
       </body>
     </html>

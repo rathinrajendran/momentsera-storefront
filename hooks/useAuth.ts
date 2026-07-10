@@ -1,26 +1,24 @@
-import { useMutation } from "@tanstack/react-query";
-import { login } from "../lib/api/auth.api";
+"use client";
 
-/* ---------------------------------
-   LOGIN
----------------------------------- */
-export function useLogin() {
-  return useMutation({
-    mutationFn: login,
+import { useQuery } from "@tanstack/react-query";
+import { getCurrentUser } from "../lib/api/auth.api";
+
+export function useAuth() {
+  const {
+    data: user,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["auth-user"],
+    queryFn: getCurrentUser,
+    retry: false,
+    staleTime: 5 * 60 * 1000,
   });
+
+  return {
+    user: user ?? null,
+    loading: isLoading,
+    isLoggedIn: !!user,
+    refreshUser: refetch,
+  };
 }
-
-// "use client";
-
-// import { useContext } from "react";
-// import { AuthContext } from "../context/AuthContext";
-
-// export function useAuth() {
-//   const context = useContext(AuthContext);
-
-//   if (!context) {
-//     throw new Error("useAuth must be used inside AuthProvider");
-//   }
-
-//   return context;
-// }
