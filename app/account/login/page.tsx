@@ -6,7 +6,6 @@ import AuthLayout from "../../components/auth/AuthLayout";
 import Link from "next/link";
 import PasswordInput from "../../components/auth/PasswordInput";
 import GoogleButton from "../../components/auth/GoogleButton";
-import { Header } from "../../(marketing)/components/header/Header";
 import { motion } from "framer-motion";
 import GridMotion from "../../../components/ui/GridMotion";
 import { ChevronLeft, Sparkles } from "lucide-react";
@@ -22,35 +21,24 @@ export default function LoginPage() {
 
   const items: (string | ReactNode)[] = [
     "Planning",
-
     <div key="jsx-1" className="font-bold tracking-tighter text-[var(--accent-primary)] uppercase italic">
       Event Setup
     </div>,
-
     dummyImages[0],
-
     "Guests",
-
     <div key="jsx-2" className="font-bold tracking-tighter uppercase italic">
       Invitations
     </div>,
-
     dummyImages[1],
-
     "Schedule",
-
     <div key="jsx-3" className="font-bold tracking-tighter uppercase italic">
       Timeline
     </div>,
-
     dummyImages[2],
-
     "Design",
-
     <div key="jsx-4" className="font-bold tracking-tighter text-[var(--accent-primary)] uppercase italic">
       Theme
     </div>,
-
     dummyImages[3],
   ];
 
@@ -95,7 +83,7 @@ export default function LoginPage() {
   return (
     <AuthLayout title="Sign In to Your Account">
       <main className="relative min-h-screen w-full overflow-hidden bg-[var(--background)] text-[var(--text-primary)]">
-        <Header />
+        {/* <Header /> */}
 
         {/* Background Glow */}
         <div
@@ -185,7 +173,53 @@ export default function LoginPage() {
               </div>
 
               {/* FORM */}
-               FORM
+              <form onSubmit={handleSubmit} className="w-full space-y-4">
+                {error && <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-600">{error}</div>}
+
+                <div>
+                  <label className="mb-1 block text-sm font-medium text-gray-700">Email Address</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    required
+                    disabled={isLoading}
+                  />
+                </div>
+
+                <div>
+                  <div className="mb-1 flex items-center justify-between">
+                    <label className="block text-sm font-medium text-gray-700">Password</label>
+                    <Link href="/account/forgot-password" id="forgot-password" className="text-xs text-blue-600 hover:underline">
+                      Forgot password?
+                    </Link>
+                  </div>
+                  <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading} />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700 disabled:opacity-50"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Signing In..." : "Sign In"}
+                </button>
+              </form>
+
+              <div className="relative my-6 flex w-full items-center justify-center">
+                <div className="absolute w-full border-t border-gray-300"></div>
+                <span className="relative z-10 bg-white px-3 text-xs text-gray-500">OR CONTINUE WITH</span>
+              </div>
+
+              <GoogleButton />
+
+              <p className="mt-6 text-center text-sm text-gray-600">
+                Don't have an account?{" "}
+                <Link href="/account/register" className="font-medium text-blue-600 hover:underline">
+                  Register
+                </Link>
+              </p>
 
               {/* Register */}
               <p className="text-sm text-[var(--text-secondary)]">
@@ -225,53 +259,6 @@ export default function LoginPage() {
           </motion.div>
         </div>
       </main>
-      <form onSubmit={handleSubmit} className="w-full space-y-4">
-        {error && <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-600">{error}</div>}
-
-        <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">Email Address</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            required
-            disabled={isLoading}
-          />
-        </div>
-
-        <div>
-          <div className="mb-1 flex items-center justify-between">
-            <label className="block text-sm font-medium text-gray-700">Password</label>
-            <Link href="/account/forgot-password" id="forgot-password" className="text-xs text-blue-600 hover:underline">
-              Forgot password?
-            </Link>
-          </div>
-          <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading} />
-        </div>
-
-        <button
-          type="submit"
-          className="w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700 disabled:opacity-50"
-          disabled={isLoading}
-        >
-          {isLoading ? "Signing In..." : "Sign In"}
-        </button>
-      </form>
-
-      <div className="relative my-6 flex w-full items-center justify-center">
-        <div className="absolute w-full border-t border-gray-300"></div>
-        <span className="relative z-10 bg-white px-3 text-xs text-gray-500">OR CONTINUE WITH</span>
-      </div>
-
-      <GoogleButton />
-
-      <p className="mt-6 text-center text-sm text-gray-600">
-        Don't have an account?{" "}
-        <Link href="/account/register" className="font-medium text-blue-600 hover:underline">
-          Register
-        </Link>
-      </p>
     </AuthLayout>
   );
 }
