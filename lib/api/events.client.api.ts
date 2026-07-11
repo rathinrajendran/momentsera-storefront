@@ -1,28 +1,6 @@
 "use client";
 
-const base = process.env.NEXT_PUBLIC_API!.replace(/\/$/, "");
-
-/* ---------- COMMON FETCH ---------- */
-
-async function apiFetch(url: string, options: RequestInit = {}) {
-  const res = await fetch(`${base}${url}`, {
-    credentials: "include",
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...(options.headers || {}),
-    },
-  });
-
-  if (!res.ok) {
-    const error = await res.json().catch(() => ({}));
-    throw new Error(error.message || "Request failed");
-  }
-
-  return res.json();
-}
-
-/* ---------- CREATE / ONBOARDING ---------- */
+import { apiClient } from "./apiClient";
 
 export type UpsertOnboardingPayload = {
   invite_key: string;
@@ -32,17 +10,17 @@ export type UpsertOnboardingPayload = {
 };
 
 export function upsertOnboarding(payload: UpsertOnboardingPayload) {
-  return apiFetch("/events/onboarding", {
+  return apiClient("/events/onboarding", {
     method: "POST",
+    requireAuth: true,
     body: JSON.stringify(payload),
   });
 }
 
-/* ---------- SAVE SECTION ---------- */
-
 export function saveEventSection(eventId: number, path: string, data: Record<string, any>, stage?: string) {
-  return apiFetch(`/events/${eventId}/section`, {
+  return apiClient(`/events/${eventId}/section`, {
     method: "PATCH",
+    requireAuth: true,
     body: JSON.stringify({
       path,
       data,
@@ -51,10 +29,9 @@ export function saveEventSection(eventId: number, path: string, data: Record<str
   });
 }
 
-/* ---------- PUBLISH ---------- */
-
 export function publishEvent(eventId: number) {
-  return apiFetch(`/events/${eventId}/publish`, {
+  return apiClient(`/events/${eventId}/publish`, {
     method: "POST",
+    requireAuth: true,
   });
 }

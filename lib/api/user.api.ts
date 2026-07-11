@@ -10,7 +10,11 @@ export const getProfile = () =>
 export const updateProfile = (patch: { name?: string; phone?: string }): Promise<User> =>
   apiClient("/user/me", {
     method: "PUT",
+    requireAuth: true,
     body: JSON.stringify(patch),
   });
 
-export const getMyEvents = (): Promise<Event[]> => apiClient("/user/me/events");
+export const getMyEvents = (): Promise<Event[]> =>
+  apiClient("/user/me/events", {
+    requireAuth: true,
+  });

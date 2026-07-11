@@ -9,14 +9,16 @@ import GoogleButton from "../../components/auth/GoogleButton";
 import { motion } from "framer-motion";
 import GridMotion from "../../../components/ui/GridMotion";
 import { ChevronLeft, Sparkles } from "lucide-react";
+import { useLogin } from "../../../hooks/useLogin";
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const loginMutation = useLogin();
 
+  const isLoading = loginMutation.isPending;
   const dummyImages: string[] = Array.from({ length: 12 }, (_, i) => `https://picsum.photos/seed/${i + 40}/800/800`);
 
   const items: (string | ReactNode)[] = [
@@ -44,23 +46,14 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     setError("");
-    setIsLoading(true);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+      await loginMutation.mutateAsync({
+        email,
+        password,
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Invalid credentials");
-      }
-
-      // Backend already created HttpOnly cookie.
 
       const pending = sessionStorage.getItem("pending_event");
 
@@ -71,12 +64,10 @@ export default function LoginPage() {
 
         router.replace(`/invites/${invite.event_type}/${invite.invite_key}/onboarding`);
       } else {
-        router.replace("/dashboard");
+        router.replace("/account");
       }
     } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setIsLoading(false);
+      setError(err.message ?? "Login failed");
     }
   };
 

@@ -1,41 +1,30 @@
+import { apiClient } from "./apiClient";
 import API from "./config";
 
-export const fetchAccounts = async () => {
-  const res = await fetch(`${API}/accounts`);
-  if (!res.ok) throw new Error("Failed to load accounts");
-  return res.json();
-};
+export const fetchAccounts = () =>
+  apiClient("/accounts", {
+    requireAuth: true,
+  });
 
-export const createAccount = async (payload: any) => {
-  const res = await fetch(`${API}/accounts`, {
+export const createAccount = (payload: any) =>
+  apiClient("/accounts", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    requireAuth: true,
     body: JSON.stringify(payload),
   });
 
-  if (!res.ok) throw new Error("Failed to create account");
-  return res.json();
-};
-
-export const updateAccount = async (id: number, patch: any) => {
-  const res = await fetch(`${API}/accounts/${id}`, {
+export const updateAccount = (id: number, patch: any) =>
+  apiClient(`/accounts/${id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    requireAuth: true,
     body: JSON.stringify(patch),
   });
 
-  if (!res.ok) throw new Error("Failed to update account");
-  return res.json();
-};
-
-export const deleteAccount = async (id: number) => {
-  const res = await fetch(`${API}/accounts/${id}`, {
+export const deleteAccount = (id: number) =>
+  apiClient(`/accounts/${id}`, {
     method: "DELETE",
+    requireAuth: true,
   });
-
-  if (!res.ok) throw new Error("Failed to delete account");
-  return res.json();
-};
 
 export async function checkAccountExists(params: {
   email?: string;

@@ -2,15 +2,14 @@ import type { SubmitWishPayload } from "../../hooks/useWishes";
 
 /* ---------------- UPDATE WISH CONFIG ---------------- */
 
-export async function updateWishes(eventId: number, wishes: Record<string, any>) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API}/events/${eventId}/wishes`, {
+import { apiClient } from "./apiClient";
+
+export function updateWishes(eventId: number, wishes: Record<string, any>) {
+  return apiClient(`/events/${eventId}/wishes`, {
     method: "PATCH",
-    headers: { "Content-Type": "application/json" },
+    requireAuth: true,
     body: JSON.stringify(wishes),
   });
-
-  if (!res.ok) throw new Error("Failed to update wishes");
-  return res.json();
 }
 
 /* ---------------- SUBMIT WISH ---------------- */
@@ -53,17 +52,8 @@ export async function fetchWishes(eventKey: string) {
 
 /* ---------------- FETCH MY WISHES ---------------- */
 
-export async function fetchMyWishes(token: string) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API}/account/wishes`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    cache: "no-store",
+export function fetchMyWishes() {
+  return apiClient("/account/wishes", {
+    requireAuth: true,
   });
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch wishes");
-  }
-
-  return res.json();
 }
