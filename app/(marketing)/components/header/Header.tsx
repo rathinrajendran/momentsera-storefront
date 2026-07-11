@@ -106,7 +106,7 @@ export function Header({ className }: headerProps) {
               {!isLoggedIn && (
                 <button
                   onClick={() => router.push("/account/login")}
-                  className="cursor-pointer bg-transparent text-[10px] font-bold tracking-[0.25em] text-[var(--text-primary)] uppercase transition-all hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)]"
+                  className="cursor-pointer text-[10px] font-bold tracking-[0.25em] text-white uppercase transition-all bg-[var(--accent-primary)] hover:text-[var(--accent-primary)] py-3 px-6 rounded-full"
                 >
                   Login
                 </button>

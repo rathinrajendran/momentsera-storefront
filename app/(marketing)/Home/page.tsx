@@ -221,18 +221,19 @@ export default function Home() {
                         ease: [0.19, 1, 0.22, 1],
                       }}
                       onClick={() => router.push("/invites")}
-                      className="group relative flex cursor-pointer items-center gap-2 overflow-hidden rounded-full border border-black/10 px-6 py-3 transition-all duration-500 hover:border-black"
+                      className="flex cursor-pointer items-center rounded-full bg-[var(--primary)] pl-6 pr-2 py-2 text-[10px] font-light tracking-[0.25em] text-white uppercase transition-all"
                     >
                       <div className="absolute inset-0 origin-center scale-0 rounded-full bg-black transition-transform duration-500 ease-out group-hover:scale-100" />
 
-                      <span className="relative z-10 text-xs font-bold tracking-[0.2em] uppercase transition-colors duration-500 group-hover:text-white">
+                      <span className="relative z-10 text-xs font-light tracking-[0.2em] uppercase transition-colors duration-500 group-hover:text-white">
                         Create now
                       </span>
-
-                      <ArrowUpRight
-                        strokeWidth={1}
-                        className="relative z-10 h-5 w-5 transition-colors duration-500 group-hover:text-white"
-                      />
+                      <div className="rounded-full bg-[var(--accent-primary)] p-2 ml-2">
+                        <ArrowUpRight
+                          strokeWidth={1}
+                          className="relative z-10 h-5 w-5 transition-colors duration-500 group-hover:text-white"
+                        />
+                      </div>
                     </motion.button>
                   </div>
                 </div>

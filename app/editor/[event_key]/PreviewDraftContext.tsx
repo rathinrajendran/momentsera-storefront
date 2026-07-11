@@ -20,6 +20,7 @@ type Draft = {
   privacy?: any;
   sharing?: any;
   wishes?: any;
+  frontendUrl?: string;
 };
 
 type DraftSection = keyof Draft;
@@ -40,8 +41,18 @@ const DraftContext = createContext<DraftContextType | null>(null);
 
 /* ---------------- PROVIDER ---------------- */
 export function PreviewDraftProvider({ initialData, children }: { initialData: Draft; children: React.ReactNode }) {
-  const [draft, setDraft] = useState<Draft>(initialData);
-  const [serverData, setServerData] = useState<Draft>(initialData);
+  const frontendUrl = process.env.FRONTEND_URL ?? window.location.origin;
+
+  const [draft, setDraft] = useState<Draft>({
+    ...initialData,
+    frontendUrl,
+  });
+
+  const [serverData, setServerData] = useState<Draft>({
+    ...initialData,
+    frontendUrl,
+  });
+
   const [showFooterDialog, setShowFooterDialog] = useState(false);
   const [isRefreshing, startRefreshTransition] = useTransition();
 
@@ -65,10 +76,20 @@ export function PreviewDraftProvider({ initialData, children }: { initialData: D
   /* ---------------- RESET / REFRESH ---------------- */
   const resetDraft = useCallback(() => setDraft(serverData), [serverData]);
 
-  const refreshDraft = useCallback((data: Draft) => {
-    setServerData(data);
-    setDraft(data);
-  }, []);
+const refreshDraft = useCallback(
+  (data: Draft) => {
+    setServerData({
+      ...data,
+      frontendUrl,
+    });
+
+    setDraft({
+      ...data,
+      frontendUrl,
+    });
+  },
+  [frontendUrl],
+);
 
   const refreshEvent = useCallback(async (eventKey: string) => {
     startRefreshTransition(async () => {
@@ -76,8 +97,15 @@ export function PreviewDraftProvider({ initialData, children }: { initialData: D
         // Cache bust query parameter ensures network request bypasses aggressive router/browser caches
         const freshEvent = await fetchEventByKey(`${eventKey}?timestamp=${Date.now()}`);
         if (freshEvent) {
-          setServerData(freshEvent);
-          setDraft(freshEvent);
+         setServerData({
+           ...freshEvent,
+           frontendUrl,
+         });
+
+         setDraft({
+           ...freshEvent,
+           frontendUrl,
+         });
         }
       } catch (error) {
         console.error("Failed to refresh event draft:", error);

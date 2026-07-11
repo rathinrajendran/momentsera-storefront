@@ -299,7 +299,7 @@ export default function SharingEditor({ eventKey, onBack }: SharingEditorProps) 
             <div className="space-y-3">
               <div className="flex items-center gap-1.5">
                 <Eye size={12} className="text-slate-400" />
-                <p className="text-[0.7rem] font-bold tracking-wider text-slate-400 uppercase">Live Message Preview</p>
+                <p className="text-[0.7rem] font-bold tracking-wider text-slate-400 uppercase">Live Message Preview {inviteUrl}</p>
               </div>
               <div className="flex flex-col items-start">
                 <div className="w-full max-w-[100%] rounded-2xl rounded-tl-sm border border-slate-100 bg-slate-100 p-3.5">

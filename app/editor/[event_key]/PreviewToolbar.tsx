@@ -28,9 +28,6 @@ export function safeDecode(value: string) {
 export function PreviewToolbar({ inviteUrl, onInviteUrlChange, device, onDeviceChange }: Props) {
   const { draft } = usePreviewDraft();
 
-console.log("draft 111", draft);
-
-
   const { invite, announcement, schedule } = draft;
   const displayInviteUrl = useMemo(() => safeDecode(inviteUrl), [inviteUrl]);
   const getLiveUrl = () => `${window.location.origin}/${inviteUrl}`;
@@ -54,9 +51,10 @@ console.log("draft 111", draft);
     <div className="sticky top-0 z-10 flex h-[50px] items-center justify-between gap-3 border-b bg-white px-4">
       <div className="flex min-w-0 flex-1 items-center gap-2">
         <div className="flex min-w-0 items-center text-xs">
-          <span className="truncate font-medium" title={displayInviteUrl}>
-            localhost:3000/{displayInviteUrl}
-          </span>
+          <div className="truncate font-medium flex items-center" title={displayInviteUrl}>
+            <span className="hidden lg:block">{draft?.frontendUrl}/</span>
+            {displayInviteUrl}
+          </div>
         </div>
         <CustomizeDialog inviteUrl={inviteUrl} onInviteUrlChange={onInviteUrlChange} inviteData={inviteData}>
           <button

@@ -33,6 +33,11 @@ export function ShareDialog({ children, url, status, paymentStatus, displayInvit
   // Use the active distribution URL context link target
   const activeTargetUrl = canShareInvite ? decodedInviteUrl : decodedPreviewUrl;
 
+  const frontendUrl =
+    draft?.frontendUrl ?? process.env.NEXT_PUBLIC_FRONTEND_URL ?? (typeof window !== "undefined" ? window.location.origin : "");
+
+  const fullInviteUrl = `${frontendUrl}${activeTargetUrl}`;
+
   // 1. Extract configurations securely from backing schema
   const sharing = draft?.sharing ?? {};
   const announcement = draft?.announcement ?? {};
@@ -107,23 +112,23 @@ export function ShareDialog({ children, url, status, paymentStatus, displayInvit
       }
     }
 
-    if (activeTargetUrl) {
-      lines.push(activeTargetUrl);
+    if (fullInviteUrl) {
+      lines.push(fullInviteUrl);
     }
 
     return lines.join("\n");
-  }, [sharing, announcement, primaryFunction, activeTargetUrl, brideName, groomName]);
+  }, [sharing, announcement, primaryFunction, brideName, groomName, fullInviteUrl]);
 
   // 3. Dynamic Array Layout mapping matching your structured channels
   const shareItems = useMemo(() => {
     const encodedFullText = encodeURIComponent(generatedShareText);
-    const encodedUrlOnly = encodeURIComponent(activeTargetUrl);
-
+    const encodedUrlOnly = encodeURIComponent(fullInviteUrl);
+    const whatsappText = encodeURIComponent(`${sharing.shareMessage ?? DEFAULT_SHARE_MESSAGE}\n\n${fullInviteUrl}`);
     return [
       {
         label: "WhatsApp",
         icon: MessageCircle,
-        href: `https://api.whatsapp.com/send?text=${encodedFullText}`,
+        href: `https://api.whatsapp.com/send?text=${whatsappText}`,
         isExternal: true,
       },
       {
@@ -145,10 +150,10 @@ export function ShareDialog({ children, url, status, paymentStatus, displayInvit
         isExternal: false,
       },
     ];
-  }, [generatedShareText, activeTargetUrl]);
+  }, [generatedShareText, fullInviteUrl, sharing.shareMessage]);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(activeTargetUrl);
+    navigator.clipboard.writeText(fullInviteUrl);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -165,6 +170,7 @@ export function ShareDialog({ children, url, status, paymentStatus, displayInvit
       await navigator.share({
         title: "Wedding Invitation",
         text: generatedShareText,
+        url: fullInviteUrl,
       });
     } catch (err) {
       console.error("Error sharing:", err);
@@ -205,7 +211,7 @@ export function ShareDialog({ children, url, status, paymentStatus, displayInvit
               </button>
             </div>
             <div className="rounded-xl border border-slate-100 bg-slate-50/50 p-3.5">
-              <div className="scrollbar-none max-h-28 overflow-y-auto text-[11px] leading-relaxed font-medium whitespace-pre-wrap text-slate-600 select-all">
+              <div className="max-h-28 scrollbar-none overflow-y-auto text-[11px] leading-relaxed font-medium whitespace-pre-wrap text-slate-600 select-all">
                 {generatedShareText}
               </div>
             </div>
@@ -255,7 +261,7 @@ export function ShareDialog({ children, url, status, paymentStatus, displayInvit
           <div className="space-y-1.5">
             <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase">Direct Invitation Link</span>
             <div className="grid grid-cols-[1fr_auto] items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 shadow-sm">
-              <span className="min-w-0 truncate font-mono text-[11px] text-slate-500 select-all">{activeTargetUrl}</span>
+              <span className="min-w-0 truncate font-mono text-[11px] text-slate-500 select-all">{fullInviteUrl}</span>
               <Button
                 type="button"
                 variant="ghost"
