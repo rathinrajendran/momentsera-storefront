@@ -1,3 +1,5 @@
+import { apiClient } from "./apiClient";
+
 const API = process.env.NEXT_PUBLIC_API;
 
 /* ---------------------------
@@ -38,25 +40,12 @@ export async function fetchInviteByKey(inviteKey: string) {
   return res.json();
 }
 
-export async function updateEventKey(eventId: number, eventKey: string) {
-  const base = process.env.NEXT_PUBLIC_API?.replace(/\/$/, "");
-
-  const res = await fetch(`${base}/events/${eventId}/event-key`, {
+export function updateEventKey(eventId: number, eventKey: string) {
+  return apiClient(`/events/${eventId}/event-key`, {
     method: "PATCH",
-    credentials: "include", // ✅ Send HttpOnly cookie
-    headers: {
-      "Content-Type": "application/json",
-    },
+    requireAuth: true,
     body: JSON.stringify({
       event_key: eventKey,
     }),
   });
-
-  if (!res.ok) {
-    const err = await res.json().catch(() => null);
-
-    throw new Error(err?.message ?? err?.error ?? "Failed to update event key");
-  }
-
-  return res.json();
 }
