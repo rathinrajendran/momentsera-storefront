@@ -1,7 +1,3 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @import "tailwindcss";
 @import "react-day-picker/dist/style.css";
 @import "tw-animate-css";
@@ -10,6 +6,8 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  --font-plus-jakarta: "Plus Jakarta Sans Variable", sans-serif;
+
   /* ─────────────────────────────
      PREMIUM SAGE WHITE THEME
   ───────────────────────────── */
@@ -141,7 +139,7 @@ html {
 
 body {
   background: radial-gradient(circle at top left, rgba(132, 165, 157, 0.12), transparent 30%), var(--background);
-  font-family: "Plus Jakarta Sans Variable", Arial, Helvetica, sans-serif;
+  font-family: var(--font-plus-jakarta);
   margin: 0;
   overflow-x: hidden;
   text-rendering: optimizeLegibility;

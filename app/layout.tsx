@@ -70,11 +70,10 @@ import {
 
   /* Mono */
   JetBrains_Mono,
+  Plus_Jakarta_Sans,
 } from "next/font/google";
-// import "@fontsource-variable/plus-jakarta-sans";
+
 import StyledComponentsRegistry from "./(store)/invites/[eventType]/[inviteKey]/onboarding/styled-registry";
-import SmoothScroll from "../components/ui/SmoothScroll";
-import { useEffect } from "react";
 import QueryProvider from "../providers/QueryProvider";
 import "./globals.css";
 /* ─────────────────────────────────────────
@@ -137,6 +136,12 @@ const cormorant = Cormorant_Garamond({
 const lora = Lora({
   subsets: ["latin"],
   variable: "--font-lora",
+});
+
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-plus-jakarta",
+  display: "swap",
 });
 
 const ebGaramond = EB_Garamond({
@@ -463,6 +468,7 @@ const fontClasses = [
 
   jetbrains.variable,
   display.variable,
+  plusJakarta.variable,
 ].join(" ");
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -471,7 +477,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${fontClasses} antialiased`}>
         <StyledComponentsRegistry>
           <QueryProvider>
-            {/* <SmoothScroll /> */}
             {children}
           </QueryProvider>
         </StyledComponentsRegistry>
