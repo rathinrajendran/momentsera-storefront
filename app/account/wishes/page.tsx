@@ -51,8 +51,7 @@ type Wish = {
 export default function WishPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState<"text" | "audio" | "video">("text");
-  const token = useToken();
-  const { data, isLoading } = useMyWishes(token);
+  const { data = [], isPending, isError, error } = useMyWishes();
   const wishes = useMemo(() => {
     return (data ?? []).map((item: any) => ({
       id: item.id,
@@ -75,8 +74,12 @@ export default function WishPage() {
       event_type: item.event_type,
     }));
   }, [data]);
-  if (isLoading) {
+  if (isPending) {
     return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div className="p-6 text-red-500">{error instanceof Error ? error.message : "Failed to load wishes."}</div>;
   }
   return (
     <PageLayout>
@@ -102,7 +105,7 @@ export default function WishPage() {
                     : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                 }`}
               >
-                Text ({wishes.filter((w:any) => w.type === "text").length})
+                Text ({wishes.filter((w: any) => w.type === "text").length})
                 {activeTab === "text" && <div className="absolute bottom-0 left-0 h-[2px] w-full bg-[var(--text-primary)]" />}
               </button>
               <button
@@ -113,7 +116,7 @@ export default function WishPage() {
                     : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                 }`}
               >
-                Audio ({wishes.filter((w:any) => w.type === "audio").length})
+                Audio ({wishes.filter((w: any) => w.type === "audio").length})
                 {activeTab === "audio" && <div className="absolute bottom-0 left-0 h-[2px] w-full bg-[var(--text-primary)]" />}
               </button>
               <button
@@ -124,7 +127,7 @@ export default function WishPage() {
                     : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                 }`}
               >
-                Video ({wishes.filter((w:any) => w.type === "video").length})
+                Video ({wishes.filter((w: any) => w.type === "video").length})
                 {activeTab === "video" && <div className="absolute bottom-0 left-0 h-[2px] w-full bg-[var(--text-primary)]" />}
               </button>
             </div>

@@ -2,13 +2,16 @@
 
 import { getAccessToken } from "./apiClient";
 
-
-
 export async function fetchEventByKey(eventKey: string) {
   if (!eventKey) return null;
 
-  const base = process.env.NEXT_PUBLIC_API?.replace(/\/$/, "");
-  const res = await fetch(`${base}/events/key/${eventKey}`, {
+  const base = process.env.NEXT_PUBLIC_API;
+
+  if (!base) {
+    throw new Error("NEXT_PUBLIC_API is missing. Check your .env.local file.");
+  }
+
+  const res = await fetch(`${base.replace(/\/$/, "")}/events/key/${encodeURIComponent(eventKey)}`, {
     cache: "no-store",
   });
 

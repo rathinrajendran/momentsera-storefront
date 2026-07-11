@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchMyWishes, fetchWishes, submitWish, updateWishes } from "../lib/api/wishes.api";
+import { apiClient } from "../lib/api/apiClient";
 
 export type WishType = "text" | "audio" | "video";
 
@@ -43,10 +44,9 @@ export function useWishes(eventKey: string) {
   });
 }
 
-export function useMyWishes(token: string) {
+export function useMyWishes() {
   return useQuery({
     queryKey: ["my-wishes"],
-    queryFn: () => fetchMyWishes(token),
-    enabled: !!token,
+    queryFn: () => fetchMyWishes(),
   });
 }
