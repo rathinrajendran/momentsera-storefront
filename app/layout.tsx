@@ -76,6 +76,7 @@ import {
 import StyledComponentsRegistry from "./(store)/invites/[eventType]/[inviteKey]/onboarding/styled-registry";
 import QueryProvider from "../providers/QueryProvider";
 import "./globals.css";
+import { AuthProvider } from "../providers/AuthProvider";
 /* ─────────────────────────────────────────
    BODY / UI
 ───────────────────────────────────────── */
@@ -473,11 +474,11 @@ const fontClasses = [
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-qb-installed="true">
+    <html lang="en">
       <body className={`${fontClasses} antialiased`}>
         <StyledComponentsRegistry>
           <QueryProvider>
-            {children}
+            <AuthProvider>{children}</AuthProvider>
           </QueryProvider>
         </StyledComponentsRegistry>
       </body>
