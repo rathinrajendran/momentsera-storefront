@@ -5,16 +5,18 @@ import { fetchEventByKey } from "../../lib/api";
 import { buildShare } from "@/utils/share/builder";
 import { buildShareMessage } from "@/utils/share/message";
 import { SharePreviewType, type ShareCardData } from "@/utils/share/types";
-import { BasicCard, CoverCard, PremiumCard, HeroCard } from "@/utils/share/cards";
+import { BasicCard, CoverCard, HeroCard, PremiumCard } from "@/utils/share/cards";
 
 export const runtime = "nodejs";
 
 export const alt = "Momentsera Invitation";
 
-export const size = {
+const IMAGE_SIZE = Object.freeze({
   width: 1200,
   height: 630,
-};
+});
+
+export const size = IMAGE_SIZE;
 
 export const contentType = "image/png";
 
@@ -24,52 +26,64 @@ type Props = {
   }>;
 };
 
+function NotFoundImage() {
+  return (
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "#ffffff",
+        color: "#111827",
+        fontSize: 48,
+        fontWeight: 700,
+      }}
+    >
+      Invitation Not Found
+    </div>
+  );
+}
+
 export default async function OpenGraphImage({ params }: Props) {
   const { event_key } = await params;
 
-  const event = await fetchEventByKey(event_key);
+  let event = null;
 
-  if (!event) {
-    return new ImageResponse(
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          background: "#ffffff",
-          color: "#111827",
-          fontSize: 48,
-          fontWeight: 700,
-        }}
-      >
-        Invitation Not Found
-      </div>,
-      size,
-    );
+  try {
+    event = await fetchEventByKey(event_key);
+  } catch (error) {
+    console.error("[OpenGraph] Failed to fetch event:", error);
   }
 
-  const share = buildShare(event);
+  if (!event) {
+    return new ImageResponse(<NotFoundImage />, IMAGE_SIZE);
+  }
 
-  const card: ShareCardData = {
-    ...share,
-    description: buildShareMessage(share, {
-      includeUrl: false,
-    }),
-  };
+  try {
+    const share = buildShare(event);
 
-  switch (share.previewType) {
-    case SharePreviewType.BASIC:
-      return new ImageResponse(<BasicCard {...card} />, size);
+    const card: ShareCardData = {
+      ...share,
+      description: buildShareMessage(share, {
+        includeUrl: false,
+      }),
+    };
 
-    case SharePreviewType.COVER:
-      return new ImageResponse(<CoverCard {...card} />, size);
+    const CardComponent =
+      share.previewType === SharePreviewType.BASIC
+        ? BasicCard
+        : share.previewType === SharePreviewType.COVER
+          ? CoverCard
+          : share.previewType === SharePreviewType.PREMIUM
+            ? PremiumCard
+            : HeroCard;
 
-    case SharePreviewType.PREMIUM:
-      return new ImageResponse(<PremiumCard {...card} />, size);
+    return new ImageResponse(<CardComponent {...card} />, IMAGE_SIZE);
+  } catch (error) {
+    console.error("[OpenGraph] Failed to generate image:", error);
 
-    default:
-      return new ImageResponse(<HeroCard {...card} />, size);
+    return new ImageResponse(<NotFoundImage />, IMAGE_SIZE);
   }
 }
