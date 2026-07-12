@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import GridMotion from "../../../components/ui/GridMotion";
 import { ChevronLeft, Sparkles } from "lucide-react";
 import { useLogin } from "../../../hooks/useLogin";
+import { Header } from "../../(marketing)/components/header/Header";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -68,15 +69,7 @@ export default function LoginPage() {
   return (
     <AuthLayout title="Sign In to Your Account">
       <main className="relative min-h-screen w-full overflow-hidden bg-[var(--background)] text-[var(--text-primary)]">
-        {/* <Header /> */}
-
-        {/* Background Glow */}
-        <div
-          className="pointer-events-none absolute top-[-10%] left-[-10%] h-[600px] w-[600px] rounded-full blur-[140px]"
-          style={{
-            background: "rgba(132,165,157,0.12)",
-          }}
-        />
+        <Header />
 
         <div className="relative z-10 grid h-screen w-full grid-cols-1 pt-[64px] md:grid-cols-12">
           {/* LEFT SIDE */}
@@ -93,7 +86,7 @@ export default function LoginPage() {
               duration: 1.2,
               ease: [0.16, 1, 0.3, 1],
             }}
-            className="relative hidden h-full border-r border-[var(--border-color)] md:col-span-7 md:block lg:col-span-8"
+            className="relative hidden h-[calc(100vh-93px)] mt-[8px] md:col-span-7 md:block lg:col-span-8 pl-5"
           >
             {/* <div
             className="
@@ -130,7 +123,7 @@ export default function LoginPage() {
               duration: 0.8,
               delay: 0.2,
             }}
-            className="glass-card col-span-12 flex h-full flex-col justify-between p-10 md:col-span-5 lg:col-span-4"
+            className="col-span-12 flex h-full flex-col justify-between px-10 py-4 md:col-span-5 lg:col-span-4"
           >
             <div className="space-y-12">
               {/* Back */}
@@ -144,79 +137,65 @@ export default function LoginPage() {
 
               {/* Header */}
               <div>
-                <div className="mb-4 flex items-center gap-2">
+                {/* <div className="mb-4 flex items-center gap-2">
                   <Sparkles size={14} className="text-[var(--accent-primary)]" />
-
                   <span className="text-[10px] font-bold tracking-[0.2em] text-[var(--text-muted)] uppercase">Secure Access</span>
+                </div> */}
+                <h1 className="mb-3 text-4xl font-bold tracking-tight text-[var(--text-primary)]">Welcome Back</h1>
+                {/* <p className="max-w-[320px] text-sm leading-relaxed text-[var(--text-secondary)]">
+                  Sign in to continue managing your beautifully crafted invitation experiences.
+                </p> */}
+              </div>
+              <div>
+                {/* FORM */}
+                <form onSubmit={handleSubmit} className="w-full space-y-4">
+                  {error && <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-600">{error}</div>}
+
+                  <div>
+                    <label className="mb-1 block text-sm font-medium text-gray-700">Email Address</label>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                      required
+                      disabled={isLoading}
+                    />
+                  </div>
+
+                  <div>
+                    <div className="mb-1 flex items-center justify-between">
+                      <label className="block text-sm font-medium text-gray-700">Password</label>
+                      <Link href="/account/forgot-password" id="forgot-password" className="text-xs text-blue-600 hover:underline">
+                        Forgot password?
+                      </Link>
+                    </div>
+                    <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading} />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700 disabled:opacity-50"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Signing In..." : "Sign In"}
+                  </button>
+                </form>
+
+                <div className="relative my-6 flex w-full items-center justify-center">
+                  <div className="absolute w-full border-t border-gray-300"></div>
+                  <span className="relative z-10 bg-white px-3 text-xs text-gray-500">OR CONTINUE WITH</span>
                 </div>
 
-                <h1 className="mb-3 text-4xl font-bold tracking-tight text-[var(--text-primary)]">Welcome Back</h1>
+                <GoogleButton />
 
-                <p className="max-w-[320px] text-sm leading-relaxed text-[var(--text-secondary)]">
-                  Sign in to continue managing your beautifully crafted invitation experiences.
+                <p className="text-sm text-[var(--text-secondary)]">
+                  Don't have an account?{" "}
+                  <Link href="/account/register" className="font-medium text-[var(--accent-primary)] transition-colors hover:opacity-80">
+                    Create account
+                  </Link>
                 </p>
               </div>
-
-              {/* FORM */}
-              <form onSubmit={handleSubmit} className="w-full space-y-4">
-                {error && <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-600">{error}</div>}
-
-                <div>
-                  <label className="mb-1 block text-sm font-medium text-gray-700">Email Address</label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    required
-                    disabled={isLoading}
-                  />
-                </div>
-
-                <div>
-                  <div className="mb-1 flex items-center justify-between">
-                    <label className="block text-sm font-medium text-gray-700">Password</label>
-                    <Link href="/account/forgot-password" id="forgot-password" className="text-xs text-blue-600 hover:underline">
-                      Forgot password?
-                    </Link>
-                  </div>
-                  <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading} />
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700 disabled:opacity-50"
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Signing In..." : "Sign In"}
-                </button>
-              </form>
-
-              <div className="relative my-6 flex w-full items-center justify-center">
-                <div className="absolute w-full border-t border-gray-300"></div>
-                <span className="relative z-10 bg-white px-3 text-xs text-gray-500">OR CONTINUE WITH</span>
-              </div>
-
-              <GoogleButton />
-
-              <p className="mt-6 text-center text-sm text-gray-600">
-                Don't have an account?{" "}
-                <Link href="/account/register" className="font-medium text-blue-600 hover:underline">
-                  Register
-                </Link>
-              </p>
-
-              {/* Register */}
-              <p className="text-sm text-[var(--text-secondary)]">
-                Don’t have an account?
-                <button
-                  onClick={() => router.push("/account/register")}
-                  className="font-medium text-[var(--accent-primary)] transition-colors hover:opacity-80"
-                >
-                  Create account
-                </button>
-              </p>
-
               {/* Footer */}
               <div className="border-t border-[var(--border-color)] pt-2">
                 <nav className="flex gap-4">

@@ -236,10 +236,10 @@ export default function EditorLayout({ eventKey, eventId }: EditorLayoutProps) {
 
           {/* RIGHT Persistent Workspace Panel Wrapper Container */}
           <div
-            className={`${splitScreen ? "h-[40dvh]" : ""} fixed right-0 bottom-0 left-0 z-[99] flex flex-col-reverse overflow-hidden border-t border-zinc-200 bg-white md:relative md:w-[400px] md:flex-row md:border-t-0 md:border-l`}
+            className={`${splitScreen ? "h-[40dvh]" : "h-[160px]"} flex-column fixed right-0 bottom-0 left-0 z-[99] flex flex-col overflow-hidden border-t border-zinc-200 bg-white md:relative md:w-[400px] md:flex-row md:border-t-0 md:border-l`}
           >
             {/* Config Form Action Switcher Layer */}
-            <div className="h-[calc(100%-64px)] flex-1 overflow-y-auto bg-white md:h-full">
+            <div className="h-auto w-full overflow-y-auto bg-white md:h-[calc(100%-64px)] md:flex-1">
               <EditorPanel
                 activeSection={activeSection}
                 onSectionChange={setActiveSection}
@@ -251,7 +251,9 @@ export default function EditorLayout({ eventKey, eventId }: EditorLayoutProps) {
               />
             </div>
             {/* Global Fixed Side Nav Menu Layer */}
-            <div className="z-10 flex h-16 w-full shrink-0 flex-row items-center justify-around border-t border-zinc-100 bg-[#fafafa] px-2 py-1 text-zinc-400 md:h-full md:w-[85px] md:flex-col md:justify-start md:border-t-0 md:border-r md:py-6">
+            <div
+              className={`${splitScreen ? "hidden" : "flex"} z-10 h-16 w-full shrink-0 flex-row items-center justify-around border-t border-zinc-100 bg-[#fafafa] px-2 py-1 text-zinc-400 md:h-full md:w-[85px] md:flex-col md:justify-start md:border-t-0 md:border-r md:py-6`}
+            >
               <nav className="flex w-full flex-row items-center justify-around gap-1 md:flex-col md:gap-4">
                 {sideMenuItems.map((item) => {
                   const isActive = activeTab === item.id;
@@ -262,10 +264,8 @@ export default function EditorLayout({ eventKey, eventId }: EditorLayoutProps) {
                         setActiveTab(item.id as any);
                         setActiveSection("overview");
                       }}
-                      className={`cursor-pointer flex w-12 flex-col items-center justify-center gap-1 rounded-lg py-1.5 text-[10px] font-medium transition-all md:w-full md:text-[10px] uppercase ${
-                        isActive
-                          ? "bg-[var(--accent-primary)] text-white shadow-inner"
-                          : "text-zinc-400"
+                      className={`flex w-12 cursor-pointer flex-col items-center justify-center gap-1 rounded-lg py-1.5 text-[10px] font-medium uppercase transition-all md:w-full md:text-[10px] ${
+                        isActive ? "bg-[var(--accent-primary)] text-white shadow-inner" : "text-zinc-400"
                       }`}
                     >
                       {item.icon}

@@ -74,16 +74,11 @@ type FormData = z.infer<typeof schema>;
 
 export default function RegisterPage() {
   const router = useRouter();
-
   const createAccount = useCreateAccount();
   const checkAccountExists = useCheckAccountExists();
-
   const [emailError, setEmailError] = useState<string | null>(null);
-
   const [checkingEmail, setCheckingEmail] = useState(false);
-
   const emailLock = useRef(false);
-
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     mode: "onBlur",
@@ -98,19 +93,28 @@ export default function RegisterPage() {
   /* ---------------- SUBMIT ---------------- */
 
   const onSubmit = (values: FormData) => {
-    if (emailError) return;
+    if (checkingEmail || emailError) return;
 
     createAccount.mutate(values, {
       onSuccess: () => {
-        router.replace("/account/login");
+        form.reset();
+        setEmailError(null);
+
+        router.replace(`/account/check-email?email=${encodeURIComponent(values.email)}`);
       },
 
       onError: (err: any) => {
-        const msg = err?.response?.data?.error?.toLowerCase();
+        const message = err?.response?.data?.message ?? err?.response?.data?.error ?? "Unable to create your account. Please try again.";
 
-        if (msg?.includes("email")) {
-          setEmailError("Email already exists");
+        if (message.toLowerCase().includes("email")) {
+          setEmailError("Email already exists.");
+          return;
         }
+
+        form.setError("root", {
+          type: "server",
+          message,
+        });
       },
     });
   };
@@ -118,16 +122,19 @@ export default function RegisterPage() {
   /* ---------------- VALIDATIONS ---------------- */
 
   const validateEmail = async (email: string) => {
-    if (!email || emailLock.current) return;
+    if (!email.trim() || emailLock.current) return;
 
     emailLock.current = true;
-
     setCheckingEmail(true);
 
     try {
-      const res = await checkAccountExists({ email });
+      const res = await checkAccountExists({
+        email: email.trim(),
+      });
 
-      setEmailError(res.exists ? "Email already exists" : null);
+      setEmailError(res.exists ? "Email already exists." : null);
+    } catch {
+      setEmailError(null);
     } finally {
       setCheckingEmail(false);
       emailLock.current = false;
@@ -216,6 +223,11 @@ export default function RegisterPage() {
             {/* FORM */}
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="mb-0 space-y-5" autoComplete="off">
+                {form.formState.errors.root && (
+                  <div className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-600">
+                    {form.formState.errors.root.message}
+                  </div>
+                )}
                 {/* Full Name */}
                 <FormField
                   control={form.control}
@@ -227,6 +239,7 @@ export default function RegisterPage() {
                       <FormControl>
                         <Input
                           {...field}
+                          disabled={createAccount.isPending}
                           placeholder="John Doe"
                           className="h-[42px] border-[var(--border-color)] bg-[var(--bg-secondary)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus-visible:ring-[var(--accent-primary)]"
                         />
@@ -251,10 +264,11 @@ export default function RegisterPage() {
                         <Input
                           {...field}
                           type="email"
+                          disabled={createAccount.isPending}
                           placeholder="name@example.com"
                           onBlur={(e) => {
                             field.onBlur();
-                            validateEmail(e.target.value);
+                            void validateEmail(e.target.value);
                           }}
                           className="h-[42px] border-[var(--border-color)] bg-[var(--bg-secondary)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus-visible:ring-[var(--accent-primary)]"
                         />
@@ -281,6 +295,7 @@ export default function RegisterPage() {
                         <Input
                           {...field}
                           type="password"
+                          disabled={createAccount.isPending}
                           placeholder="••••••••"
                           className="h-[42px] border-[var(--border-color)] bg-[var(--bg-secondary)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus-visible:ring-[var(--accent-primary)]"
                         />

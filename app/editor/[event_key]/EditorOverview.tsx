@@ -37,21 +37,23 @@ export default function EditorOverview({ activeTab, currentSections = [], onSele
   }, [scrollTop]);
 
   return (
-    <div className="flex h-full flex-col overflow-hidden bg-white px-4 pt-6 md:px-6 md:pt-8">
-      <div className="mb-5">
+    <div className="flex h-auto md:h-full flex-col overflow-hidden bg-white px-4 md:pt-6 md:px-6 md:pt-8">
+      <div className="mb-5 hidden md:block">
         <h2 className="text-2xl font-bold tracking-tight text-zinc-900 capitalize">{activeTab}</h2>
       </div>
 
       <div className="flex-1 overflow-hidden">
-        <div ref={scrollRef} className="h-full space-y-3 overflow-y-auto pb-24 md:space-y-3.5 md:pb-10">
+        <div ref={scrollRef} className="h-auto space-y-3 overflow-y-auto md:pb-24 md:space-y-3.5">
           {activeTab === "preview" ? (
             <div className="flex h-40 flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-200 p-6 text-center text-sm text-zinc-400">
               <p>Opening live interactive preview overlay...</p>
             </div>
           ) : (
-            currentSections.map(({ id, title, desc, icon }) => (
-              <EditorCard key={id} title={title} desc={desc} icon={icon} onClick={() => handleCardSelect(id as EditorSection)} />
-            ))
+            <div className="flex md:flex-col gap-5">
+              {currentSections.map(({ id, title, desc, icon }) => (
+                <EditorCard key={id} title={title} desc={desc} icon={icon} onClick={() => handleCardSelect(id as EditorSection)} />
+              ))}
+            </div>
           )}
         </div>
       </div>
