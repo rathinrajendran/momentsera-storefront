@@ -1,6 +1,6 @@
 import { ShareCardProps } from "../types";
 
-export default function LargeCard({ title, description, coverImage }: ShareCardProps) {
+export default function CoverCard({ title, description, coverImage }: ShareCardProps) {
   return (
     <div
       style={{

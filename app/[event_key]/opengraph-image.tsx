@@ -5,7 +5,7 @@ import { fetchEventByKey } from "../../lib/api";
 import { buildShare } from "@/utils/share/builder";
 import { buildShareMessage } from "@/utils/share/message";
 import { SharePreviewType, type ShareCardData } from "@/utils/share/types";
-import { BasicCard, LargeCard, PremiumCard } from "@/utils/share/cards";
+import { BasicCard, CoverCard, PremiumCard, HeroCard } from "@/utils/share/cards";
 
 export const runtime = "nodejs";
 
@@ -63,13 +63,13 @@ export default async function OpenGraphImage({ params }: Props) {
     case SharePreviewType.BASIC:
       return new ImageResponse(<BasicCard {...card} />, size);
 
-    case SharePreviewType.LARGE:
-      return new ImageResponse(<LargeCard {...card} />, size);
+    case SharePreviewType.COVER:
+      return new ImageResponse(<CoverCard {...card} />, size);
 
     case SharePreviewType.PREMIUM:
       return new ImageResponse(<PremiumCard {...card} />, size);
 
     default:
-      return new ImageResponse(<LargeCard {...card} />, size);
+      return new ImageResponse(<HeroCard {...card} />, size);
   }
 }

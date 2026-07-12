@@ -5,9 +5,10 @@ export function buildPreviewImage(share: ShareData, inviteUrl: string): string |
     case SharePreviewType.BASIC:
       return undefined;
 
-    case SharePreviewType.LARGE:
+    case SharePreviewType.COVER:
       return share.coverImage || undefined;
 
+    case SharePreviewType.HERO:
     case SharePreviewType.PREMIUM:
       return `${inviteUrl}/opengraph-image`;
 

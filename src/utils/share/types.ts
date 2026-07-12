@@ -1,7 +1,11 @@
 export enum SharePreviewType {
   BASIC = "basic",
-  LARGE = "large",
+
+  COVER = "cover",
+
   PREMIUM = "premium",
+
+  HERO = "hero",
 }
 export interface ShareCardProps extends ShareData {
   description: string;
