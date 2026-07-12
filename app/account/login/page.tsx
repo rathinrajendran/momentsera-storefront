@@ -58,7 +58,7 @@ export default function LoginPage() {
         sessionStorage.removeItem("pending_event");
         router.replace(`/invites/${invite.event_type}/${invite.invite_key}/onboarding`);
       } else {
-        router.replace("/account");
+        router.replace("/invites");
       }
     } catch (err: any) {
       setError(err.message ?? "Login failed");
