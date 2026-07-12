@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { fetchEventByKey } from "../../lib/api";
-import { buildShareMessage } from "../../utils/shareMessage";
 import Catalog from "./invites/catalog/page";
+import { buildShare } from "@/utils/share/builder";
+import { buildMetadata } from "@/utils/share/metadata";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -35,79 +36,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
-  const announcement = data.announcement ?? {};
-  const invite = data.invite ?? {};
-
-  const bride = announcement?.bride?.name?.trim() ?? invite?.firstName?.trim() ?? "";
-
-  const groom = announcement?.groom?.name?.trim() ?? invite?.secondName?.trim() ?? "";
-
-  const couple = [bride, groom].filter(Boolean).join(" & ") || invite?.title || "Wedding Invitation";
-
   const frontendUrl = process.env.NEXT_PUBLIC_FRONTEND_URL ?? "https://invite.momentsera.com";
 
-  const inviteUrl = `${frontendUrl}/${event_key}`;
+  const share = buildShare(data);
 
-  const imagePath = data.gallery?.coverImage || data.gallery?.cover || "/images/default-og.jpg";
-
-  const coverImage = imagePath.startsWith("http") ? imagePath : `${frontendUrl}${imagePath.startsWith("/") ? "" : "/"}${imagePath}`;
-
-  // Same message used by SharingEditor + ShareDialog
-  const description = buildShareMessage(data, {
-    includeUrl: false,
+  return buildMetadata(share, {
+    frontendUrl,
+    eventKey: event_key,
   });
-
-  return {
-    metadataBase: new URL(frontendUrl),
-
-    title: `${couple} | Momentsera`,
-
-    description,
-
-    applicationName: "Momentsera",
-
-    keywords: ["Wedding Invitation", "Digital Invitation", "Momentsera", bride, groom],
-
-    robots: {
-      index: true,
-      follow: true,
-    },
-
-    alternates: {
-      canonical: inviteUrl,
-    },
-
-    openGraph: {
-      type: "website",
-      locale: "en_US",
-      siteName: "Momentsera",
-
-      url: inviteUrl,
-
-      title: `${couple} | Wedding Invitation`,
-
-      description,
-
-      images: [
-        {
-          url: coverImage,
-          width: 1200,
-          height: 630,
-          alt: couple,
-        },
-      ],
-    },
-
-    twitter: {
-      card: "summary_large_image",
-
-      title: `${couple} | Wedding Invitation`,
-
-      description,
-
-      images: [coverImage],
-    },
-  };
 }
 
 /* -------------------------------------------------------------------------- */
