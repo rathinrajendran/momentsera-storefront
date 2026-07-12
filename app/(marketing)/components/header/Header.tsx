@@ -66,7 +66,7 @@ export function Header({ className }: headerProps) {
              LOGO
           ───────────────────── */}
             <div className="flex items-center gap-1">
-              <Link href="/" style={{ fontFamily: "Plus Jakarta Sans Variable" }} className="tracking-[0.2rem]">
+              <Link href="/" className="tracking-[0.2rem]">
                 {/* <LogoBy
               width={150}
               height={30}

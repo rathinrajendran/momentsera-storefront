@@ -46,22 +46,16 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     setError("");
-
     try {
       await loginMutation.mutateAsync({
         email,
         password,
       });
-
       const pending = sessionStorage.getItem("pending_event");
-
       if (pending) {
         const invite = JSON.parse(pending);
-
         sessionStorage.removeItem("pending_event");
-
         router.replace(`/invites/${invite.event_type}/${invite.invite_key}/onboarding`);
       } else {
         router.replace("/account");

@@ -5,7 +5,6 @@ import BlurText from "../../../components/bits/BlurText";
 import { Input } from "../../../components/ui/input";
 
 export const HomeWrapper = styled.div`
-  font-family: "Plus Jakarta Sans Variable", sans-serif;
   background: #ffffff;
   width: 100%;
   .wave {
@@ -42,7 +41,6 @@ export const HomeWrapper = styled.div`
   }
 `;
 export const BlurTextWrapper = styled(BlurText)`
-  font-family: "Plus Jakarta Sans Variable", sans-serif;
   font-size: clamp(1.6rem, 4vw, 2.7rem);
   justify-content: center;
   letter-spacing: -0.5px;

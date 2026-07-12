@@ -9,6 +9,7 @@ import { Button } from "../../../../components/ui/button";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "../../../../components/ui/form";
 import { Switch } from "../../../../components/ui/switch";
 import EditorHeader from "./EditorHeader";
+import { buildShareMessage } from "../../../../utils/shareMessage";
 
 /* ---------------- TYPES & CONFIG ---------------- */
 
@@ -124,85 +125,15 @@ export default function SharingEditor({ eventKey, onBack }: SharingEditorProps) 
   );
 
   // Premium computed dynamic share view array logic
-  const previewLines = React.useMemo(() => {
-    const lines: string[] = [];
-
-    if (watchedMessage?.trim()) {
-      lines.push(watchedMessage.trim());
-    }
-
-    if (watchedIncludeCoupleNames && (brideName || groomName)) {
-      lines.push([brideName, groomName].filter(Boolean).join(" & "));
-    }
-
-    if (primaryFunction) {
-      // 1. Safe Date Extractor & Format Validation
-      if (watchedIncludeEventDate) {
-        const rawDate = primaryFunction.date || primaryFunction.eventDate;
-        if (rawDate) {
-          const parsedDate = new Date(rawDate);
-          if (!isNaN(parsedDate.getTime())) {
-            lines.push(
-              parsedDate.toLocaleDateString("en-IN", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              }),
-            );
-          } else {
-            lines.push(String(rawDate));
-          }
-        }
-      }
-
-      // 2. Safe Time Extractor
-      if (watchedIncludeEventTime) {
-        const rawTime = primaryFunction.startTime || primaryFunction.time;
-        if (rawTime) {
-          if (typeof rawTime === "string" && (rawTime.includes("T") || !isNaN(Date.parse(rawTime)))) {
-            try {
-              lines.push(
-                new Intl.DateTimeFormat("en-IN", {
-                  hour: "numeric",
-                  minute: "2-digit",
-                  hour12: true,
-                }).format(new Date(rawTime)),
-              );
-            } catch {
-              lines.push(String(rawTime));
-            }
-          } else {
-            lines.push(String(rawTime));
-          }
-        }
-      }
-
-      // 3. Venue
-      if (watchedIncludeVenue) {
-        const venue = primaryFunction.locationName || primaryFunction.venue;
-        if (venue?.trim()) {
-          lines.push(venue.trim());
-        }
-      }
-    }
-
-    if (inviteUrl) {
-      lines.push(inviteUrl);
-    }
-
-    return lines;
-  }, [
-    watchedMessage,
-    watchedIncludeCoupleNames,
-    watchedIncludeEventDate,
-    watchedIncludeEventTime,
-    watchedIncludeVenue,
-    brideName,
-    groomName,
-    primaryFunction,
-    inviteUrl,
-  ]);
-
+  const previewLines = React.useMemo(
+    () =>
+      buildShareMessage(draft, {
+        includeUrl: true,
+        inviteUrl,
+      }).split("\n"),
+    [draft, inviteUrl],
+  );
+  
   const onSubmit = (values: SharingFormValues) => {
     mutation.mutate(
       {

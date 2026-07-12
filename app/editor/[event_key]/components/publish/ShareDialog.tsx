@@ -8,6 +8,7 @@ import { Button } from "../../../../../components/ui/button";
 import { safeDecode } from "../../PreviewToolbar";
 import { usePreviewDraft } from "../../PreviewDraftContext";
 import { cn } from "../../../../../utils/utils";
+import { buildShareMessage } from "../../../../../utils/shareMessage";
 
 type Props = {
   children: React.ReactNode;
@@ -47,77 +48,14 @@ export function ShareDialog({ children, url, status, paymentStatus, displayInvit
   const schedule = Array.isArray(draft?.schedule) ? draft.schedule : Object.values(draft?.schedule ?? {});
   const primaryFunction = schedule.find((item: any) => item.isPrimary) ?? schedule[0];
 
-  // 2. Compute live text dynamically corresponding to toggle selections
-  const generatedShareText = useMemo(() => {
-    const lines: string[] = [];
-
-    const shareMessage = sharing.shareMessage ?? DEFAULT_SHARE_MESSAGE;
-    if (shareMessage.trim()) {
-      lines.push(shareMessage.trim());
-    }
-
-    const includeCoupleNames = sharing.includeCoupleNames ?? true;
-    if (includeCoupleNames && (brideName || groomName)) {
-      lines.push([brideName, groomName].filter(Boolean).join(" & "));
-    }
-
-    if (primaryFunction) {
-      const includeEventDate = sharing.includeEventDate ?? true;
-      if (includeEventDate) {
-        const rawDate = primaryFunction.date || primaryFunction.eventDate;
-        if (rawDate) {
-          const parsedDate = new Date(rawDate);
-          if (!isNaN(parsedDate.getTime())) {
-            lines.push(
-              parsedDate.toLocaleDateString("en-IN", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              }),
-            );
-          } else {
-            lines.push(String(rawDate));
-          }
-        }
-      }
-
-      const includeEventTime = sharing.includeEventTime ?? true;
-      if (includeEventTime) {
-        const rawTime = primaryFunction.startTime || primaryFunction.time;
-        if (rawTime) {
-          if (typeof rawTime === "string" && (rawTime.includes("T") || !isNaN(Date.parse(rawTime)))) {
-            try {
-              lines.push(
-                new Intl.DateTimeFormat("en-IN", {
-                  hour: "numeric",
-                  minute: "2-digit",
-                  hour12: true,
-                }).format(new Date(rawTime)),
-              );
-            } catch {
-              lines.push(String(rawTime));
-            }
-          } else {
-            lines.push(String(rawTime));
-          }
-        }
-      }
-
-      const includeVenue = sharing.includeVenue ?? true;
-      if (includeVenue) {
-        const venue = primaryFunction.locationName || primaryFunction.venue;
-        if (venue?.trim()) {
-          lines.push(venue.trim());
-        }
-      }
-    }
-
-    if (fullInviteUrl) {
-      lines.push(fullInviteUrl);
-    }
-
-    return lines.join("\n");
-  }, [sharing, announcement, primaryFunction, brideName, groomName, fullInviteUrl]);
+  const generatedShareText = useMemo(
+    () =>
+      buildShareMessage(draft, {
+        includeUrl: true,
+        inviteUrl: fullInviteUrl,
+      }),
+    [draft, fullInviteUrl],
+  );
 
   // 3. Dynamic Array Layout mapping matching your structured channels
   const shareItems = useMemo(() => {

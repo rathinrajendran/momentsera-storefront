@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { fetchEventByKey } from "../../lib/api";
+import { buildShareMessage } from "../../utils/shareMessage";
 import Catalog from "./invites/catalog/page";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const fetchCache = "force-no-store";
 
 type PageProps = {
   params: Promise<{
@@ -10,9 +15,10 @@ type PageProps = {
   }>;
 };
 
-/* ---------------------------------------------
- * Dynamic SEO + WhatsApp/Facebook Preview
- * --------------------------------------------*/
+/* -------------------------------------------------------------------------- */
+/*                                Dynamic SEO                                 */
+/* -------------------------------------------------------------------------- */
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { event_key } = await params;
 
@@ -20,30 +26,52 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!data) {
     return {
-      title: "Invitation Not Found",
-      description: "The invitation you're looking for does not exist.",
+      title: "Invitation Not Found | Momentsera",
+      description: "The invitation you're looking for could not be found.",
+      robots: {
+        index: false,
+        follow: false,
+      },
     };
   }
 
   const announcement = data.announcement ?? {};
   const invite = data.invite ?? {};
 
-  const bride = announcement?.bride?.name ?? invite?.firstName ?? "";
+  const bride = announcement?.bride?.name?.trim() ?? invite?.firstName?.trim() ?? "";
 
-  const groom = announcement?.groom?.name ?? invite?.secondName ?? "";
+  const groom = announcement?.groom?.name?.trim() ?? invite?.secondName?.trim() ?? "";
 
-  const couple = [bride, groom].filter(Boolean).join(" & ") || "Wedding Invitation";
+  const couple = [bride, groom].filter(Boolean).join(" & ") || invite?.title || "Wedding Invitation";
 
   const frontendUrl = process.env.NEXT_PUBLIC_FRONTEND_URL ?? "https://invite.momentsera.com";
 
   const inviteUrl = `${frontendUrl}/${event_key}`;
 
-  const coverImage = data.gallery?.coverImage || data.gallery?.cover || `${frontendUrl}/images/default-og.jpg`;
+  const imagePath = data.gallery?.coverImage || data.gallery?.cover || "/images/default-og.jpg";
+
+  const coverImage = imagePath.startsWith("http") ? imagePath : `${frontendUrl}${imagePath.startsWith("/") ? "" : "/"}${imagePath}`;
+
+  // Same message used by SharingEditor + ShareDialog
+  const description = buildShareMessage(data, {
+    includeUrl: false,
+  });
 
   return {
+    metadataBase: new URL(frontendUrl),
+
     title: `${couple} | Momentsera`,
 
-    description: "You're invited to celebrate our special day.",
+    description,
+
+    applicationName: "Momentsera",
+
+    keywords: ["Wedding Invitation", "Digital Invitation", "Momentsera", bride, groom],
+
+    robots: {
+      index: true,
+      follow: true,
+    },
 
     alternates: {
       canonical: inviteUrl,
@@ -51,11 +79,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     openGraph: {
       type: "website",
+      locale: "en_US",
+      siteName: "Momentsera",
+
       url: inviteUrl,
 
       title: `${couple} | Wedding Invitation`,
 
-      description: "You're invited to celebrate our special day.",
+      description,
 
       images: [
         {
@@ -72,16 +103,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
       title: `${couple} | Wedding Invitation`,
 
-      description: "You're invited to celebrate our special day.",
+      description,
 
       images: [coverImage],
     },
   };
 }
 
-/* ---------------------------------------------
- * Invitation Page
- * --------------------------------------------*/
+/* -------------------------------------------------------------------------- */
+/*                                  Page                                      */
+/* -------------------------------------------------------------------------- */
+
 export default async function EventPage({ params }: PageProps) {
   const { event_key } = await params;
 
@@ -126,7 +158,7 @@ export default async function EventPage({ params }: PageProps) {
       theme={theme}
       eventKey={event_key}
       print={print}
-      isLive={true}
+      isLive
       motion={motion}
       sharing={sharing}
       privacy={privacy}
