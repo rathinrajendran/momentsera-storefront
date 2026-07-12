@@ -80,6 +80,6 @@ export function buildShare(data: any): ShareData {
     // coverImage: data?.gallery?.coverImage ?? data?.gallery?.cover ?? "/images/demo-cover.jpg",
     coverImage: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1200&q=80",
     // previewType: sharing.previewType ?? SharePreviewType.BASIC,
-    previewType: SharePreviewType.LARGE,
+    previewType: SharePreviewType.BASIC,
   };
 }
