@@ -11,8 +11,6 @@ import {
   Calendar,
   Compass,
   Settings,
-  PlayCircle,
-  BookOpen,
   Image as ImageIcon,
   MessageSquare,
   Clock,
@@ -60,28 +58,28 @@ export const sectionTabMapping = {
       id: "announcement",
       title: "Announcement",
       desc: "Names & greeting",
-      icon: <Heading className="h-4 w-4" strokeWidth={1.5} />,
+      icon: <Heading className="h-4 w-4" strokeWidth={1} />,
       visibilityCheck: false,
     },
     {
       id: "gallery",
       title: "Gallery",
       desc: "Photos & videos",
-      icon: <ImageIcon className="h-4 w-4" strokeWidth={1.5} />,
+      icon: <ImageIcon className="h-4 w-4" strokeWidth={1} />,
       visibilityCheck: true,
     },
     {
       id: "wishes",
       title: "Wishes",
       desc: "Guest messages & congratulations",
-      icon: <MessageSquare className="h-4 w-4" strokeWidth={1.5} />,
+      icon: <MessageSquare className="h-4 w-4" strokeWidth={1} />,
       visibilityCheck: true,
     },
     {
       id: "music",
       title: "Music",
       desc: "Background audio track",
-      icon: <Music className="h-4 w-4" strokeWidth={1.5} />,
+      icon: <Music className="h-4 w-4" strokeWidth={1} />,
       visibilityCheck: true,
     },
   ],
@@ -189,7 +187,7 @@ const sideMenuItems = [
   { id: "event", label: "Event", icon: <Calendar className="h-5 w-5" /> },
   { id: "design", label: "Design", icon: <Compass className="h-5 w-5" /> },
   { id: "settings", label: "Settings", icon: <Settings className="h-5 w-5" /> },
-  { id: "preview", label: "Preview", icon: <PlayCircle className="h-5 w-5" /> },
+  // { id: "preview", label: "Preview", icon: <PlayCircle className="h-5 w-5" /> },
 ];
 
 export default function EditorLayout({ eventKey, eventId }: EditorLayoutProps) {
@@ -236,10 +234,10 @@ export default function EditorLayout({ eventKey, eventId }: EditorLayoutProps) {
 
           {/* RIGHT Persistent Workspace Panel Wrapper Container */}
           <div
-            className={`${splitScreen ? "h-[40dvh]" : "h-[160px]"} flex-column fixed right-0 bottom-0 left-0 z-[99] flex flex-col overflow-hidden border-t border-zinc-200 bg-white md:relative md:w-[400px] md:flex-row md:border-t-0 md:border-l`}
+            className={`${splitScreen ? "h-[40dvh]" : "h-[160px] md:h-[calc(100vh-65px)]"} flex-column fixed right-0 bottom-0 left-0 z-[99] flex flex-col overflow-hidden md:relative md:w-[400px] md:flex-row md:border-t-0 md:border-l md:bg-white justify-end`}
           >
             {/* Config Form Action Switcher Layer */}
-            <div className="h-auto w-full overflow-y-auto bg-white md:h-[calc(100%-64px)] md:flex-1">
+            <div className="h-auto w-full overflow-y-auto md:h-[calc(100%-64px)] md:flex-1 md:bg-white">
               <EditorPanel
                 activeSection={activeSection}
                 onSectionChange={setActiveSection}
@@ -252,7 +250,7 @@ export default function EditorLayout({ eventKey, eventId }: EditorLayoutProps) {
             </div>
             {/* Global Fixed Side Nav Menu Layer */}
             <div
-              className={`${splitScreen ? "hidden" : "flex"} z-10 h-16 w-full shrink-0 flex-row items-center justify-around border-t border-zinc-100 bg-[#fafafa] px-2 py-1 text-zinc-400 md:h-full md:w-[85px] md:flex-col md:justify-start md:border-t-0 md:border-r md:py-6`}
+              className={`${splitScreen ? "hidden" : "flex"} z-10 h-[80px] w-full shrink-0 flex-row items-center justify-around border-t border-zinc-100 bg-[#fafafa] px-2 py-1 text-zinc-400 md:h-full md:w-[85px] md:flex-col md:justify-start md:border-t-0 md:border-r md:py-6 bg-black rounded-t-3xl`}
             >
               <nav className="flex w-full flex-row items-center justify-around gap-1 md:flex-col md:gap-4">
                 {sideMenuItems.map((item) => {
@@ -264,7 +262,7 @@ export default function EditorLayout({ eventKey, eventId }: EditorLayoutProps) {
                         setActiveTab(item.id as any);
                         setActiveSection("overview");
                       }}
-                      className={`flex w-12 cursor-pointer flex-col items-center justify-center gap-1 rounded-lg py-1.5 text-[10px] font-medium uppercase transition-all md:w-full md:text-[10px] ${
+                      className={`flex w-17 cursor-pointer flex-col items-center justify-center gap-1 rounded-lg py-1.5 px-2 text-[10px] font-medium capitalize transition-all md:w-full md:text-[10px] ${
                         isActive ? "bg-[var(--accent-primary)] text-white shadow-inner" : "text-zinc-400"
                       }`}
                     >
