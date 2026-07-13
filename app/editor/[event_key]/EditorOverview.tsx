@@ -65,7 +65,7 @@ function EditorCard({ title, desc, icon, onClick }: { title: string; desc: strin
   return (
     <div
       onClick={onClick}
-      className="flex cursor-pointer items-center justify-between rounded-xl border border-zinc-100 bg-white p-2 shadow-sm transition-all duration-200 hover:border-zinc-200/80 hover:shadow-md md:rounded-2xl md:p-5"
+      className="flex cursor-pointer items-center justify-between rounded-xl border border-zinc-100 bg-white p-4 shadow-sm transition-all duration-200 hover:border-zinc-200/80 hover:shadow-md md:rounded-2xl md:p-5"
     >
       <div className="flex min-w-0 flex-1 items-center gap-4">
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-zinc-100/50 bg-zinc-50 text-zinc-500">

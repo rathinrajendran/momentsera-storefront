@@ -11,6 +11,7 @@ import Heading from "../../../components/ui/Heading";
 import PageLayout from "../../../components/ui/PageLayout";
 import { BorderFrame } from "../../../components/ui/BorderFrame";
 import Section from "../../../components/ui/Section";
+import { Invite } from "./page";
 /* ──────────────────────────────────────────
 ANIMATION
 ────────────────────────────────────────── */
@@ -41,7 +42,7 @@ const itemVariants: Variants = {
   },
 };
 interface InviteListsProps {
-  invites: any[];
+  invites: Invite[];
   filters: {
     categories: string[];
     types: string[];

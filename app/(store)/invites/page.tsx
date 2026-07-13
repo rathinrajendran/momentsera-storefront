@@ -9,9 +9,19 @@ export const metadata = {
 // This page depends on the API.
 // Don't prerender it during build.
 export const dynamic = "force-dynamic";
-
+export interface Invite {
+  id: number;
+  invite_key: string;
+  shortname: string;
+  price: number;
+  main_category: string;
+  style_category: string;
+  type: string;
+  description?: string;
+  thumbnail?: string;
+}
 export default async function Invites() {
-  let invites: any[] = [];
+  let invites: Invite[] = [];
 
   try {
     invites = await fetchInvites();

@@ -250,7 +250,7 @@ export default function EditorLayout({ eventKey, eventId }: EditorLayoutProps) {
             </div>
             {/* Global Fixed Side Nav Menu Layer */}
             <div
-              className={`${splitScreen ? "hidden" : "flex"} z-10 h-[80px] w-full shrink-0 flex-row items-center justify-around border-t border-zinc-100 bg-[#fafafa] px-2 py-1 text-zinc-400 md:h-full md:w-[85px] md:flex-col md:justify-start md:border-t-0 md:border-r md:py-6 bg-black rounded-t-3xl`}
+              className={`${splitScreen ? "hidden" : "flex"} z-10 h-[80px] w-full shrink-0 flex-row items-center justify-around border-t border-zinc-100 bg-[#fafafa] px-2 py-1 text-zinc-400 md:h-full md:w-[85px] md:flex-col md:justify-start md:border-t-0 md:border-r md:py-6 bg-[#fafafa] rounded-t-3xl`}
             >
               <nav className="flex w-full flex-row items-center justify-around gap-1 md:flex-col md:gap-4">
                 {sideMenuItems.map((item) => {

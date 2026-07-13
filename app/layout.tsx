@@ -84,36 +84,42 @@ import { AuthProvider } from "../providers/AuthProvider";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
 });
 
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600"],
   variable: "--font-poppins",
+  display: "swap",
 });
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600"],
   variable: "--font-dm-sans",
+  display: "swap",
 });
 
 const josefinSans = Josefin_Sans({
   subsets: ["latin"],
   weight: ["300", "400", "600"],
   variable: "--font-josefin",
+  display: "swap",
 });
 
 const nunito = Nunito({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600"],
   variable: "--font-nunito",
+  display: "swap",
 });
 
 const workSans = Work_Sans({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600"],
   variable: "--font-work-sans",
+  display: "swap",
 });
 
 /* ─────────────────────────────────────────
@@ -125,6 +131,7 @@ const playfair = Playfair_Display({
   weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
   variable: "--font-playfair",
+  display: "swap",
 });
 
 const cormorant = Cormorant_Garamond({
@@ -132,11 +139,13 @@ const cormorant = Cormorant_Garamond({
   weight: ["300", "400", "500", "600"],
   style: ["normal", "italic"],
   variable: "--font-cormorant",
+  display: "swap",
 });
 
 const lora = Lora({
   subsets: ["latin"],
   variable: "--font-lora",
+  display: "swap",
 });
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -148,76 +157,89 @@ const plusJakarta = Plus_Jakarta_Sans({
 const ebGaramond = EB_Garamond({
   subsets: ["latin"],
   variable: "--font-eb-garamond",
+  display: "swap",
 });
 
 const cinzel = Cinzel({
   subsets: ["latin"],
   weight: ["400", "600", "700"],
   variable: "--font-cinzel",
+  display: "swap",
 });
 
 const tenorSans = Tenor_Sans({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-tenor",
+  display: "swap",
 });
 
 const sourceSerif = Source_Serif_4({
   subsets: ["latin"],
   variable: "--font-source-serif",
+  display: "swap",
 });
 
 const bodoni = Bodoni_Moda({
   subsets: ["latin"],
   variable: "--font-bodoni",
+  display: "swap",
 });
 
 const prata = Prata({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-prata",
+  display: "swap",
 });
 
 const marcellus = Marcellus({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-marcellus",
+  display: "swap",
 });
 
 const forum = Forum({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-forum",
+  display: "swap",
 });
 
 const vidaloka = Vidaloka({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-vidaloka",
+  display: "swap",
 });
 
 const libreBaskerville = Libre_Baskerville({
   subsets: ["latin"],
   weight: ["400", "700"],
   variable: "--font-libre-baskerville",
+  display: "swap",
 });
 
 const cormorantUnicase = Cormorant_Unicase({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
   variable: "--font-cormorant-unicase",
+  display: "swap",
 });
 
 const gloock = Gloock({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-gloock",
+  display: "swap",
 });
 
 const bellefair = Bellefair({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-bellefair",
+  display: "swap",
 });
 
 /* ─────────────────────────────────────────
@@ -228,65 +250,76 @@ const greatVibes = Great_Vibes({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-great-vibes",
+  display: "swap",
 });
 
 const sacramento = Sacramento({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-sacramento",
+  display: "swap",
 });
 
 const pinyon = Pinyon_Script({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-pinyon",
+  display: "swap",
 });
 
 const alexBrush = Alex_Brush({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-alex-brush",
+  display: "swap",
 });
 
 const allura = Allura({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-allura",
+  display: "swap",
 });
 
 const parisienne = Parisienne({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-parisienne",
+  display: "swap",
 });
 
 const dancingScript = Dancing_Script({
   subsets: ["latin"],
   variable: "--font-dancing-script",
+  display: "swap",
 });
 
 const qwitcher = Qwitcher_Grypen({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-qwitcher",
+  display: "swap",
 });
 
 const windsong = WindSong({
   subsets: ["latin"],
   weight: ["400", "500"],
   variable: "--font-windsong",
+  display: "swap",
 });
 
 const msMadi = Ms_Madi({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-ms-madi",
+  display: "swap",
 });
 
 const imperialScript = Imperial_Script({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-imperial-script",
+  display: "swap",
 });
 
 /* NEW PREMIUM SCRIPTS */
@@ -294,78 +327,91 @@ const imperialScript = Imperial_Script({
 const ballet = Ballet({
   subsets: ["latin"],
   variable: "--font-ballet",
+  display: "swap",
 });
 
 const italianno = Italianno({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-italianno",
+  display: "swap",
 });
 
 const meaCulpa = Mea_Culpa({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-mea-culpa",
+  display: "swap",
 });
 
 const monsieur = Monsieur_La_Doulaise({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-monsieur",
+  display: "swap",
 });
 
 const passions = Passions_Conflict({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-passions",
+  display: "swap",
 });
 
 const rougeScript = Rouge_Script({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-rouge-script",
+  display: "swap",
 });
 
 const tangerine = Tangerine({
   subsets: ["latin"],
   weight: ["400", "700"],
   variable: "--font-tangerine",
+  display: "swap",
 });
 
 const niconne = Niconne({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-niconne",
+  display: "swap",
 });
 
 const arizonia = Arizonia({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-arizonia",
+  display: "swap",
 });
 
 const satisfy = Satisfy({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-satisfy",
+  display: "swap",
 });
 
 const yellowtail = Yellowtail({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-yellowtail",
+  display: "swap",
 });
 
 const petitFormal = Petit_Formal_Script({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-petit-formal",
+  display: "swap",
 });
 
 const norican = Norican({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-norican",
+  display: "swap",
 });
 
 /* HANDWRITTEN */
@@ -373,18 +419,21 @@ const norican = Norican({
 const caveat = Caveat({
   subsets: ["latin"],
   variable: "--font-caveat",
+  display: "swap",
 });
 
 const belleAurore = La_Belle_Aurore({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-belle-aurore",
+  display: "swap",
 });
 
 const whisper = Whisper({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-whisper",
+  display: "swap",
 });
 
 /* ─────────────────────────────────────────
@@ -395,6 +444,7 @@ const jetbrains = JetBrains_Mono({
   subsets: ["latin"],
   weight: ["400", "500"],
   variable: "--font-jetbrains",
+  display: "swap",
 });
 
 /* ─────────────────────────────────────────
@@ -406,6 +456,7 @@ const display = Cormorant_Garamond({
   weight: ["300", "400", "500"],
   style: ["normal", "italic"],
   variable: "--font-display",
+  display: "swap",
 });
 
 /* ─────────────────────────────────────────
