@@ -191,7 +191,7 @@ export default function EditorOverview({ activeTab, currentSections = [], onSele
   }, [scrollTop]);
 
   return (
-    <div className="flex h-auto flex-col overflow-hidden px-4 md:h-full md:bg-white md:px-6 md:pt-5">
+    <div className="flex h-auto flex-col overflow-hidden px-4 md:h-full md:bg-white md:px-6 p-5">
       <div className="mb-5 hidden md:block">
         <h2 className="text-lg font-bold tracking-tight text-zinc-900 capitalize">{activeTab}</h2>
         <p className="text-xs tracking-wide">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, voluptas iure!</p>
@@ -252,16 +252,15 @@ function EditorCard({
   return (
     <div
       onClick={onClick}
-      className="flex cursor-pointer items-center justify-between rounded-xl border border-slate-200 bg-white p-4 transition-all duration-200 hover:border-[#84a59d]/40 hover:shadow-sm md:rounded-xl md:p-3"
+      className="flex cursor-pointer items-center justify-between rounded-lg border border-slate-200 bg-white p-2 transition-all duration-200 hover:border-[#84a59d]/40 md:rounded-xl md:p-3"
     >
-      <div className="flex min-w-0 flex-1 items-center gap-4">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-zinc-100/50 bg-zinc-50 text-zinc-500">
+      <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-4">
+        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-sm border border-zinc-100/50 bg-zinc-50 text-zinc-500 sm:h-10 sm:w-10 sm:rounded-lg">
           {icon}
         </div>
 
         <div className="min-w-0 flex-1">
-          <h3 className="truncate text-[0.9rem] font-semibold text-zinc-800">{title}</h3>
-
+          <h3 className="truncate text-[0.8rem] font-semibold text-zinc-800 sm:text-[0.9rem]">{title}</h3>
           <p className="truncate text-[0.7rem] text-zinc-400">{desc}</p>
         </div>
       </div>
@@ -273,12 +272,11 @@ function EditorCard({
               e.stopPropagation();
               onVisibilityClick?.();
             }}
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 transition hover:bg-emerald-100"
+            className="flex hidden h-8 w-8 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 transition hover:bg-emerald-100 sm:block"
           >
             <Eye size={14} strokeWidth={1.8} />
           </button>
         )}
-
         <ChevronRight size={16} className="shrink-0 text-zinc-300" />
       </div>
     </div>

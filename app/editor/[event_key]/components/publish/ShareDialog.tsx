@@ -11,7 +11,11 @@ import { cn } from "../../../../../utils/utils";
 import { buildShareMessage } from "../../../../../utils/shareMessage";
 
 type Props = {
-  children: React.ReactNode;
+  children?: React.ReactNode; // Made optional since it might be controlled programmatically
+
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+
   url: string;
   className?: string;
   status: string;
@@ -21,7 +25,7 @@ type Props = {
 
 const DEFAULT_SHARE_MESSAGE = "You're invited! We can't wait to celebrate with you.";
 
-export function ShareDialog({ children, url, status, paymentStatus, displayInviteUrl }: Props) {
+export function ShareDialog({ children, open, onOpenChange, url, status, paymentStatus, displayInviteUrl }: Props) {
   const { draft } = usePreviewDraft();
   const [copied, setCopied] = useState(false);
   const [copiedPreview, setCopiedPreview] = useState(false);
@@ -31,7 +35,6 @@ export function ShareDialog({ children, url, status, paymentStatus, displayInvit
   const canShare = typeof navigator !== "undefined" && "share" in navigator;
   const canShareInvite = paymentStatus === "paid" && status === "published";
 
-  // Use the active distribution URL context link target
   const activeTargetUrl = canShareInvite ? decodedInviteUrl : decodedPreviewUrl;
 
   const frontendUrl =
@@ -39,14 +42,7 @@ export function ShareDialog({ children, url, status, paymentStatus, displayInvit
 
   const fullInviteUrl = `${frontendUrl}${activeTargetUrl}`;
 
-  // 1. Extract configurations securely from backing schema
   const sharing = draft?.sharing ?? {};
-  const announcement = draft?.announcement ?? {};
-  const brideName = announcement.bride?.name?.trim() ?? "";
-  const groomName = announcement.groom?.name?.trim() ?? "";
-
-  const schedule = Array.isArray(draft?.schedule) ? draft.schedule : Object.values(draft?.schedule ?? {});
-  const primaryFunction = schedule.find((item: any) => item.isPrimary) ?? schedule[0];
 
   const generatedShareText = useMemo(
     () =>
@@ -57,7 +53,6 @@ export function ShareDialog({ children, url, status, paymentStatus, displayInvit
     [draft, fullInviteUrl],
   );
 
-  // 3. Dynamic Array Layout mapping matching your structured channels
   const shareItems = useMemo(() => {
     const encodedFullText = encodeURIComponent(generatedShareText);
     const encodedUrlOnly = encodeURIComponent(fullInviteUrl);
@@ -116,15 +111,14 @@ export function ShareDialog({ children, url, status, paymentStatus, displayInvit
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      {children && <DialogTrigger asChild>{children}</DialogTrigger>}
       <DialogContent
         className={cn(
           "animate-in fade-in zoom-in-95 border border-slate-100 bg-white p-5 shadow-xl duration-200 outline-none",
           "mx-auto w-[calc(100%-2rem)] max-w-[420px] rounded-2xl md:w-full",
         )}
       >
-        {/* Header Section */}
         <DialogHeader className="flex flex-row items-center justify-between border-b border-slate-50 pb-2">
           <div className="max-w-[90%] space-y-0.5">
             <DialogTitle className="truncate text-sm font-bold text-slate-900">Share Invitation</DialogTitle>
@@ -134,9 +128,7 @@ export function ShareDialog({ children, url, status, paymentStatus, displayInvit
           </div>
         </DialogHeader>
 
-        {/* Content Body */}
         <div className="mt-4 space-y-5">
-          {/* Live Message Preview Bubble */}
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase">Compiled Text Message</span>
@@ -155,7 +147,6 @@ export function ShareDialog({ children, url, status, paymentStatus, displayInvit
             </div>
           </div>
 
-          {/* Share Channels Matrix */}
           <div className="space-y-2 rounded-xl border border-slate-100 bg-slate-50/30 p-4 duration-200">
             <span className="text-[11px] font-bold tracking-wider text-slate-400 uppercase">Share via channels</span>
             <div className="grid grid-cols-4 gap-3 pt-1">
@@ -179,7 +170,6 @@ export function ShareDialog({ children, url, status, paymentStatus, displayInvit
                 );
               })}
 
-              {/* Native Mobile Share Button */}
               {canShare && (
                 <button
                   type="button"
@@ -195,7 +185,6 @@ export function ShareDialog({ children, url, status, paymentStatus, displayInvit
             </div>
           </div>
 
-          {/* Core Direct link container section */}
           <div className="space-y-1.5">
             <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase">Direct Invitation Link</span>
             <div className="grid grid-cols-[1fr_auto] items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 shadow-sm">

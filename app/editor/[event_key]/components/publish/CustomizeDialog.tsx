@@ -16,25 +16,41 @@ import { safeDecode } from "../../PreviewToolbar";
 import { cn } from "../../../../../utils/utils";
 
 type Props = {
-  children: React.ReactNode;
+  children?: React.ReactNode; // Made optional
+
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+
   inviteUrl: string;
   onInviteUrlChange: (value: string) => void;
   inviteData: {
-    id: number;
-    eventKey: string;
-    eventType: string;
+    id?: number;
+    eventKey?: string;
+    eventType?: string;
     year?: number;
-    firstName: string;
-    secondName: string;
+    firstName?: string;
+    secondName?: string;
   };
 };
 
-export function CustomizeDialog({ children, inviteUrl, onInviteUrlChange, inviteData }: Props) {
-  const [open, setOpen] = useState(false);
+export function CustomizeDialog({
+  children,
+  open: controlledOpen,
+  onOpenChange: controlledOnOpenChange,
+  inviteUrl,
+  onInviteUrlChange,
+  inviteData,
+}: Props) {
+  // Support both controlled and uncontrolled states
+  const [localOpen, setLocalOpen] = useState(false);
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen : localOpen;
+  const setOpen = isControlled ? controlledOnOpenChange : setLocalOpen;
+
   const decodedInviteUrl = useMemo(() => safeDecode(inviteUrl), [inviteUrl]);
   const [query, setQuery] = useState(decodedInviteUrl);
   const [hasEdited, setHasEdited] = useState(false);
-  const suggestions = useUrlSuggestions(inviteData.firstName, inviteData.secondName, inviteData.year);
+  const suggestions = useUrlSuggestions(inviteData.firstName ?? "", inviteData.secondName ?? "", inviteData.year);
   const debouncedQuery = useDebounce(query.trim(), 500);
   const normalizedQuery = query.trim();
   const shouldCheck = open && hasEdited && normalizedQuery.length > 2 && normalizedQuery !== decodedInviteUrl;
@@ -47,7 +63,7 @@ export function CustomizeDialog({ children, inviteUrl, onInviteUrlChange, invite
   };
 
   const handleOpenChange = (value: boolean) => {
-    setOpen(value);
+    setOpen?.(value);
     if (value) {
       setQuery(decodedInviteUrl);
       setHasEdited(false);
@@ -59,13 +75,13 @@ export function CustomizeDialog({ children, inviteUrl, onInviteUrlChange, invite
   const handleSave = () => {
     if (!canSave) return;
     onInviteUrlChange(normalizedQuery);
-    setOpen(false);
+    setOpen?.(false);
     reset();
   };
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      {children && <DialogTrigger asChild>{children}</DialogTrigger>}
 
       <DialogContent
         className={cn(
@@ -73,7 +89,6 @@ export function CustomizeDialog({ children, inviteUrl, onInviteUrlChange, invite
           "mx-auto w-[calc(100%-2rem)] max-w-[420px] rounded-2xl md:w-full",
         )}
       >
-        {/* Header Section */}
         <DialogHeader className="flex flex-row items-center justify-between border-b border-slate-50 pb-2">
           <div className="max-w-[90%] space-y-0.5">
             <DialogTitle className="truncate text-sm font-bold text-slate-900">Customize invite link</DialogTitle>
@@ -83,9 +98,7 @@ export function CustomizeDialog({ children, inviteUrl, onInviteUrlChange, invite
           </div>
         </DialogHeader>
 
-        {/* Content Body */}
         <div className="mt-4 space-y-5">
-          {/* Input & Availability Badge — Added 'relative' back to anchor the badge correctly */}
           <div className="relative space-y-1.5">
             <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase">Link Configuration</span>
 
@@ -105,7 +118,6 @@ export function CustomizeDialog({ children, inviteUrl, onInviteUrlChange, invite
             )}
           </div>
 
-          {/* Suggestions Section */}
           {suggestions && suggestions.length > 0 && (
             <div className="space-y-2 rounded-xl border border-slate-100 bg-slate-50/30 p-4 duration-200">
               <p className="text-[11px] font-bold tracking-wider text-slate-400 uppercase">Suggested Invitation URLs</p>
@@ -119,7 +131,6 @@ export function CustomizeDialog({ children, inviteUrl, onInviteUrlChange, invite
             </div>
           )}
 
-          {/* Save Trigger Action */}
           <button
             type="button"
             disabled={!canSave || isLoading}

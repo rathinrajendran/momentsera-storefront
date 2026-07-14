@@ -2,7 +2,6 @@
 
 import { useMemo } from "react";
 import { Pen, Share2 } from "lucide-react";
-
 import { DeviceType } from "./EditorLayout";
 import { DeviceSwitcher } from "./DeviceSwitcher";
 import { ShareDialog } from "./components/publish/ShareDialog";
@@ -16,6 +15,11 @@ type Props = {
   device: DeviceType;
   onDeviceChange: (device: DeviceType) => void;
   className: string;
+  shareDialogOpen: boolean;
+  onShareDialogOpenChange: (open: boolean) => void;
+
+  customizeDialogOpen: boolean;
+  onCustomizeDialogOpenChange: (open: boolean) => void;
 };
 
 export function safeDecode(value: string) {
@@ -26,7 +30,17 @@ export function safeDecode(value: string) {
   }
 }
 
-export function PreviewToolbar({ inviteUrl, onInviteUrlChange, device, onDeviceChange, className }: Props) {
+export function PreviewToolbar({
+  inviteUrl,
+  onInviteUrlChange,
+  device,
+  onDeviceChange,
+  className,
+  shareDialogOpen,
+  onShareDialogOpenChange,
+  customizeDialogOpen,
+  onCustomizeDialogOpenChange,
+}: Props) {
   const { draft } = usePreviewDraft();
   const { invite, announcement, schedule } = draft;
   const displayInviteUrl = useMemo(() => safeDecode(inviteUrl), [inviteUrl]);
@@ -55,7 +69,13 @@ export function PreviewToolbar({ inviteUrl, onInviteUrlChange, device, onDeviceC
             {displayInviteUrl}
           </div>
         </div>
-        <CustomizeDialog inviteUrl={inviteUrl} onInviteUrlChange={onInviteUrlChange} inviteData={inviteData}>
+        <CustomizeDialog
+          open={customizeDialogOpen}
+          onOpenChange={onCustomizeDialogOpenChange}
+          inviteUrl={inviteUrl}
+          onInviteUrlChange={onInviteUrlChange}
+          inviteData={inviteData}
+        >
           <button
             type="button"
             className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-md transition hover:bg-slate-100"
@@ -65,6 +85,8 @@ export function PreviewToolbar({ inviteUrl, onInviteUrlChange, device, onDeviceC
           </button>
         </CustomizeDialog>
         <ShareDialog
+          open={shareDialogOpen}
+          onOpenChange={onShareDialogOpenChange}
           url={displayInviteUrl}
           status={invite.status}
           paymentStatus={invite.payment_status}
