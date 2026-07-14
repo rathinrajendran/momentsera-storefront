@@ -54,6 +54,7 @@ export default function EditorPanel({
           onSelect={onSectionChange}
           scrollTop={overviewScrollTop}
           onScrollChange={onOverviewScrollChange}
+          eventKey={eventKey}
         />
       )}
       {activeSection === "announcement" && <AnnouncementEditor eventKey={eventKey} onBack={() => onSectionChange("overview")} />}

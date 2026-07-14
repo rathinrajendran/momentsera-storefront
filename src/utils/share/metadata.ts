@@ -1,27 +1,38 @@
 import type { Metadata } from "next";
-import { SharePreviewType, type ShareData } from "./types";
+import { type ShareData } from "./types";
 import { buildShareMessage } from "./message";
 import { buildPreviewImage } from "./preview";
 
 interface Options {
-  frontendUrl: string;
+  frontendUrl?: string;
   eventKey: string;
 }
 
+function getFrontendUrl(url?: string) {
+  const value = url || process.env.FRONTEND_URL || process.env.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000";
+
+  try {
+    return new URL(value).toString().replace(/\/$/, "");
+  } catch {
+    return "http://localhost:3000";
+  }
+}
+
 export function buildMetadata(share: ShareData, options: Options): Metadata {
-  const inviteUrl = `${options.frontendUrl}/${options.eventKey}`;
+  const frontendUrl = getFrontendUrl(options.frontendUrl);
+
+  const inviteUrl = `${frontendUrl}/${options.eventKey}`;
 
   const description = buildShareMessage(share, {
     includeUrl: false,
   });
 
-const image = buildPreviewImage(share, inviteUrl);
+  const image = buildPreviewImage(share, inviteUrl);
 
   return {
-    metadataBase: new URL(options.frontendUrl),
+    metadataBase: new URL(frontendUrl),
 
     title: share.title,
-
     description,
 
     alternates: {
@@ -30,13 +41,9 @@ const image = buildPreviewImage(share, inviteUrl);
 
     openGraph: {
       type: "website",
-
       url: inviteUrl,
-
       title: share.title,
-
       description,
-
       images: image
         ? [
             {
@@ -51,11 +58,8 @@ const image = buildPreviewImage(share, inviteUrl);
 
     twitter: {
       card: "summary_large_image",
-
       title: share.title,
-
       description,
-
       images: image ? [image] : [],
     },
   };

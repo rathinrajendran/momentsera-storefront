@@ -48,7 +48,7 @@ export function PreviewToolbar({ inviteUrl, onInviteUrlChange, device, onDeviceC
   );
 
   return (
-    <div className="sticky top-0 z-10 flex h-[50px] items-center justify-between gap-3 border-b bg-white px-4">
+    <div className="relative z-10 flex h-[50px] items-center justify-between gap-3 border-b bg-white px-4">
       <div className="flex min-w-0 flex-1 items-center gap-2">
         <div className="flex min-w-0 items-center text-xs">
           <div className="truncate font-medium flex items-center" title={displayInviteUrl}>
