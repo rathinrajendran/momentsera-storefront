@@ -286,58 +286,62 @@ export default function EditorLayout({ eventKey, eventId }: EditorLayoutProps) {
             showMenuLayer ? "mt-0 h-[100dvh]" : "h-[calc(100dvh-45px)] md:h-[calc(100dvh-65px)]"
           } grid grid-cols-2 grid-rows-[1fr_1fr] overflow-hidden md:grid-cols-[200px_minmax(0,1fr)_400px] md:grid-rows-1`}
         >
-          <div
-            className={`${
-              showMenuLayer ? "h-[calc(55dvh-60px)]" : "hidden"
-            } menu-layer z-10 col-start-1 row-start-3 w-full flex-col bg-white p-4 text-zinc-400 md:col-start-1 md:row-start-1 md:flex md:h-full md:w-auto`}
-          >
-            <div className="flex w-full justify-start pb-5">
-              <h3 className="text-left text-xs font-bold tracking-wide text-black uppercase">Editor</h3>
+          {!splitScreen ? (
+            <div
+              className={`${
+                showMenuLayer ? "h-[calc(55dvh-50px)]" : "hidden"
+              } menu-layer z-10 col-start-1 row-start-3 w-full flex-col bg-white p-4 text-zinc-400 md:col-start-1 md:row-start-1 md:flex md:h-full md:w-auto`}
+            >
+              <div className="flex w-full justify-start pb-5">
+                <h3 className="text-left text-xs font-bold tracking-wide text-black uppercase">Editor</h3>
+              </div>
+              <nav className="flex w-full flex-col items-center justify-around">
+                {sideMenuItems.map((item) => {
+                  const isActive = activeTab === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        setActiveTab(item.id as any);
+                        setShowMenuLayer(true);
+                      }}
+                      className={`flex w-full cursor-pointer items-center gap-1 rounded-md px-3 py-2.5 text-[10px] font-medium text-black capitalize transition-all md:justify-start md:text-[10px] ${
+                        isActive ? "text-green bg-[#ebf2ef]" : "text-black"
+                      }`}
+                    >
+                      {item.icon}
+                      <span className="max-w-full truncate">{item.label}</span>
+                    </button>
+                  );
+                })}
+              </nav>
+              <div className="flex w-full justify-start pb-5">
+                <h3 className="text-left text-xs font-bold uppercase">Tools</h3>
+              </div>
+              <nav className="flex w-full flex-col items-center justify-around">
+                {ToolsMenuItems.map((item) => {
+                  const isActive = activeTab === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        setActiveTab(item.id as any);
+                        setActiveSection("overview");
+                      }}
+                      className={`flex w-full cursor-pointer items-center gap-1 rounded-md px-3 py-2.5 text-[10px] font-medium text-black capitalize transition-all md:justify-start md:text-[10px] ${
+                        isActive ? "text-green bg-[#ebf2ef]" : "text-black"
+                      }`}
+                    >
+                      {item.icon}
+                      <span className="max-w-full truncate">{item.label}</span>
+                    </button>
+                  );
+                })}
+              </nav>
             </div>
-            <nav className="flex w-full flex-col items-center justify-around">
-              {sideMenuItems.map((item) => {
-                const isActive = activeTab === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => {
-                      setActiveTab(item.id as any);
-                      setShowMenuLayer(true);
-                    }}
-                    className={`flex w-full cursor-pointer items-center gap-1 rounded-md px-3 py-2.5 text-[10px] font-medium text-black capitalize transition-all md:justify-start md:text-[10px] ${
-                      isActive ? "text-green bg-[#ebf2ef]" : "text-black"
-                    }`}
-                  >
-                    {item.icon}
-                    <span className="max-w-full truncate">{item.label}</span>
-                  </button>
-                );
-              })}
-            </nav>
-            <div className="flex w-full justify-start pb-5">
-              <h3 className="text-left text-xs font-bold uppercase">Tools</h3>
-            </div>
-            <nav className="flex w-full flex-col items-center justify-around">
-              {ToolsMenuItems.map((item) => {
-                const isActive = activeTab === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => {
-                      setActiveTab(item.id as any);
-                      setActiveSection("overview");
-                    }}
-                    className={`flex w-full cursor-pointer items-center gap-1 rounded-md px-3 py-2.5 text-[10px] font-medium text-black capitalize transition-all md:justify-start md:text-[10px] ${
-                      isActive ? "text-green bg-[#ebf2ef]" : "text-black"
-                    }`}
-                  >
-                    {item.icon}
-                    <span className="max-w-full truncate">{item.label}</span>
-                  </button>
-                );
-              })}
-            </nav>
-          </div>
+          ) : (
+            <></>
+          )}
           {/* LEFT – LIVE VIEW PREVIEW */}
           <div
             className={`${
@@ -346,19 +350,23 @@ export default function EditorLayout({ eventKey, eventId }: EditorLayoutProps) {
           >
             <PreviewPanel device={device} splitScreen={splitScreen} eventKey={eventKey} />
           </div>
-          <div className="col-span-2 row-start-2 flex h-[50px] items-center gap-4 bg-white px-4 md:hidden">
-            <button className="flex h-8 w-8 items-center justify-center rounded-md border" onClick={() => setShowMenuLayer(false)}>
-              <ChevronLeftIcon strokeWidth={1} className="h-5 w-5" />
-            </button>
-            <div>
-              <h6 className="font-bold">Sections</h6>
+          {!splitScreen ? (
+            <div className="col-span-2 row-start-2 flex h-[50px] items-center gap-4 rounded-t-3xl bg-white px-4 md:hidden">
+              <button className="flex h-8 w-8 items-center justify-center rounded-md border" onClick={() => setShowMenuLayer(false)}>
+                <ChevronLeftIcon strokeWidth={1} className="h-5 w-5" />
+              </button>
+              <div>
+                <h6 className="font-bold">Sections</h6>
+              </div>
             </div>
-          </div>
+          ) : (
+            <></>
+          )}
           {/* RIGHT Persistent Workspace Panel Wrapper Container */}
           <div
             className={`${
-              showMenuLayer ? "block h-[calc(55dvh-60px)]" : "hidden md:block md:h-[calc(100vh-65px)]"
-            } menu-layer col-start-2 row-start-3 flex flex-col border-l bg-white md:relative md:col-start-3 md:row-start-1 md:h-full`}
+              showMenuLayer ? "000 block h-[calc(55dvh-50px)]" : "hidden md:block md:h-[calc(100vh-65px)]"
+            } ${splitScreen ? "col-span-2 col-start-1" : "col-span-1 col-start-2"} menu-layer row-start-3 flex flex-col border-l bg-white md:relative md:col-start-3 md:row-start-1 md:h-full`}
           >
             {/* Config Form Action Switcher Layer */}
             <div className="h-auto w-full overflow-y-auto md:h-[calc(100%-64px)] md:flex-1 md:bg-white">
