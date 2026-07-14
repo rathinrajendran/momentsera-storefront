@@ -18,16 +18,21 @@ const PADDING_ITEMS = 2;
 
 export function TimePicker({ value, onChange }: TimePickerProps) {
   const [isOpen, setIsOpen] = React.useState(false);
+
+  // Cleanly sync external value changes during the render phase without useEffect
+  const [prevValue, setPrevValue] = React.useState<Date | undefined>(value);
   const [tempDate, setTempDate] = React.useState<Date>(value || new Date());
 
-  React.useEffect(() => {
+  if (value !== prevValue) {
+    setPrevValue(value);
     setTempDate(value || new Date());
-  }, [value]);
+  }
 
   const hours = Array.from({ length: 12 }, (_, i) => i + 1);
   const minutes = Array.from({ length: 60 }, (_, i) => i);
   const periods = ["AM", "PM"];
 
+  // Changed from null! to standard null now that signatures are updated
   const hourRef = React.useRef<HTMLDivElement>(null);
   const minuteRef = React.useRef<HTMLDivElement>(null);
   const periodRef = React.useRef<HTMLDivElement>(null);
@@ -39,7 +44,7 @@ export function TimePicker({ value, onChange }: TimePickerProps) {
   const updateTime = (hour?: number, minute?: number, period?: "AM" | "PM") => {
     const date = new Date(tempDate);
     let h = hour ?? (date.getHours() % 12 || 12);
-    let m = minute ?? date.getMinutes();
+    const m = minute ?? date.getMinutes();
     let p = period ?? (date.getHours() >= 12 ? "PM" : "AM");
 
     if (p === "PM" && h !== 12) h += 12;
@@ -50,20 +55,24 @@ export function TimePicker({ value, onChange }: TimePickerProps) {
     setTempDate(date);
   };
 
-  const handleWheelScroll = (e: React.UIEvent<HTMLDivElement>, values: any[], type: "hour" | "minute" | "period") => {
+  const handleWheelScroll = (e: React.UIEvent<HTMLDivElement>, values: (number | string)[], type: "hour" | "minute" | "period") => {
     const scrollTop = e.currentTarget.scrollTop;
     const index = Math.round(scrollTop / ITEM_HEIGHT);
     const selected = values[Math.max(0, Math.min(index, values.length - 1))];
 
     if (selected === undefined) return;
 
-    if (type === "hour" && selected !== selectedHour) updateTime(selected);
-    if (type === "minute" && selected !== selectedMinute) updateTime(undefined, selected);
-    if (type === "period" && selected !== selectedPeriod) updateTime(undefined, undefined, selected);
+    if (type === "hour" && selected !== selectedHour) updateTime(selected as number);
+    if (type === "minute" && selected !== selectedMinute) updateTime(undefined, selected as number);
+    if (type === "period" && selected !== selectedPeriod) updateTime(undefined, undefined, selected as "AM" | "PM");
   };
 
-  // High-End Click Trigger Selection & Auto Scroll Positioning
-  const handleItemClick = (item: any, index: number, ref: React.RefObject<HTMLDivElement>, type: "hour" | "minute" | "period") => {
+  const handleItemClick = (
+    item: number | string,
+    index: number,
+    ref: React.RefObject<HTMLDivElement | null>,
+    type: "hour" | "minute" | "period",
+  ) => {
     if (ref.current) {
       ref.current.scrollTo({
         top: index * ITEM_HEIGHT,
@@ -71,20 +80,19 @@ export function TimePicker({ value, onChange }: TimePickerProps) {
       });
     }
 
-    if (type === "hour") updateTime(item);
-    if (type === "minute") updateTime(undefined, item);
-    if (type === "period") updateTime(undefined, undefined, item);
+    if (type === "hour") updateTime(item as number);
+    if (type === "minute") updateTime(undefined, item as number);
+    if (type === "period") updateTime(undefined, undefined, item as "AM" | "PM");
   };
 
-  // Enable desktop click-and-drag interactions
-  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>, ref: React.RefObject<HTMLDivElement>) => {
+  // FIXED: Changed signature to accept React.RefObject<HTMLDivElement | null>
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>, ref: React.RefObject<HTMLDivElement | null>) => {
     const element = ref.current;
     if (!element) return;
 
     const startY = e.pageY;
     const startScrollTop = element.scrollTop;
 
-    // Temporarily turn off smooth/snapping behaviors during dragging for a responsive feel
     element.style.scrollSnapType = "none";
     element.style.scrollBehavior = "auto";
 
@@ -102,7 +110,6 @@ export function TimePicker({ value, onChange }: TimePickerProps) {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
 
-      // Re-enable snapping behaviors once dragging finishes
       element.style.scrollSnapType = "y mandatory";
       element.style.scrollBehavior = "smooth";
 
@@ -116,7 +123,6 @@ export function TimePicker({ value, onChange }: TimePickerProps) {
     window.addEventListener("mouseup", handleMouseUp);
   };
 
-  // Align positions reliably when the modal pops open
   React.useEffect(() => {
     if (!isOpen) return;
 
@@ -131,12 +137,17 @@ export function TimePicker({ value, onChange }: TimePickerProps) {
     });
   }, [isOpen]);
 
-  const renderWheel = (items: any[], selected: any, ref: React.RefObject<HTMLDivElement>, type: "hour" | "minute" | "period") => (
+  const renderWheel = (
+    items: (number | string)[],
+    selected: number | string,
+    ref: React.RefObject<HTMLDivElement | null>,
+    type: "hour" | "minute" | "period",
+  ) => (
     <div
       ref={ref}
       onScroll={(e) => handleWheelScroll(e, items, type)}
       onMouseDown={(e) => handleMouseDown(e, ref)}
-      className="scrollbar-none flex-1 cursor-grab snap-y snap-mandatory overflow-y-auto scroll-smooth border-r border-slate-200 select-none last:border-r-0 active:cursor-grabbing [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-[0px] [&::-webkit-scrollbar-thumb]:rounded-[10px] [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-[#78909C]"
+      className="flex-1 cursor-grab snap-y snap-mandatory scrollbar-none overflow-y-auto scroll-smooth border-r border-slate-200 select-none last:border-r-0 active:cursor-grabbing [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-[0px] [&::-webkit-scrollbar-thumb]:rounded-[10px] [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-[#78909C]"
       style={{ height: `${ITEM_HEIGHT * 5}px` }}
     >
       {/* Top Padding Row Spacers */}
