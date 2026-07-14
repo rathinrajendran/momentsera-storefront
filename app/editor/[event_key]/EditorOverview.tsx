@@ -230,7 +230,6 @@ export default function EditorOverview({ activeTab, currentSections = [], onSele
         hint={getSectionVisibility(activeSection ?? "")?.hint ?? ""}
         onSave={handleVisibilitySave}
       />
-      ;
     </div>
   );
 }

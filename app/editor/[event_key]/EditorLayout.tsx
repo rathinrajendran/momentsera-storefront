@@ -24,6 +24,7 @@ import {
   Lock,
   Printer,
   Heading,
+  ChevronLeftIcon,
 } from "lucide-react";
 import { PreviewToolbar } from "./PreviewToolbar";
 import { useRouter } from "next/navigation";
@@ -238,42 +239,7 @@ export default function EditorLayout({ eventKey, eventId }: EditorLayoutProps) {
 
   const splitScreen = activeSection !== "overview" && isMobile;
   const currentSections = activeTab !== "preview" ? sectionTabMapping[activeTab] : [];
-  const menuVariants = {
-    hidden: {
-      y: "100%",
-      opacity: 0,
-    },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.28,
-        ease: [0.22, 1, 0.36, 1],
-      },
-    },
-    exit: {
-      y: "100%",
-      opacity: 0,
-      transition: {
-        duration: 0.2,
-        ease: [0.4, 0, 1, 1],
-      },
-    },
-  };
 
-  const panelVariants = {
-    hidden: {
-      x: 40,
-      opacity: 0,
-    },
-    visible: {
-      x: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.25,
-      },
-    },
-  };
   return (
     <HomeWrapper
       className="relative overflow-hidden"
@@ -295,7 +261,17 @@ export default function EditorLayout({ eventKey, eventId }: EditorLayoutProps) {
           damping: 28,
         }}
       >
-        <Header />
+        <div className="fixed top-0 right-0 left-0 z-50 w-full bg-white">
+          <div className="flex h-[70px] items-center gap-4 px-4">
+            <button className="flex h-8 w-8 items-center justify-center rounded-md border">
+              <ChevronLeftIcon strokeWidth={1} className="h-5 w-5" />
+            </button>
+            <div>
+              <h6 className="font-bold">Momentsera Studio</h6>
+              <p className="text-[0.7rem] tracking-wide">Everything you need to build invitations.</p>
+            </div>
+          </div>
+        </div>
       </motion.div>
       <div className="max-w-8xl mx-auto bg-[#f3f4f6] md:mt-[64px]">
         <PreviewToolbar
@@ -307,13 +283,13 @@ export default function EditorLayout({ eventKey, eventId }: EditorLayoutProps) {
         />
         <div
           className={`${
-            splitScreen ? "mt-0 h-[100dvh]" : "h-[calc(100dvh-45px)] md:h-[calc(100dvh-65px)]"
+            showMenuLayer ? "mt-0 h-[100dvh]" : "h-[calc(100dvh-45px)] md:h-[calc(100dvh-65px)]"
           } grid grid-cols-2 grid-rows-[1fr_1fr] overflow-hidden md:grid-cols-[200px_minmax(0,1fr)_400px] md:grid-rows-1`}
         >
           <div
             className={`${
-              showMenuLayer ? "h-[50dvh]" : "hidden"
-            } menu-layer z-10 col-start-1 row-start-2 w-full flex-col bg-white p-4 text-zinc-400 md:col-start-1 md:row-start-1 md:flex md:h-full md:w-auto`}
+              showMenuLayer ? "h-[calc(55dvh-60px)]" : "hidden"
+            } menu-layer z-10 col-start-1 row-start-3 w-full flex-col bg-white p-4 text-zinc-400 md:col-start-1 md:row-start-1 md:flex md:h-full md:w-auto`}
           >
             <div className="flex w-full justify-start pb-5">
               <h3 className="text-left text-xs font-bold tracking-wide text-black uppercase">Editor</h3>
@@ -351,8 +327,8 @@ export default function EditorLayout({ eventKey, eventId }: EditorLayoutProps) {
                       setActiveTab(item.id as any);
                       setActiveSection("overview");
                     }}
-                    className={`flex w-17 cursor-pointer items-center justify-center gap-1 rounded-md px-3 py-2.5 text-[10px] font-medium capitalize transition-all md:w-full md:justify-start md:text-[10px] ${
-                      isActive ? "bg-[var(--accent-primary)] text-white shadow-inner" : "text-black"
+                    className={`flex w-full cursor-pointer items-center gap-1 rounded-md px-3 py-2.5 text-[10px] font-medium text-black capitalize transition-all md:justify-start md:text-[10px] ${
+                      isActive ? "text-green bg-[#ebf2ef]" : "text-black"
                     }`}
                   >
                     {item.icon}
@@ -365,17 +341,24 @@ export default function EditorLayout({ eventKey, eventId }: EditorLayoutProps) {
           {/* LEFT – LIVE VIEW PREVIEW */}
           <div
             className={`${
-              showMenuLayer ? "h-[50dvh]" : "h-[calc(100dvh-105px)] md:h-[calc(100dvh-65px)]"
+              showMenuLayer ? "h-[45dvh]" : "h-[calc(100dvh-61px)] pt-[70px] md:h-[calc(100dvh-65px)] md:pt-0"
             } col-span-2 row-start-1 overflow-hidden md:col-span-1 md:col-start-2`}
           >
             <PreviewPanel device={device} splitScreen={splitScreen} eventKey={eventKey} />
           </div>
-
+          <div className="col-span-2 row-start-2 flex h-[50px] items-center gap-4 bg-white px-4 md:hidden">
+            <button className="flex h-8 w-8 items-center justify-center rounded-md border" onClick={() => setShowMenuLayer(false)}>
+              <ChevronLeftIcon strokeWidth={1} className="h-5 w-5" />
+            </button>
+            <div>
+              <h6 className="font-bold">Sections</h6>
+            </div>
+          </div>
           {/* RIGHT Persistent Workspace Panel Wrapper Container */}
           <div
             className={`${
-              showMenuLayer ? "h-[50dvh]" : "h-[160px] md:h-[calc(100vh-65px)]"
-            } menu-layer col-start-2 row-start-2 flex flex-col border-l bg-white md:relative md:col-start-3 md:row-start-1 md:h-full`}
+              showMenuLayer ? "block h-[calc(55dvh-60px)]" : "hidden md:block md:h-[calc(100vh-65px)]"
+            } menu-layer col-start-2 row-start-3 flex flex-col border-l bg-white md:relative md:col-start-3 md:row-start-1 md:h-full`}
           >
             {/* Config Form Action Switcher Layer */}
             <div className="h-auto w-full overflow-y-auto md:h-[calc(100%-64px)] md:flex-1 md:bg-white">
