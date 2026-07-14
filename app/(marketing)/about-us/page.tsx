@@ -1,32 +1,13 @@
 "use client";
 
-import React from "react";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Sparkles, Fingerprint, Zap } from "lucide-react";
-
 import { Header } from "../components/header/Header";
 import { Footer } from "../components/footer/Footer";
-
 import { H2 } from "../../../components/ui/H2";
 import { H5 } from "../../../components/ui/H5";
-import { H6 } from "../../../components/ui/H6";
 import { Para } from "../../../components/ui/Para";
 import Heading from "../../../components/ui/Heading";
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Animation Variants
-// ─────────────────────────────────────────────────────────────────────────────
-const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 1,
-      ease: [0.19, 1, 0.22, 1],
-    },
-  },
-};
 
 export default function AboutUs() {
   return (

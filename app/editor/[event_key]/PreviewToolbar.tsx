@@ -15,6 +15,7 @@ type Props = {
   onInviteUrlChange: (value: string) => void;
   device: DeviceType;
   onDeviceChange: (device: DeviceType) => void;
+  className: string;
 };
 
 export function safeDecode(value: string) {
@@ -25,12 +26,10 @@ export function safeDecode(value: string) {
   }
 }
 
-export function PreviewToolbar({ inviteUrl, onInviteUrlChange, device, onDeviceChange }: Props) {
+export function PreviewToolbar({ inviteUrl, onInviteUrlChange, device, onDeviceChange, className }: Props) {
   const { draft } = usePreviewDraft();
-
   const { invite, announcement, schedule } = draft;
   const displayInviteUrl = useMemo(() => safeDecode(inviteUrl), [inviteUrl]);
-  const getLiveUrl = () => `${window.location.origin}/${inviteUrl}`;
   const primaryFunction = useMemo(() => schedule?.find((item: any) => item.isPrimary), [schedule]);
   const coupleOrder = announcement?.coupleOrder ?? "bride_first";
   const firstName = coupleOrder === "groom_first" ? announcement?.groom?.name : announcement?.bride?.name;
@@ -48,10 +47,10 @@ export function PreviewToolbar({ inviteUrl, onInviteUrlChange, device, onDeviceC
   );
 
   return (
-    <div className="relative z-10 flex h-[50px] items-center justify-between gap-3 border-b bg-white px-4">
+    <div className={`${className} relative z-10 flex h-[50px] items-center justify-between gap-3 border-b bg-white px-4`}>
       <div className="flex min-w-0 flex-1 items-center gap-2">
         <div className="flex min-w-0 items-center text-xs">
-          <div className="truncate font-medium flex items-center" title={displayInviteUrl}>
+          <div className="flex items-center truncate font-medium" title={displayInviteUrl}>
             <span className="hidden lg:block">{draft?.frontendUrl}/</span>
             {displayInviteUrl}
           </div>

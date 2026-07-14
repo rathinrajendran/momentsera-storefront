@@ -46,7 +46,7 @@ function PreviewFrameComponent({ previewUrl, device, splitScreen }: Props) {
           }}
         />
       </div>
-      <div className="flex justify-center">
+      <div className="hidden md:flex justify-center">
       <PublishButton />
       </div>
     </div>

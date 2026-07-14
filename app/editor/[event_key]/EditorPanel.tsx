@@ -72,7 +72,7 @@ export default function EditorPanel({
       {activeSection === "shape" && <ShapeEditor eventKey={eventKey} onBack={() => onSectionChange("overview")} />}
       {activeSection === "privacy" && <PrivacyEditor eventKey={eventKey} onBack={() => onSectionChange("overview")} />}
       {activeSection === "sharing" && <SharingEditor eventKey={eventKey} onBack={() => onSectionChange("overview")} />}
-      {activeSection === "motion" && <MotionEditor eventKey={eventKey} onBack={() => onSectionChange("overview")} />}
+      {activeSection === "motionSection" && <MotionEditor eventKey={eventKey} onBack={() => onSectionChange("overview")} />}
       {activeSection === "print" && <PrintEditor eventKey={eventKey} onBack={() => onSectionChange("overview")} />}
     </>
   );

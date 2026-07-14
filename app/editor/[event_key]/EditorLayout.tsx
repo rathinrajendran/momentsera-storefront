@@ -6,6 +6,7 @@ import PreviewPanel from "./PreviewPanel";
 import EditorPanel from "./EditorPanel";
 import { HomeWrapper } from "../../(marketing)/Home/HomeStyles";
 import bg from "@/assets/images/placeholder/bg.png";
+import { motion } from "framer-motion";
 import {
   Megaphone,
   Calendar,
@@ -44,7 +45,7 @@ export type EditorSection =
   | "font"
   | "background"
   | "sharing"
-  | "motion"
+  | "motionSection"
   | "print"
   | "settings";
 
@@ -283,9 +284,27 @@ export default function EditorLayout({ eventKey, eventId }: EditorLayoutProps) {
         backgroundAttachment: "fixed",
       }}
     >
-      <Header className={`${splitScreen ? "hidden" : ""}`} />
+      <motion.div
+        animate={{
+          y: showMenuLayer ? -70 : 0,
+          opacity: showMenuLayer ? 0 : 1,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 260,
+          damping: 28,
+        }}
+      >
+        <Header />
+      </motion.div>
       <div className="max-w-8xl mx-auto bg-[#f3f4f6] md:mt-[64px]">
-        <PreviewToolbar inviteUrl={eventKey} onInviteUrlChange={handleInviteUrlChange} device={device} onDeviceChange={setDevice} />
+        <PreviewToolbar
+          inviteUrl={eventKey}
+          onInviteUrlChange={handleInviteUrlChange}
+          device={device}
+          onDeviceChange={setDevice}
+          className="hidden md:block"
+        />
         <div
           className={`${
             splitScreen ? "mt-0 h-[100dvh]" : "h-[calc(100dvh-45px)] md:h-[calc(100dvh-65px)]"
@@ -294,7 +313,7 @@ export default function EditorLayout({ eventKey, eventId }: EditorLayoutProps) {
           <div
             className={`${
               showMenuLayer ? "h-[50dvh]" : "hidden"
-            } menu-layer z-10 col-start-1 row-start-2 w-full flex-col bg-white text-zinc-400 md:col-start-1 md:row-start-1 md:flex md:h-full md:w-auto p-4`}
+            } menu-layer z-10 col-start-1 row-start-2 w-full flex-col bg-white p-4 text-zinc-400 md:col-start-1 md:row-start-1 md:flex md:h-full md:w-auto`}
           >
             <div className="flex w-full justify-start pb-5">
               <h3 className="text-left text-xs font-bold tracking-wide text-black uppercase">Editor</h3>
@@ -309,7 +328,7 @@ export default function EditorLayout({ eventKey, eventId }: EditorLayoutProps) {
                       setActiveTab(item.id as any);
                       setShowMenuLayer(true);
                     }}
-                    className={`flex cursor-pointer items-center gap-1 rounded-md px-3 py-2.5 text-[10px] font-medium text-black capitalize transition-all w-full md:justify-start md:text-[10px] ${
+                    className={`flex w-full cursor-pointer items-center gap-1 rounded-md px-3 py-2.5 text-[10px] font-medium text-black capitalize transition-all md:justify-start md:text-[10px] ${
                       isActive ? "text-green bg-[#ebf2ef]" : "text-black"
                     }`}
                   >
@@ -374,12 +393,25 @@ export default function EditorLayout({ eventKey, eventId }: EditorLayoutProps) {
           </div>
         </div>
       </div>
-      <MobileMenu
-        showMenuLayer={showMenuLayer}
-        onSectionClick={() => setShowMenuLayer((prev) => !prev)}
-        onOtherClick={() => setShowMenuLayer(false)}
-        className="block md:hidden"
-      />
+      <motion.div
+        initial={false}
+        animate={{
+          y: showMenuLayer ? 80 : 0,
+          opacity: showMenuLayer ? 0 : 1,
+        }}
+        transition={{
+          duration: 0.25,
+          ease: "easeInOut",
+        }}
+        className="fixed inset-x-0 bottom-0 z-50 md:hidden"
+      >
+        <MobileMenu
+          showMenuLayer={showMenuLayer}
+          onSectionClick={() => setShowMenuLayer((prev) => !prev)}
+          onOtherClick={() => setShowMenuLayer(false)}
+          className=""
+        />
+      </motion.div>
     </HomeWrapper>
   );
 }

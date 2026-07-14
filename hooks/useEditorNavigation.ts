@@ -12,7 +12,7 @@ export type EditorSection =
   | "wishes"
   | "theme"
   | "music"
-  | "motion"
+  | "motionSection"
   | "sharing"
   | "privacy"
   | "print"

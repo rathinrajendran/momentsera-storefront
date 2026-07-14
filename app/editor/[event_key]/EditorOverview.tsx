@@ -88,7 +88,7 @@ const sections = [
     visibilityCheck: false,
   },
   {
-    id: "motion",
+    id: "motionSection",
     title: "Motion",
     desc: "Animations & transitions",
     icon: <Sparkles className="h-4 w-4" strokeWidth={1} />,
