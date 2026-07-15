@@ -19,7 +19,7 @@ export default function AboutUs() {
         <Heading
           label="Our Philosophy"
           title="Engineering Emotion."
-          desc=" We are a digital design and development studio based in Kerala and the UAE, crafting premium invitation experiences, modern
+          desc=" We are a digital design and development studio based in Kerala, crafting premium invitation experiences, modern
                 websites, and memorable digital products. By combining thoughtful design, cutting-edge technology, and storytelling, we
                 transform meaningful moments into lasting digital experiences."
         />
@@ -34,7 +34,7 @@ export default function AboutUs() {
               className="max-w-[800px] text-xl leading-tight text-[#6b7280] md:text-3xl"
             >
               <Para variant={"small"}>
-                We are a digital design and development studio based in Kerala and the UAE, crafting premium invitation experiences, modern
+                We are a digital design and development studio based in Kerala. crafting premium invitation experiences, modern
                 websites, and memorable digital products. By combining thoughtful design, cutting-edge technology, and storytelling, we
                 transform meaningful moments into lasting digital experiences.
               </Para>
@@ -54,7 +54,7 @@ export default function AboutUs() {
 
               <div className="flex justify-between">
                 <span className="opacity-40">Location</span>
-                <Para>Kerala, India · UAE</Para>
+                <Para>Kerala, India</Para>
               </div>
 
               <div className="flex justify-between">
@@ -130,7 +130,7 @@ export default function AboutUs() {
               },
               {
                 title: "Global Perspective",
-                desc: "Operating between Kerala and the UAE, we bring local cultural understanding together with international design standards.",
+                desc: "Operating between Kerala, we bring local cultural understanding together with international design standards.",
                 icon: <Fingerprint className="h-6 w-6" strokeWidth={1} />,
               },
             ].map((item) => (

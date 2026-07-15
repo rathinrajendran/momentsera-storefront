@@ -58,12 +58,12 @@ export default function Contact() {
                 {
                   icon: Mail,
                   title: "Inquiries",
-                  value: "hello@themomentsby.com",
+                  value: "hello@momentsera.com",
                 },
                 {
                   icon: MapPin,
                   title: "Studio Presence",
-                  value: "Doha, Qatar — Dubai, UAE",
+                  value: "Kerala",
                 },
                 {
                   icon: MessageSquare,

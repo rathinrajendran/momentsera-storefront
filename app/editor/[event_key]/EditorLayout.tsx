@@ -281,6 +281,7 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
   const splitScreen = activeSection !== "overview" && isMobile;
   const currentSections = activeTab !== "preview" ? sectionTabMapping[activeTab] : [];
 
+
   const handlePreview = () => {
     setShowMenuLayer(false);
   };
@@ -430,10 +431,10 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
           {/* LEFT – LIVE VIEW PREVIEW */}
           <div
             className={`${
-              showMenuLayer ? "h-[45dvh]" : "h-[calc(100dvh-61px)] pt-[70px] md:h-[calc(100dvh-65px)] md:pt-0"
+              showMenuLayer ? "h-[45dvh] md:h-[calc(100dvh-65px)]" : "h-[calc(100dvh-61px)] pt-[70px] md:h-[calc(100dvh-65px)] md:pt-0"
             } col-span-2 row-start-1 overflow-hidden md:col-span-1 md:col-start-2`}
           >
-            <PreviewPanel device={device} splitScreen={splitScreen} eventKey={eventKey} />
+            <PreviewPanel device={device} splitScreen={showMenuLayer} eventKey={eventKey} />
           </div>
           {!splitScreen ? (
             <div className="col-span-2 row-start-2 flex h-[50px] items-center gap-4 rounded-t-3xl border border-b bg-white px-4 md:hidden">
@@ -444,19 +445,19 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
                 <ChevronLeftIcon strokeWidth={1} className="h-5 w-5" />
               </button>
               <div>
-                <h6 className="font-bold">Sections</h6>
+                <h6 className="font-bold">Invitation Studio</h6>
               </div>
             </div>
           ) : (
-            <div className="md:hiddenborder col-span-2 row-start-2 flex h-[50px] items-center gap-4 rounded-t-3xl border-b bg-white px-4">
+            <div className="col-span-2 row-start-2 flex h-[50px] items-center gap-4 rounded-t-3xl border border-b bg-white px-4 md:hidden">
               <button
-                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border"
+                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-b"
                 onClick={() => setActiveSection("overview")}
               >
                 <ChevronLeftIcon strokeWidth={1} className="h-5 w-5" />
               </button>
               <div>
-                <h6 className="font-bold">Options</h6>
+                <h6 className="font-bold capitalize">{activeSection}</h6>
               </div>
             </div>
           )}

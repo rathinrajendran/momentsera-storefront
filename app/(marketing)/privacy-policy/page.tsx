@@ -26,7 +26,7 @@ export default function PrivacyPolicy() {
       title: "02. Regional Compliance",
 
       content:
-        "As a studio operating within Qatar and the UAE, we adhere to regional data protection regulations, ensuring your personal information and event details are stored with enterprise-grade encryption.",
+        "As a studio operating within Kerala, we adhere to regional data protection regulations, ensuring your personal information and event details are stored with enterprise-grade encryption.",
     },
 
     {

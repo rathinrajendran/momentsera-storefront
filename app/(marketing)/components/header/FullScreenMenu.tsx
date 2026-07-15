@@ -146,7 +146,7 @@ export function FullScreenMenu({ open, onClose }: Props) {
                     <p className="text-[10px] tracking-[0.3em] text-white/40 uppercase">Studio</p>
 
                     <Para className="mt-3 text-white/70" variant={"small"}>
-                      Kerala, India · UAE
+                      Kerala, India
                     </Para>
                   </div>
 

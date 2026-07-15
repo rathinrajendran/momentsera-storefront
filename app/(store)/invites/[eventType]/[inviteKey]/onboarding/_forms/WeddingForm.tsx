@@ -211,7 +211,7 @@ const locationNotConfirmed = form.watch("locationNotConfirmed");
                 </FormLabel>
 
                 <FormControl>
-                  <Input {...field} placeholder="Dubai, UAE" disabled={locationNotConfirmed} />
+                  <Input {...field} placeholder="Kerala" disabled={locationNotConfirmed} />
                 </FormControl>
 
                 <FormMessage />
