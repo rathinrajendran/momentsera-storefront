@@ -109,7 +109,7 @@ function DialogOverlay({
     <DialogPrimitive.Overlay
       data-slot="dialog-overlay"
       className={cn(
-        "fixed inset-0 z-[999] bg-black/50 backdrop-blur-sm",
+        "fixed inset-0 z-[999] bg-white/50 backdrop-blur-sm",
 
         // animations
         "data-[state=open]:animate-in",
