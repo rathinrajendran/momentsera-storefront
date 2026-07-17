@@ -17,10 +17,7 @@ type Props = {
 function PreviewFrameComponent({ previewUrl, device, splitScreen }: Props) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [iframeLoaded, setIframeLoaded] = useState(false);
-  const { draft } = usePreviewDraft();
-
-  console.log("draft 212121", draft);
-  
+  const { draft } = usePreviewDraft();  
   const { currentViewport, scale, previewSize } = usePreviewScale(device, splitScreen);
   useIframeDraftSync({
     iframeRef,
@@ -29,8 +26,8 @@ function PreviewFrameComponent({ previewUrl, device, splitScreen }: Props) {
   });
 
   return (
-    <div className="flex flex-col gap-4 items-center justify-center bg-gray-100 p-4 h-full">
-      <div className="overflow-hidden rounded-[20px] bg-white shadow-lg" style={previewSize}>
+    <div className="flex h-full flex-col items-center justify-center gap-4 bg-gray-100 p-4">
+      <div className="overflow-hidden rounded-[20px] bg-white shadow-[0_0_0_8px_#ffffff]" style={previewSize}>
         <iframe
           ref={iframeRef}
           src={previewUrl}
@@ -46,8 +43,8 @@ function PreviewFrameComponent({ previewUrl, device, splitScreen }: Props) {
           }}
         />
       </div>
-      <div className="hidden md:flex justify-center">
-      <PublishButton />
+      <div className="hidden justify-center md:flex">
+        <PublishButton />
       </div>
     </div>
   );

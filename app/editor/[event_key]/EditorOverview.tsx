@@ -12,6 +12,7 @@ type SectionItem = {
   title: string;
   desc: string;
   icon: React.ReactNode;
+  iconClass: string;
   visibilityCheck: boolean;
 };
 
@@ -29,6 +30,7 @@ const sections = [
     title: "Announcement",
     desc: "Names & greeting",
     icon: <Heading className="h-4 w-4" strokeWidth={1} />,
+    iconClass: "bg-rose-50 text-rose-500",
     visibilityCheck: false,
   },
   {
@@ -36,6 +38,7 @@ const sections = [
     title: "Schedule",
     desc: "Events, venues & timings",
     icon: <Calendar className="h-4 w-4" strokeWidth={1} />,
+    iconClass: "bg-red-50 text-red-500",
     visibilityCheck: false,
   },
   {
@@ -43,6 +46,7 @@ const sections = [
     title: "Timeline",
     desc: "Sequential itinerary breakdown",
     icon: <Clock className="h-4 w-4" strokeWidth={1} />,
+    iconClass: "bg-amber-50 text-amber-500",
     visibilityCheck: false,
   },
   {
@@ -50,6 +54,7 @@ const sections = [
     title: "Dress Code",
     desc: "Attire rules & color palette",
     icon: <Shirt className="h-4 w-4" strokeWidth={1} />,
+    iconClass: "bg-orange-50 text-orange-500",
     visibilityCheck: false,
   },
   {
@@ -57,6 +62,7 @@ const sections = [
     title: "Gallery",
     desc: "Photos & videos",
     icon: <ImageIcon className="h-4 w-4" strokeWidth={1} />,
+    iconClass: "bg-pink-50 text-pink-500",
     visibilityCheck: true,
   },
   {
@@ -64,6 +70,7 @@ const sections = [
     title: "Music",
     desc: "Background audio track",
     icon: <Music className="h-4 w-4" strokeWidth={1} />,
+    iconClass: "bg-fuchsia-50 text-fuchsia-500",
     visibilityCheck: true,
   },
   {
@@ -71,6 +78,7 @@ const sections = [
     title: "Wishes",
     desc: "Guest messages & congratulations",
     icon: <MessageSquare className="h-4 w-4" strokeWidth={1} />,
+    iconClass: "bg-violet-50 text-violet-500",
     visibilityCheck: true,
   },
   {
@@ -78,6 +86,7 @@ const sections = [
     title: "RSVP",
     desc: "Attendance tracking",
     icon: <CheckCircle className="h-4 w-4" strokeWidth={1} />,
+    iconClass: "bg-emerald-50 text-emerald-500",
     visibilityCheck: true,
   },
   {
@@ -85,6 +94,7 @@ const sections = [
     title: "Theme",
     desc: "Colors, fonts & styling",
     icon: <Palette className="h-4 w-4" strokeWidth={1} />,
+    iconClass: "bg-purple-50 text-purple-500",
     visibilityCheck: false,
   },
   {
@@ -92,6 +102,7 @@ const sections = [
     title: "Motion",
     desc: "Animations & transitions",
     icon: <Sparkles className="h-4 w-4" strokeWidth={1} />,
+    iconClass: "bg-yellow-50 text-yellow-500",
     visibilityCheck: false,
   },
   {
@@ -99,6 +110,7 @@ const sections = [
     title: "Sharing",
     desc: "Invite link & QR code",
     icon: <Share2 className="h-4 w-4" strokeWidth={1} />,
+    iconClass: "bg-sky-50 text-sky-500",
     visibilityCheck: false,
   },
   {
@@ -106,6 +118,7 @@ const sections = [
     title: "Privacy",
     desc: "Password & visibility controls",
     icon: <Lock className="h-4 w-4" strokeWidth={1} />,
+    iconClass: "bg-slate-100 text-slate-600",
     visibilityCheck: false,
   },
   {
@@ -113,6 +126,7 @@ const sections = [
     title: "Print",
     desc: "Printable invitation layout",
     icon: <Printer className="h-4 w-4" strokeWidth={1} />,
+    iconClass: "bg-cyan-50 text-cyan-500",
     visibilityCheck: false,
   },
   {
@@ -120,10 +134,10 @@ const sections = [
     title: "Settings",
     desc: "Preferences, locale & analytics",
     icon: <Settings className="h-4 w-4" strokeWidth={1} />,
+    iconClass: "bg-indigo-50 text-indigo-500",
     visibilityCheck: false,
   },
 ] as const;
-
 
 export default function EditorOverview({ activeTab, currentSections = [], onSelect, scrollTop, onScrollChange, eventKey }: Props) {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -191,7 +205,7 @@ export default function EditorOverview({ activeTab, currentSections = [], onSele
   }, [scrollTop]);
 
   return (
-    <div className="flex h-auto flex-col overflow-hidden px-4 md:h-full md:bg-white md:px-6 p-5">
+    <div className="flex h-auto flex-col overflow-hidden p-5 px-4 md:h-full md:bg-white md:px-6">
       <div className="mb-5 hidden md:block">
         <h2 className="text-lg font-bold tracking-tight text-zinc-900 capitalize">{activeTab}</h2>
         <p className="text-xs tracking-wide">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, voluptas iure!</p>
@@ -203,13 +217,14 @@ export default function EditorOverview({ activeTab, currentSections = [], onSele
               <p>Opening live interactive preview overlay...</p>
             </div>
           ) : (
-            <div className="flex gap-2 flex-col">
-              {currentSections.map(({ id, title, desc, icon, visibilityCheck }) => (
+            <div className="flex flex-col gap-2">
+              {currentSections.map(({ id, title, desc, icon, visibilityCheck, iconClass }) => (
                 <EditorCard
                   key={id}
                   title={title}
                   desc={desc}
                   icon={icon}
+                  iconClass={iconClass}
                   visibilityCheck={visibilityCheck}
                   onClick={() => handleCardSelect(id as EditorSection)}
                   onVisibilityClick={() => handleVisibilityClick(id as EditorSection)}
@@ -239,6 +254,7 @@ function EditorCard({
   desc,
   icon,
   onClick,
+  iconClass,
   visibilityCheck,
   onVisibilityClick,
 }: {
@@ -246,6 +262,7 @@ function EditorCard({
   desc: string;
   icon: React.ReactNode;
   onClick: () => void;
+  iconClass: string;
   visibilityCheck: boolean;
   onVisibilityClick?: () => void;
 }) {
@@ -255,7 +272,7 @@ function EditorCard({
       className="flex cursor-pointer items-center justify-between rounded-lg border border-slate-200 bg-white p-2 transition-all duration-200 hover:border-[#84a59d]/40 md:rounded-xl md:p-3"
     >
       <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-4">
-        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-sm border border-zinc-100/50 bg-zinc-50 text-zinc-500 sm:h-10 sm:w-10 sm:rounded-lg">
+        <div className={`${iconClass} flex h-7 w-7 shrink-0 items-center justify-center rounded-sm border border-zinc-100/50  text-zinc-500 sm:h-10 sm:w-10 sm:rounded-lg`}>
           {icon}
         </div>
 

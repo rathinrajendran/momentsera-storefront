@@ -25,6 +25,7 @@ type SectionItem = {
   title: string;
   desc: string;
   icon: React.ReactNode;
+  iconClass: string;
   visibilityCheck: boolean;
 };
 

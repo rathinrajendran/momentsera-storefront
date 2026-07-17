@@ -28,10 +28,10 @@ export default function MobileMenu({ showMenuLayer, onSectionClick, onPreviewCli
     },
     {
       id: "publish",
-      label: "",
       icon: (
-        <div className="-mt-5 flex h-15 w-15 items-center justify-center rounded-full bg-white">
-          <Send className="h-8 w-8" width={15} strokeWidth={1.5} fill="#84a59d" />
+        <div className="flex flex-col items-center justify-center rounded-lg bg-[#84a59d] px-3 py-2">
+          <Send className="h-5 w-5" width={15} strokeWidth={1.5} fill="#ffffff" />
+          <h1 className="font-medium text-white tracking-wider">Publish</h1>
         </div>
       ),
       onClick: onPublishClick,
@@ -51,8 +51,8 @@ export default function MobileMenu({ showMenuLayer, onSectionClick, onPreviewCli
   ];
 
   return (
-    <div className={`${className} fixed right-0 bottom-0 left-0 z-20 flex`}>
-      <nav className="flex h-[60px] w-full items-center justify-around rounded-t-3xl bg-[#84a59d] px-2">
+    <div className={`${className} fixed right-2 bottom-2 left-2 z-20 flex`}>
+      <nav className="flex h-[60px] w-full items-center justify-around rounded-t-3xl rounded-b-2xl bg-white px-2">
         {ToolsMenuItems.map((item) => {
           // "sections" toggles the menu-layer open/closed; every other
           // button just makes sure the menu-layer is closed.
@@ -63,7 +63,7 @@ export default function MobileMenu({ showMenuLayer, onSectionClick, onPreviewCli
               type="button"
               onClick={item.onClick}
               className={`flex w-22 cursor-pointer flex-col items-center justify-center gap-1 rounded-md px-3 py-2.5 text-[10px] font-medium capitalize transition-all md:w-full md:justify-start md:text-[10px] ${
-                isActive ? "text-green-700" : "text-white"
+                isActive ? "text-green-700" : "text-gray-700"
               }`}
             >
               {item.icon}
