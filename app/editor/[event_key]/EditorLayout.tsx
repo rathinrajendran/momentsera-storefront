@@ -414,8 +414,11 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
     [handlePreview, handleShare, handleInviteLink],
   );
 
-  const menuHeight = showMenuLayer ? (isFullscreen ? "h-[calc(100dvh-50px)]" : "h-[calc(55dvh-50px)]") : "md:h-[calc(100vh-65px)]";
-  const menuLayerHeight = showMenuLayer ? (isFullscreen ? "flex h-[calc(100dvh-50px)]" : "flex h-[calc(55dvh-50px)]") : "hidden";
+  const panelHeight = `h-[calc(${isFullscreen ? "100dvh" : "55dvh"}-50px)]`;
+
+  const menuHeight = showMenuLayer ? panelHeight : "md:h-[calc(100dvh-65px)]";
+
+  const menuLayerHeight = showMenuLayer ? `flex ${panelHeight}` : "hidden";
 
   return (
     <HomeWrapper
@@ -429,8 +432,8 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
     >
       <motion.div
         animate={{
-          y: showMenuLayer ? -70 : 0,
-          opacity: showMenuLayer ? 0 : 1,
+          y: showMenuLayer && isMobile ? -70 : 0,
+          opacity: showMenuLayer && isMobile ? 0 : 1,
         }}
         transition={{
           type: "spring",
@@ -438,7 +441,7 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
           damping: 28,
         }}
       >
-        <div className="fixed top-0 right-0 left-0 z-50 w-full bg-white">
+        <div className="fixed top-0 right-0 left-0 z-50 w-full rounded-b-2xl bg-white">
           <div className="flex h-[70px] items-center gap-4 px-4">
             <button
               className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border"
@@ -464,10 +467,10 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
           onShareDialogOpenChange={setShareDialogOpen}
           customizeDialogOpen={customizeDialogOpen}
           onCustomizeDialogOpenChange={setCustomizeDialogOpen}
-          className="hidden md:block"
+          className="hidden md:flex"
         />
         <div
-          className={`${showMenuLayer ? "mt-0 h-[100dvh]" : "h-[calc(100dvh-45px)] md:h-[calc(100dvh-65px)]"} justify-between overflow-hidden md:flex`}
+          className={`${showMenuLayer && isMobile ? "mt-0 h-[100dvh]" : "h-[calc(100dvh-45px)] md:h-[calc(100dvh-115px)]"} justify-between overflow-hidden md:flex`}
         >
           <div
             className={`hidden w-[200px] flex-col overflow-auto bg-white p-4 text-zinc-400 md:flex md:h-full [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]`}
@@ -523,14 +526,16 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
           {/* LEFT – LIVE VIEW PREVIEW */}
           <div
             className={`${
-              showMenuLayer ? "h-[45dvh] md:h-[calc(100dvh-65px)]" : "h-[calc(100dvh-61px)] pt-[70px] md:h-[calc(100dvh-65px)] md:pt-0"
+              showMenuLayer
+                ? "h-[45dvh] md:h-[calc(100dvh-65px)]"
+                : "h-[calc(100dvh-0px)] py-0 md:h-[calc(100dvh-65px)] md:py-0"
             } overflow-hidden`}
           >
-            <PreviewPanel device={device} splitScreen={showMenuLayer} eventKey={eventKey} />
+            <PreviewPanel device={device} splitScreen={showMenuLayer && isMobile} eventKey={eventKey} />
           </div>
           <div className={`${isFullscreen ? "fixed top-0 h-full" : ""} mob-view flex w-full flex-col md:w-[380px]`}>
             {isMobile && !splitScreen ? (
-              <div className="flex h-[50px] items-center justify-between rounded-t-3xl border border-b bg-white px-4 md:hidden">
+              <div className="flex h-[50px] items-center justify-between rounded-t-3xl border-b bg-white px-4 md:hidden">
                 <div className="flex items-center gap-4">
                   <h6 className="font-bold">Invitation Studio</h6>
                 </div>
@@ -554,7 +559,7 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
               <></>
             )}
             {isMobile && splitScreen ? (
-              <div className="flex h-[50px] items-center justify-between rounded-t-3xl border border-b bg-white px-4 md:hidden">
+              <div className="flex h-[50px] items-center justify-between rounded-t-3xl border-b bg-white px-4 md:hidden">
                 <div className="flex items-center gap-4">
                   <h6 className="font-bold capitalize">{activeSection}</h6>
                 </div>
@@ -570,7 +575,7 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
             )}
             <div className="flex h-full w-full">
               <div
-                className={`${showMenuLayer && !splitScreen ? "block" : "hidden md:block"} mob-160px z-10 flex w-[160px] flex-col overflow-auto bg-white p-4 text-zinc-400 md:hidden md:h-full [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]`}
+                className={`${isFullscreen ? "h-[calc(100dvh-50px)]" : "h-[calc(55dvh-50px)] md:h-auto"} ${showMenuLayer && !splitScreen ? "block" : "hidden md:block"} mob-160px z-10 flex w-[160px] flex-col overflow-auto bg-white p-4 text-zinc-400 md:hidden md:h-full [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]`}
               >
                 <div className="flex w-full justify-start pb-3">
                   <h3 className="text-left text-xs font-bold tracking-wide text-black uppercase">Editor</h3>
@@ -623,9 +628,9 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
 
               {/* RIGHT Persistent Workspace Panel Wrapper Container */}
               <div
-                className={` ${showMenuLayer ? "block" : "hidden md:block"} ${menuHeight} ${splitScreen ? "w-full" : ""} menu-layer flex w-[calc(100%-160px)] flex-col overflow-auto border-l bg-white md:relative md:h-full md:w-full`}
+                className={`${isFullscreen ? "h-[calc(100dvh-50px)]" : "h-[calc(55dvh-50px)] md:h-auto"} ${showMenuLayer ? "block" : "hidden md:block"} ${menuHeight} ${splitScreen ? "w-full" : ""} menu-layer flex w-[calc(100%-160px)] flex-col overflow-auto border-l bg-white md:relative md:h-full md:w-full`}
               >
-                <div className="h-auto w-full overflow-y-auto md:h-[calc(100%-64px)] md:bg-white [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]">
+                <div className="h-auto w-full overflow-y-auto md:h-[calc(100dvh-115px)] md:bg-white [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]">
                   <EditorPanel
                     activeSection={activeSection}
                     onSectionChange={setActiveSection}

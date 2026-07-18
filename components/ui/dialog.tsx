@@ -109,7 +109,7 @@ function DialogOverlay({
     <DialogPrimitive.Overlay
       data-slot="dialog-overlay"
       className={cn(
-        "fixed inset-0 z-[999] bg-white/50 backdrop-blur-sm",
+        "fixed inset-0 z-[999] bg-[#f3f4f6] backdrop-blur-sm",
 
         // animations
         "data-[state=open]:animate-in",
@@ -159,7 +159,7 @@ function DialogContent({
           "grid w-full max-w-[520px]",
 
           // layout
-          "gap-4 border p-6 shadow-2xl",
+          "gap-4 border p-6",
 
           // timing
           "duration-200",

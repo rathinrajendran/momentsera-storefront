@@ -88,7 +88,7 @@ export function SectionVisibilityDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         className={cn(
-          "animate-in fade-in zoom-in-95 border border-slate-100 bg-white p-5 shadow-xl duration-200 outline-none",
+          "animate-in fade-in zoom-in-95 border border-slate-100 bg-white p-5 duration-200 outline-none",
           "mx-auto w-[calc(100%-2rem)] max-w-[420px] rounded-2xl md:w-full",
         )}
       >
