@@ -6,7 +6,8 @@ import { DeviceType } from "./EditorLayout";
 import { usePreviewDraft } from "./PreviewDraftContext";
 import { useIframeDraftSync } from "../../../hooks/useIframeDraftSync";
 import { usePreviewScale } from "../../../hooks/usePreviewScale";
-import { PublishButton } from "./components/publish/PublishButton";
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverHeader, PopoverTitle, PopoverTrigger } from "../../../components/ui/popover";
 
 type Props = {
   previewUrl: string;
@@ -43,8 +44,22 @@ function PreviewFrameComponent({ previewUrl, device, splitScreen }: Props) {
           }}
         />
       </div>
-      <div className="hidden justify-center md:flex">
-        <PublishButton />
+      <div className="justify-center hidden">
+        <Popover>
+          <PopoverTrigger
+            render={
+              <Button variant="outline" className="w-fit">
+                Add page
+              </Button>
+            }
+          />
+          <PopoverContent align="start" className="w-40">
+            <PopoverHeader>
+              <PopoverTitle>Gallery</PopoverTitle>
+              <PopoverTitle>Gallery</PopoverTitle>
+            </PopoverHeader>
+          </PopoverContent>
+        </Popover>
       </div>
     </div>
   );

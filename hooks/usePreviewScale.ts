@@ -10,14 +10,14 @@ const VIEWPORTS = {
 export function usePreviewScale(device: "mobile" | "desktop", splitScreen: boolean) {
   const scale = useMemo(() => {
     if (device === "desktop") return 1;
-    return splitScreen ? 0.65 : 0.9;
+    return splitScreen ? 0.5 : 0.9;
   }, [device, splitScreen]);
 
   const currentViewport = useMemo(() => {
     if (device === "desktop") {
       return {
-        width: "100%",
-        height: "100%",
+        width: "90%",
+        height: "90%",
       };
     }
 
@@ -27,9 +27,9 @@ export function usePreviewScale(device: "mobile" | "desktop", splitScreen: boole
   const previewSize = useMemo(() => {
     if (device === "desktop") {
       return {
-        width: "100%",
+        width: "90%",
         maxWidth: splitScreen ? "1100px" : "1024px",
-        maxHeight: splitScreen ? "1100px" : "calc(100dvh - 225px)",
+        maxHeight: splitScreen ? "1100px" : "calc(100dvh - 20px)",
         aspectRatio: "16 / 9",
       };
     }

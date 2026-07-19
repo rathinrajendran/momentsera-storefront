@@ -12,10 +12,8 @@ import { buildShareMessage } from "../../../../../utils/shareMessage";
 
 type Props = {
   children?: React.ReactNode; // Made optional since it might be controlled programmatically
-
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
-
   url: string;
   className?: string;
   status: string;
@@ -29,21 +27,15 @@ export function ShareDialog({ children, open, onOpenChange, url, status, payment
   const { draft } = usePreviewDraft();
   const [copied, setCopied] = useState(false);
   const [copiedPreview, setCopiedPreview] = useState(false);
-
   const decodedInviteUrl = useMemo(() => safeDecode(url), [url]);
   const decodedPreviewUrl = useMemo(() => safeDecode(displayInviteUrl), [displayInviteUrl]);
   const canShare = typeof navigator !== "undefined" && "share" in navigator;
   const canShareInvite = paymentStatus === "paid" && status === "published";
-
   const activeTargetUrl = canShareInvite ? decodedInviteUrl : decodedPreviewUrl;
-
   const frontendUrl =
     draft?.frontendUrl ?? process.env.NEXT_PUBLIC_FRONTEND_URL ?? (typeof window !== "undefined" ? window.location.origin : "");
-
-  const fullInviteUrl = `${frontendUrl}${activeTargetUrl}`;
-
+  const fullInviteUrl = `${frontendUrl}/preview/${activeTargetUrl}`;
   const sharing = draft?.sharing ?? {};
-
   const generatedShareText = useMemo(
     () =>
       buildShareMessage(draft, {
@@ -115,13 +107,13 @@ export function ShareDialog({ children, open, onOpenChange, url, status, payment
       {children && <DialogTrigger asChild>{children}</DialogTrigger>}
       <DialogContent
         className={cn(
-          "animate-in fade-in zoom-in-95 border border-slate-100 bg-white p-5 duration-200 outline-none",
-          "mx-auto w-[calc(100%-2rem)] max-w-[420px] rounded-2xl md:w-full",
+          "animate-in fade-in border border-slate-200 bg-white p-5 duration-200 outline-none",
+          "mx-auto w-[calc(100%-0px)] max-w-[420px] rounded-2xl md:w-full",
         )}
       >
         <DialogHeader className="flex flex-row items-center justify-between border-b border-slate-50 pb-2">
-          <div className="max-w-[90%] space-y-0.5">
-            <DialogTitle className="truncate text-sm font-bold text-slate-900">Share Invitation</DialogTitle>
+          <div className="max-w-[calc(100%-30px)] space-y-0.5">
+            <DialogTitle className="truncate text-lg font-bold text-slate-900">Share Invitation</DialogTitle>
             <p className="line-clamp-1 text-[10px] font-medium text-slate-400">
               Send out your personalized invitation text message via digital delivery options.
             </p>
@@ -149,7 +141,7 @@ export function ShareDialog({ children, open, onOpenChange, url, status, payment
 
           <div className="space-y-2 rounded-xl border border-slate-100 bg-slate-50/30 p-4 duration-200">
             <span className="text-[11px] font-bold tracking-wider text-slate-400 uppercase">Share via channels</span>
-            <div className="grid grid-cols-4 gap-3 pt-1">
+            <div className="grid grid-cols-5 gap-2 pt-1">
               {shareItems.map((item) => {
                 const IconComponent = item.icon;
                 return (
@@ -160,7 +152,7 @@ export function ShareDialog({ children, open, onOpenChange, url, status, payment
                     rel={item.isExternal ? "noopener noreferrer" : undefined}
                     className="group flex touch-manipulation flex-col items-center gap-1.5 transition-transform outline-none active:scale-98"
                   >
-                    <div className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-100 bg-white shadow-sm transition-all group-hover:border-slate-200 group-hover:bg-slate-50 group-focus:border-slate-200">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#f3f4f6] transition-all">
                       <IconComponent size={16} strokeWidth={2} className="text-slate-700" />
                     </div>
                     <H3 className="text-center text-[10px] font-semibold text-slate-500 transition-colors group-hover:text-slate-900">
@@ -176,7 +168,7 @@ export function ShareDialog({ children, open, onOpenChange, url, status, payment
                   onClick={handleNativeShare}
                   className="group flex touch-manipulation flex-col items-center gap-1.5 transition-transform outline-none active:scale-98"
                 >
-                  <div className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-100 bg-white shadow-sm transition-all group-hover:border-slate-200 group-hover:bg-slate-50">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#f3f4f6] transition-all">
                     <Share2 size={16} strokeWidth={2} className="text-slate-700" />
                   </div>
                   <H3 className="text-center text-[10px] font-semibold text-slate-500 group-hover:text-slate-900">More</H3>
@@ -186,8 +178,8 @@ export function ShareDialog({ children, open, onOpenChange, url, status, payment
           </div>
 
           <div className="space-y-1.5">
-            <span className="text-[10px] font-bold tracking-wider text-slate-400 uppercase">Direct Invitation Link</span>
-            <div className="grid grid-cols-[1fr_auto] items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-1.5 shadow-sm">
+            <span className="font-regular text-[10px] tracking-wide text-slate-400">Direct Invitation Link</span>
+            <div className="grid grid-cols-[1fr_auto] items-center gap-2 rounded-md border border-slate-100 bg-white px-3 py-1.5">
               <span className="min-w-0 truncate font-mono text-[11px] text-slate-500 select-all">{fullInviteUrl}</span>
               <Button
                 type="button"

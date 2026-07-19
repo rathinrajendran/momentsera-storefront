@@ -9,28 +9,19 @@ type Props = {
 
 export function DeviceSwitcher({ device, onChange, className }: Props) {
   return (
-    <div className={cn("flex items-center gap-1", className)}>
+    <div className={cn("flex items-center gap-1 rounded-md border border-slate-200 p-0.5", className)}>
       <button
         onClick={() => onChange("mobile")}
-        className={cn("flex h-6 w-7 cursor-pointer items-center justify-center rounded-sm transition-all duration-200")}
+        className={`${device === "mobile" ? "bg-slate-200" : ""} flex h-7 cursor-pointer items-center justify-center gap-1 rounded-sm px-2 transition-all duration-200`}
       >
-        <Smartphone
-          size={18}
-          strokeWidth={1.8}
-          fill={device === "mobile" ? "#84a59d" : "#ffffff"}
-          className={device === "mobile" ? "#1B5E20" : "#1B5E20"}
-        />
+        <Smartphone size={18} strokeWidth={1.8} /> <span className="text-[0.7rem] font-semibold">Mobile</span>
       </button>
       <button
         onClick={() => onChange("desktop")}
-        className={cn("flex h-6 w-7 cursor-pointer items-center justify-center rounded-sm transition-all duration-200")}
+        className={`${device === "desktop" ? "bg-slate-200" : ""} flex h-7 cursor-pointer items-center justify-center gap-1 rounded-sm px-2 transition-all duration-200`}
       >
-        <Monitor
-          size={18}
-          strokeWidth={1.8}
-          fill={device === "desktop" ? "#fafafa" : "#ffffff"}
-          className={device === "desktop" ? "text-green-500" : "#ffffff"}
-        />
+        <Monitor size={18} strokeWidth={1.8} />
+        <span className="text-[0.7rem] font-semibold">Desktop</span>
       </button>
     </div>
   );

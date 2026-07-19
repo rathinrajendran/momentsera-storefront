@@ -122,6 +122,7 @@ export default function Catalog({ data, theme, music, motion, sharing, privacy, 
                   top center / 100% no-repeat
                 `
             : inviteTheme.bg.page,
+            backgroundSize:"cover",
           /* SECTION BACKGROUNDS */
           "--bg-page": isImageBg ? bgOverlay : inviteTheme.bg.page,
           "--bg-section-1": isImageBg ? bgOverlay : inviteTheme.bg.section1,

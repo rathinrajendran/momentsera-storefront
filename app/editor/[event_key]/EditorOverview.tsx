@@ -208,7 +208,9 @@ export default function EditorOverview({ activeTab, currentSections = [], onSele
     <div className="flex h-auto flex-col overflow-hidden p-5 px-4 md:h-full md:bg-white md:px-6">
       <div className="mb-5 hidden md:block">
         <h2 className="text-lg font-bold tracking-tight text-zinc-900 capitalize">{activeTab}</h2>
-        <p className="text-xs tracking-wide">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, voluptas iure!</p>
+        <p className="text-xs leading-relaxed tracking-wide">
+          Everything you need to build, customize, and maintain a beautiful digital invitation.
+        </p>
       </div>
       <div className="flex-1 overflow-hidden">
         <div ref={scrollRef} className="h-auto space-y-1 overflow-y-auto md:space-y-1 md:pb-24">
@@ -269,7 +271,7 @@ function EditorCard({
   return (
     <div
       onClick={onClick}
-      className="flex cursor-pointer items-center justify-between rounded-lg border border-slate-200 bg-white p-2 transition-all duration-200 hover:border-[#84a59d]/40 md:rounded-xl md:p-3"
+      className="flex cursor-pointer items-center justify-between rounded-lg border border-gray-100 bg-[white] p-2 transition-all duration-200 hover:border-[#84a59d]/40 md:rounded-xl md:p-3"
     >
       <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-4">
         <div className={`${iconClass} flex h-7 w-7 shrink-0 items-center justify-center rounded-sm border border-zinc-100/50  text-zinc-500 sm:h-10 sm:w-10 sm:rounded-lg`}>
@@ -289,7 +291,7 @@ function EditorCard({
               e.stopPropagation();
               onVisibilityClick?.();
             }}
-            className="flex hidden h-8 w-8 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 transition hover:bg-emerald-100 sm:block"
+            className="sm:flex hidden h-8 w-8 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 transition hover:bg-emerald-100 cursor-pointer"
           >
             <Eye size={14} strokeWidth={1.8} />
           </button>

@@ -20,13 +20,18 @@ export function TimePicker({ value, onChange }: TimePickerProps) {
   const [isOpen, setIsOpen] = React.useState(false);
 
   // Cleanly sync external value changes during the render phase without useEffect
-  const [prevValue, setPrevValue] = React.useState<Date | undefined>(value);
-  const [tempDate, setTempDate] = React.useState<Date>(value || new Date());
+const [tempDate, setTempDate] = React.useState<Date>(value ?? new Date());
 
-  if (value !== prevValue) {
-    setPrevValue(value);
-    setTempDate(value || new Date());
-  }
+const handleOpenChange = React.useCallback(
+  (open: boolean) => {
+    setIsOpen(open);
+
+    if (open) {
+      setTempDate(value ?? new Date());
+    }
+  },
+  [value],
+);
 
   const hours = Array.from({ length: 12 }, (_, i) => i + 1);
   const minutes = Array.from({ length: 60 }, (_, i) => i);
@@ -186,20 +191,23 @@ export function TimePicker({ value, onChange }: TimePickerProps) {
         <div className="fixed top-0 right-0 left-0 z-[99] h-screen w-[100%] bg-white/90 md:top-[115px] md:left-auto md:w-[350px]"></div>
       )}
 
-      <Popover open={isOpen} onOpenChange={setIsOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            className={cn(
-              "h-[38px] w-full rounded-md border bg-[#ECEFF1] px-3 py-2 text-xs font-medium tracking-normal shadow-[inset_0_80px_0_0_#ffffff] transition-colors outline-none md:h-[42px]",
-              "justify-start text-[#171717] placeholder:text-[#cccccc]",
-              "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
-              "border-slate-200",
-              "focus-visible:border-slate-400 focus-visible:ring-0",
-            )}
-          >
-            {value ? format(value, "hh:mm aa") : "Select Time"}
-          </Button>
+      <Popover open={isOpen} onOpenChange={handleOpenChange}>
+        <PopoverTrigger>
+          <div className="w-full">
+            <Button
+              type="button"
+              variant="outline"
+              className={cn(
+                "h-[38px] w-full rounded-md border bg-[#ECEFF1] px-3 py-2 text-xs font-medium tracking-normal shadow-[inset_0_80px_0_0_#ffffff] transition-colors outline-none md:h-[42px]",
+                "justify-start text-[#171717] placeholder:text-[#cccccc]",
+                "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
+                "border-slate-200",
+                "focus-visible:border-slate-400 focus-visible:ring-0",
+              )}
+            >
+              {value ? format(value, "hh:mm aa") : "Select Time"}
+            </Button>
+          </div>
         </PopoverTrigger>
 
         <PopoverContent className="timepicker-popover z-[100] w-[300px] gap-0 overflow-hidden rounded-3xl border-0 p-0 shadow-none">

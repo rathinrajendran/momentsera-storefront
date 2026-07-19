@@ -142,9 +142,7 @@ function DialogContent({
   ...props
 }: DialogContentProps) {
   return (
-    <DialogPortal
-      container={container}
-    >
+    <DialogPortal container={container}>
       <DialogOverlay />
 
       <DialogPrimitive.Content
@@ -183,7 +181,7 @@ function DialogContent({
 
         <DialogPrimitive.Close
           className={cn(
-            "ring-offset-background",
+            "ring-offset-background flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-slate-100 p-2",
             "focus:ring-ring",
 
             // position
@@ -207,10 +205,7 @@ function DialogContent({
           )}
         >
           <XIcon />
-
-          <span className="sr-only">
-            Close
-          </span>
+          <span className="sr-only">Close</span>
         </DialogPrimitive.Close>
       </DialogPrimitive.Content>
     </DialogPortal>
@@ -229,7 +224,7 @@ function DialogHeader({
     <div
       data-slot="dialog-header"
       className={cn(
-        "flex flex-col gap-2 text-center sm:text-left",
+        "flex flex-col gap-2 sm:text-left",
         className,
       )}
       {...props}
@@ -272,7 +267,7 @@ function DialogTitle({
     <DialogPrimitive.Title
       data-slot="dialog-title"
       className={cn(
-        "text-lg leading-none font-semibold",
+        "text-lg leading-none font-semibold text-left", 
         className,
       )}
       {...props}

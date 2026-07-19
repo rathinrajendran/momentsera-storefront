@@ -9,18 +9,14 @@ import { motion } from "framer-motion";
 import {
   Calendar,
   Settings,
-  Image as ImageIcon,
-  MessageSquare,
   Clock,
   Shirt,
   Palette,
   Sparkles,
-  Music,
   CheckCircle,
   Share2,
   Lock,
   Printer,
-  Heading,
   ChevronLeftIcon,
   Eye,
   Link2,
@@ -28,9 +24,17 @@ import {
   Minimize2,
   Maximize2,
   X,
+  Image,
+  Droplets,
+  Type,
+  Shapes,
+  Music4,
+  MessagesSquare,
+  Images,
+  ScrollText,
 } from "lucide-react";
 import { PreviewToolbar, safeDecode } from "./PreviewToolbar";
-import { useRouter } from "next/navigation";
+import {  useRouter } from "next/navigation";
 import { useUpdateEventKey } from "../../../hooks/useEvents";
 import MobileMenu from "./MobileMenu";
 import { ShareDialog } from "./components/publish/ShareDialog";
@@ -67,12 +71,12 @@ export type EditorLayoutProps = {
 };
 
 export const sectionTabMapping = {
-  content: [
+  invitation: [
     {
       id: "announcement",
       title: "Announcement",
       desc: "Names & greeting",
-      icon: <Heading className="h-4 w-4" strokeWidth={1} />,
+      icon: <ScrollText className="h-4 w-4" strokeWidth={1.5} />,
       iconClass: "bg-rose-50 text-rose-500",
       visibilityCheck: false,
     },
@@ -80,7 +84,7 @@ export const sectionTabMapping = {
       id: "gallery",
       title: "Gallery",
       desc: "Photos & videos",
-      icon: <ImageIcon className="h-4 w-4" strokeWidth={1} />,
+      icon: <Images className="h-4 w-4" strokeWidth={1.5} />,
       iconClass: "bg-pink-50 text-pink-500",
       visibilityCheck: true,
     },
@@ -88,7 +92,7 @@ export const sectionTabMapping = {
       id: "wishes",
       title: "Wishes",
       desc: "Guest messages & congratulations",
-      icon: <MessageSquare className="h-4 w-4" strokeWidth={1} />,
+      icon: <MessagesSquare className="h-4 w-4" strokeWidth={1.5} />,
       iconClass: "bg-violet-50 text-violet-500",
       visibilityCheck: true,
     },
@@ -96,7 +100,7 @@ export const sectionTabMapping = {
       id: "music",
       title: "Music",
       desc: "Background audio track",
-      icon: <Music className="h-4 w-4" strokeWidth={1} />,
+      icon: <Music4 className="h-4 w-4" strokeWidth={1.5} />,
       iconClass: "bg-fuchsia-50 text-fuchsia-500",
       visibilityCheck: true,
     },
@@ -142,7 +146,7 @@ export const sectionTabMapping = {
       id: "background",
       title: "Background",
       desc: "Background image & texture",
-      icon: <Palette className="h-4 w-4" strokeWidth={1.5} />,
+      icon: <Images className="h-4 w-4" strokeWidth={1.5} />,
       iconClass: "bg-sky-50 text-sky-500",
       visibilityCheck: false,
     },
@@ -150,7 +154,7 @@ export const sectionTabMapping = {
       id: "color",
       title: "Color",
       desc: "Primary & accent colors",
-      icon: <Palette className="h-4 w-4" strokeWidth={1.5} />,
+      icon: <Droplets className="h-4 w-4" strokeWidth={1.5} />,
       iconClass: "bg-cyan-50 text-cyan-500",
       visibilityCheck: false,
     },
@@ -158,7 +162,7 @@ export const sectionTabMapping = {
       id: "font",
       title: "Font",
       desc: "Typography selection",
-      icon: <Palette className="h-4 w-4" strokeWidth={1.5} />,
+      icon: <Type className="h-4 w-4" strokeWidth={1.5} />,
       iconClass: "bg-indigo-50 text-indigo-500",
       visibilityCheck: false,
     },
@@ -166,7 +170,7 @@ export const sectionTabMapping = {
       id: "shape",
       title: "Shape",
       desc: "Corners & decorative elements",
-      icon: <Palette className="h-4 w-4" strokeWidth={1.5} />,
+      icon: <Shapes className="h-4 w-4" strokeWidth={1.5} />,
       iconClass: "bg-purple-50 text-purple-500",
       visibilityCheck: false,
     },
@@ -218,8 +222,8 @@ export const sectionTabMapping = {
 
 const sideMenuItems = [
   {
-    id: "content",
-    label: "Content",
+    id: "invitation",
+    label: "Invitation",
     icon: <SquareLibrary className="h-5 w-5" strokeWidth={1.75} />,
   },
   {
@@ -258,18 +262,13 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
   // -----------------------------------------------------------------------------
 
   const [activeSection, setActiveSection] = useState<EditorSection>("overview");
-  const [activeTab, setActiveTab] = useState<keyof typeof sectionTabMapping | "preview">("content");
-
+  const [activeTab, setActiveTab] = useState<keyof typeof sectionTabMapping | "preview">("invitation");
   const [device, setDevice] = useState<DeviceType>("mobile");
   const [isMobile, setIsMobile] = useState(false);
-
   const [overviewScrollTop, setOverviewScrollTop] = useState(0);
-
   const [showMenuLayer, setShowMenuLayer] = useState(false);
-
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [customizeDialogOpen, setCustomizeDialogOpen] = useState(false);
-
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   // -----------------------------------------------------------------------------
@@ -292,16 +291,12 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
   // -----------------------------------------------------------------------------
 
   const displayInviteUrl = useMemo(() => safeDecode(eventKey), [eventKey]);
-
   const primaryFunction = useMemo(() => schedule.find((item: any) => item.isPrimary), [schedule]);
-
   const coupleOrder = useMemo(() => announcement.coupleOrder ?? "bride_first", [announcement]);
-
   const firstName = useMemo(
     () => (coupleOrder === "groom_first" ? announcement.groom?.name : announcement.bride?.name),
     [announcement, coupleOrder],
   );
-
   const secondName = useMemo(
     () => (coupleOrder === "groom_first" ? announcement.bride?.name : announcement.groom?.name),
     [announcement, coupleOrder],
@@ -333,9 +328,7 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
     async (value: string) => {
       try {
         const response = await updateEventKeyMutation.mutateAsync(value);
-
         if (!response?.success || !response.event_key) return;
-
         router.replace(`/editor/${response.event_key}`);
       } catch (error) {
         console.error("Failed to update invite URL:", error);
@@ -349,16 +342,14 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
   };
 
   const handlePreview = useCallback(() => {
-    setShowMenuLayer(false);
-  }, []);
+    window.open(`/preview/${eventKey}`, "_blank");
+  }, [eventKey]);
 
   const handleShare = useCallback(() => {
-    setShowMenuLayer(false);
     setShareDialogOpen(true);
   }, []);
 
   const handleInviteLink = useCallback(() => {
-    setShowMenuLayer(false);
     setCustomizeDialogOpen(true);
   }, []);
 
@@ -383,7 +374,6 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
   // -----------------------------------------------------------------------------
 
   const splitScreen = activeSection !== "overview" && isMobile;
-
   const currentSections = activeTab === "preview" ? [] : sectionTabMapping[activeTab];
 
   // -----------------------------------------------------------------------------
@@ -415,10 +405,7 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
   );
 
   const panelHeight = `h-[calc(${isFullscreen ? "100dvh" : "55dvh"}-50px)]`;
-
-  const menuHeight = showMenuLayer ? panelHeight : "md:h-[calc(100dvh-65px)]";
-
-  const menuLayerHeight = showMenuLayer ? `flex ${panelHeight}` : "hidden";
+  const menuHeight = showMenuLayer ? panelHeight : "md:h-[calc(100dvh-115px)]";
 
   return (
     <HomeWrapper
@@ -470,13 +457,13 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
           className="hidden md:flex"
         />
         <div
-          className={`${showMenuLayer && isMobile ? "mt-0 h-[100dvh]" : "h-[calc(100dvh-45px)] md:h-[calc(100dvh-115px)]"} justify-between overflow-hidden md:flex`}
+          className={`${showMenuLayer && isMobile ? "mt-0 h-[100dvh]" : "h-[calc(100dvh-0px)] md:h-[calc(100dvh-115px)]"} justify-between overflow-hidden md:flex`}
         >
           <div
-            className={`hidden w-[200px] flex-col overflow-auto bg-white p-4 text-zinc-400 md:flex md:h-full [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]`}
+            className={`hidden flex-col overflow-auto bg-white p-4 text-zinc-400 md:flex md:h-full md:w-[90px] lg:w-[200px] [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]`}
           >
-            <div className="flex w-full justify-start pb-3">
-              <h3 className="text-left text-xs font-bold tracking-wide text-black uppercase">Editor</h3>
+            <div className="flex w-full pb-3 md:justify-center lg:justify-start">
+              <h3 className="text-center text-xs font-bold tracking-wide text-black uppercase lg:text-left">Editor</h3>
             </div>
             <nav className="flex w-full flex-col items-center justify-around">
               {sideMenuItems.map((item) => {
@@ -489,18 +476,18 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
                       setActiveSection("overview");
                       setShowMenuLayer(true);
                     }}
-                    className={`flex w-full cursor-pointer items-center gap-1 rounded-md px-3 py-2.5 text-[10px] font-medium text-black capitalize transition-all md:justify-start md:text-[10px] ${
+                    className={`d:text-[10px] flex cursor-pointer items-center gap-1 rounded-md px-3 py-2.5 text-[10px] font-medium text-black capitalize transition-all md:w-11 md:justify-center lg:w-full lg:justify-start ${
                       isActive ? "text-green bg-[#ebf2ef]" : "text-black"
                     }`}
                   >
                     {item.icon}
-                    <span className="max-w-full truncate">{item.label}</span>
+                    <span className="hidden max-w-full truncate lg:block">{item.label}</span>
                   </button>
                 );
               })}
             </nav>
-            <div className="flex w-full justify-start pt-4 pb-3">
-              <h3 className="text-left text-xs font-bold tracking-wide text-black uppercase">Tools</h3>
+            <div className="flex w-full pt-4 pb-3 md:justify-center lg:justify-start">
+              <h3 className="text-center text-xs font-bold tracking-wide text-black uppercase lg:text-left">Tools</h3>
             </div>
             <nav className="flex w-full flex-col items-center justify-around">
               {ToolsMenuItems.map((item) => {
@@ -512,12 +499,12 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
                       setActiveSection("overview");
                       item.onClick();
                     }}
-                    className={`flex w-full cursor-pointer items-center gap-1 rounded-md px-3 py-2.5 text-[10px] font-medium text-black capitalize transition-all md:justify-start md:text-[10px] ${
+                    className={`flex w-full cursor-pointer items-center gap-1 rounded-md px-3 py-2.5 text-[10px] font-medium text-black capitalize transition-all md:justify-center md:text-[10px] lg:justify-start ${
                       isActive ? "text-green bg-[#ebf2ef]" : "text-black"
                     }`}
                   >
                     {item.icon}
-                    <span className="max-w-full truncate">{item.label}</span>
+                    <span className="hidden max-w-full truncate lg:block">{item.label}</span>
                   </button>
                 );
               })}
@@ -525,22 +512,25 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
           </div>
           {/* LEFT – LIVE VIEW PREVIEW */}
           <div
-            className={`${
-              showMenuLayer
-                ? "h-[45dvh] md:h-[calc(100dvh-65px)]"
-                : "h-[calc(100dvh-0px)] py-0 md:h-[calc(100dvh-65px)] md:py-0"
+            className={`w-full ${
+              showMenuLayer ? "h-[45dvh] md:h-[calc(100dvh-115px)]" : "h-[calc(100dvh-0px)] py-0 md:h-[calc(100dvh-115px)] md:py-0"
             } overflow-hidden`}
           >
             <PreviewPanel device={device} splitScreen={showMenuLayer && isMobile} eventKey={eventKey} />
           </div>
-          <div className={`${isFullscreen ? "fixed top-0 h-full" : ""} mob-view flex w-full flex-col md:w-[380px]`}>
+          <div
+            className={`${isFullscreen ? "fixed top-0 h-full" : ""} mob-view flex w-full lg:min-w-[380px] flex-col md:w-[320px] md:min-w-[320px] lg:w-[380px]`}
+          >
             {isMobile && !splitScreen ? (
-              <div className="flex h-[50px] items-center justify-between rounded-t-3xl border-b bg-white px-4 md:hidden">
+              <div className="flex h-[50px] items-center justify-between rounded-t-3xl border border-slate-100 bg-white px-4 md:hidden">
                 <div className="flex items-center gap-4">
-                  <h6 className="font-bold">Invitation Studio</h6>
+                  <h6 className="font-bold">Invite Studio</h6>
                 </div>
                 <div className="flex items-center gap-2">
-                  <button className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border" onClick={toggleFullscreen}>
+                  <button
+                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-slate-100"
+                    onClick={toggleFullscreen}
+                  >
                     {isFullscreen ? (
                       <Minimize2 className="h-5 w-5" strokeWidth={1.5} />
                     ) : (
@@ -548,7 +538,7 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
                     )}
                   </button>
                   <button
-                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border"
+                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-slate-100"
                     onClick={() => setShowMenuLayer(false)}
                   >
                     <X strokeWidth={1.5} className="h-5 w-5" />
@@ -564,7 +554,7 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
                   <h6 className="font-bold capitalize">{activeSection}</h6>
                 </div>
                 <button
-                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border"
+                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-slate-100"
                   onClick={() => setActiveSection("overview")}
                 >
                   <ChevronLeftIcon strokeWidth={1.5} className="h-5 w-5" />
@@ -575,7 +565,7 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
             )}
             <div className="flex h-full w-full">
               <div
-                className={`${isFullscreen ? "h-[calc(100dvh-50px)]" : "h-[calc(55dvh-50px)] md:h-auto"} ${showMenuLayer && !splitScreen ? "block" : "hidden md:block"} mob-160px z-10 flex w-[160px] flex-col overflow-auto bg-white p-4 text-zinc-400 md:hidden md:h-full [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]`}
+                className={`${isFullscreen ? "h-[calc(100dvh-50px)]" : "h-[calc(55dvh-50px)] md:h-auto"} ${showMenuLayer && !splitScreen ? "block w-[130px] sm:w-[180px]" : "hidden md:block"} mob-160px z-10 flex flex-col overflow-auto border-r border-slate-100 bg-white p-4 text-zinc-400 md:hidden md:h-full [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]`}
               >
                 <div className="flex w-full justify-start pb-3">
                   <h3 className="text-left text-xs font-bold tracking-wide text-black uppercase">Editor</h3>
@@ -628,7 +618,7 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
 
               {/* RIGHT Persistent Workspace Panel Wrapper Container */}
               <div
-                className={`${isFullscreen ? "h-[calc(100dvh-50px)]" : "h-[calc(55dvh-50px)] md:h-auto"} ${showMenuLayer ? "block" : "hidden md:block"} ${menuHeight} ${splitScreen ? "w-full" : ""} menu-layer flex w-[calc(100%-160px)] flex-col overflow-auto border-l bg-white md:relative md:h-full md:w-full`}
+                className={`${isFullscreen ? "h-[calc(100dvh-50px)]" : "h-[calc(55dvh-50px)] md:h-auto"} ${showMenuLayer ? "block" : "hidden md:block"} ${menuHeight} ${splitScreen ? "w-full" : "w-[calc(100%-130px)] sm:w-[calc(100%-180px)]"} menu-layer flex flex-col overflow-auto bg-white md:relative md:h-full md:w-full`}
               >
                 <div className="h-auto w-full overflow-y-auto md:h-[calc(100dvh-115px)] md:bg-white [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]">
                   <EditorPanel
