@@ -14,7 +14,7 @@ import PrintEditor from "./components/PrintEditor";
 import SharingEditor from "./components/SharingEditor";
 import TimelineEditor from "./components/TimelineEditor";
 import DressCodeEditor from "./components/DressCodeEditor";
-import RSVPEditor from "./components/RSVPEditor";
+// import RSVPEditor from "./components/RSVPEditor";
 import FontEditor from "./components/FontEditor";
 import ColorEditor from "./components/ColorEditor";
 import ShapeEditor from "./components/ShapeEditor";
@@ -64,7 +64,6 @@ export default function EditorPanel({
       {activeSection === "gallery" && <GalleryEditor eventKey={eventKey} onBack={() => onSectionChange("overview")} />}
       {activeSection === "dressCode" && <DressCodeEditor eventKey={eventKey} onBack={() => onSectionChange("overview")} />}
       {activeSection === "wishes" && <WishesEditor eventKey={eventKey} onBack={() => onSectionChange("overview")} />}
-      {activeSection === "rsvp" && <RSVPEditor eventKey={eventKey} onBack={() => onSectionChange("overview")} />}
       {activeSection === "music" && <MusicEditor eventKey={eventKey} onBack={() => onSectionChange("overview")} />}
       {activeSection === "settings" && <SettingsEditor eventKey={eventKey} onBack={() => onSectionChange("overview")} />}
       {activeSection === "background" && <BackgroundEditor eventKey={eventKey} onBack={() => onSectionChange("overview")} />}

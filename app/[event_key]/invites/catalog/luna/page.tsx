@@ -28,7 +28,9 @@ export default function Luna({ data, eventKey, motionData, settings }: LunaProps
     if (Luna.firstName && Luna.secondName) {
       return `${Luna.firstName} & ${Luna.secondName}`;
     }
-    return data?.announcement?.eventTitle || Luna.title || "Special Event";
+    return data?.announcement?.eventTitle || 
+    // Luna.title ||
+     "Special Event";
   }, [Luna, data]);
 
   const organization = data?.announcement?.organization;
