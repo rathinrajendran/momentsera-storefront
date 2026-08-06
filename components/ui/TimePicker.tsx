@@ -192,7 +192,7 @@ const handleOpenChange = React.useCallback(
       )}
 
       <Popover open={isOpen} onOpenChange={handleOpenChange}>
-        <PopoverTrigger>
+     
           <div className="w-full">
             <Button
               type="button"
@@ -208,7 +208,7 @@ const handleOpenChange = React.useCallback(
               {value ? format(value, "hh:mm aa") : "Select Time"}
             </Button>
           </div>
-        </PopoverTrigger>
+        
 
         <PopoverContent className="timepicker-popover z-[100] w-[300px] gap-0 overflow-hidden rounded-3xl border-0 p-0 shadow-none">
           {/* Header Preview Banner */}

@@ -298,7 +298,7 @@ export default function Home() {
 
                       <h3 className="text-md py-2 leading-tight font-bold">Premium Invitation Designs</h3>
 
-                      <p className="text-xs leading-5 text-[#6f665f]">Elegant designs for life's most memorable moments.</p>
+                      <p className="text-xs leading-5 text-[#6f665f]">Elegant designs for life&apos;s most memorable moments.</p>
                     </motion.div>
                     <div className="relative h-full w-auto">
                       <Image
@@ -379,7 +379,7 @@ export default function Home() {
       </section>
 
       {/* SHOWCASE */}
-      <section className="bg-secondary text-primary shadow-premium relative z-20 border-y border-slate-100 px-6 py-40 md:px-20">
+      <section className="bg-secondary text-primary shadow-premium relative z-20 border-y border-slate-100 px-[20px] py-40 md:px-[40px]">
         <Heading
           layout="split"
           variant="light"

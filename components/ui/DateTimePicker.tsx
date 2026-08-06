@@ -69,7 +69,7 @@ export function DateTimePicker() {
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger>
+ 
         <div className="w-full">
           <Button
             type="button"
@@ -81,7 +81,7 @@ export function DateTimePicker() {
             {date ? format(date, "MM/dd/yyyy hh:mm aa") : <span>MM/DD/YYYY hh:mm aa</span>}
           </Button>
         </div>
-      </PopoverTrigger>
+    
 
       <PopoverContent className="z-[99] w-auto bg-[#e8e8e8] p-0">
         <div className="sm:flex">

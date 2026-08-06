@@ -9,6 +9,9 @@ import BirthdayForm from "./_forms/BirthdayForm";
 import GridMotion from "../../../../../../components/ui/GridMotion";
 import { Header } from "../../../../../(marketing)/components/header/Header";
 import { Para } from "../../../../../../components/ui/Para";
+import CorporateForm from "./_forms/CorporateForm";
+import HousewarmingForm from "./_forms/HousewarmingForm";
+import AnniversaryForm from "./_forms/AnniversaryForm";
 
 /* ---------------- GRID DATA ---------------- */
 
@@ -41,6 +44,9 @@ const items: (string | ReactNode)[] = [
 const FORM_MAP: Record<string, React.ComponentType<any>> = {
   wedding: WeddingForm,
   birthday: BirthdayForm,
+  corporate: CorporateForm,
+  housewarming: HousewarmingForm,
+  anniversary: AnniversaryForm,
 };
 
 /* ---------------- COMPONENT ---------------- */

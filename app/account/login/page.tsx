@@ -86,7 +86,7 @@ export default function LoginPage() {
               duration: 1.2,
               ease: [0.16, 1, 0.3, 1],
             }}
-            className="relative hidden h-[calc(100vh-93px)] mt-[8px] md:col-span-7 md:block lg:col-span-8 pl-5"
+            className="relative hidden h-[calc(100vh-113px)] mt-[8px] md:col-span-7 md:block lg:col-span-8 pl-10"
           >
             {/* <div
             className="

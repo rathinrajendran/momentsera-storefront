@@ -60,7 +60,7 @@ export function Header({ className }: headerProps) {
       <nav
         className={`fixed top-0 z-[999] h-[45px] w-full bg-[rgba(255,255,255,0.95)] backdrop-blur-md transition-transform duration-300 ease-in-out md:h-[72px] ${className} ${hide ? "-translate-y-full" : "translate-y-0"} `}
       >
-        <div className="mx-auto max-w-[1800px] px-[5vw]">
+        <div className="mx-auto max-w-[1800px] px-[40px]">
           <div className="flex h-[45px] items-center justify-between md:h-[72px]">
             {/* ─────────────────────
              LOGO

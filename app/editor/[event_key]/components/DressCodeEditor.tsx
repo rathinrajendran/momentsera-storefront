@@ -11,7 +11,8 @@ import { Input } from "../../../../components/ui/input";
 import { Button } from "../../../../components/ui/button";
 import { Textarea } from "../../../../components/ui/textarea";
 import EditorHeader from "./EditorHeader";
-
+import { useState } from "react";
+import { HexColorPicker } from "react-colorful";
 /* ---------------- SCHEMA ---------------- */
 const dressCodeItemSchema = z.object({
   id: z.string().optional(),
@@ -33,7 +34,10 @@ export default function DressCodeEditor({ onBack, eventKey }: { onBack: () => vo
   const { draft, updateSection, resetDraft, refreshEvent } = usePreviewDraft();
   const eventId = draft.invite.id;
   const mutation = useSaveEventSection(eventKey, eventId);
-
+const [activePicker, setActivePicker] = useState<{
+  dressCodeIndex: number;
+  colorIndex: number;
+} | null>(null);
   // Derived initial data structure with fallback mapping[cite: 2]
   const rawDressCode = Array.isArray(draft?.dressCode) ? draft.dressCode : Object.values(draft?.dressCode || {});
   const dressCodeData: DressCodeItem[] =
@@ -111,7 +115,7 @@ export default function DressCodeEditor({ onBack, eventKey }: { onBack: () => vo
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-1 flex-col justify-between space-y-6 p-5 pb-0 md:min-h-[calc(100dvh-115px)] md:rounded-none [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-[2px] [&::-webkit-scrollbar-thumb]:rounded-[10px] [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-slate-100"
+          className="relative flex flex-1 flex-col justify-between space-y-6 p-5 pb-0 md:min-h-[calc(100dvh-115px)] md:rounded-none [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-[2px] [&::-webkit-scrollbar-thumb]:rounded-[10px] [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-slate-100"
         >
           {/* Section 1: Dress Code Options */}
           <section className="space-y-5 [&>*:last-child]:mb-6">
@@ -121,7 +125,7 @@ export default function DressCodeEditor({ onBack, eventKey }: { onBack: () => vo
               return (
                 <div
                   key={field.id}
-                  className="group relative rounded-xl border border-slate-100 bg-slate-50/40 p-5 transition-all duration-300 hover:border-slate-200/80 hover:bg-white hover:shadow-xl hover:shadow-slate-100/50"
+                  className="group rounded-xl border border-slate-100 bg-slate-50/40 p-5 transition-all duration-300 hover:border-slate-200/80 hover:bg-white hover:shadow-xl hover:shadow-slate-100/50"
                 >
                   {/* Delete Button */}
                   {fields.length > 1 && (
@@ -206,36 +210,44 @@ export default function DressCodeEditor({ onBack, eventKey }: { onBack: () => vo
                             render={({ field: colorField }) => (
                               <FormItem className="space-y-0">
                                 <FormControl>
-                                  <div className="relative flex h-8 items-center gap-2 rounded-full border border-slate-200 bg-white pr-2.5 pl-1.5 shadow-sm transition-all hover:border-slate-300">
-                                    {/* Visual Swatch Wrapper */}
-                                    <div
-                                      className="relative h-5 w-5 shrink-0 cursor-pointer rounded-full border border-black/5 shadow-inner"
-                                      style={{ backgroundColor: colorField.value || "#FFFFFF" }}
-                                    >
-                                      <input
-                                        type="color"
-                                        value={colorField.value || "#FFFFFF"}
-                                        onChange={(e) => {
-                                          colorField.onChange(e.target.value.toUpperCase());
-                                          handleLiveChange();
-                                        }}
-                                        className="absolute inset-0 h-full w-full scale-150 cursor-pointer opacity-0"
-                                      />
-                                    </div>
+                                  <div
+                                    className="flex h-8 items-center gap-2 rounded-full border border-slate-200 bg-white pr-2.5 pl-1.5 shadow-sm transition-all hover:border-slate-300 cursor-pointer"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setActivePicker({
+                                        dressCodeIndex: index,
+                                        colorIndex: colorIdx,
+                                      });
+                                    }}
+                                  >
+                                    {/* Color Swatch */}
+                                    <button
+                                      type="button"
 
-                                    {/* Text Display of Hex */}
+                                      className="h-5 w-5 shrink-0 rounded-full border border-black/10 shadow-inner"
+                                      style={{
+                                        backgroundColor: colorField.value || "#FFFFFF",
+                                      }}
+                                    />
+
                                     <span className="font-mono text-[10px] font-bold tracking-wider text-slate-600">
                                       {colorField.value || "#FFFFFF"}
                                     </span>
 
-                                    {/* Remove Color Button */}
                                     {colors.length > 1 && (
                                       <button
                                         type="button"
-                                        onClick={() => {
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+
                                           const updatedColors = [...colors];
                                           updatedColors.splice(colorIdx, 1);
-                                          form.setValue(`dressCode.${index}.hexColors`, updatedColors, { shouldValidate: true });
+
+                                          form.setValue(`dressCode.${index}.hexColors`, updatedColors, {
+                                            shouldValidate: true,
+                                            shouldDirty: true,
+                                          });
+
                                           handleLiveChange();
                                         }}
                                         className="ml-0.5 rounded-full p-0.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-red-500"
@@ -245,6 +257,32 @@ export default function DressCodeEditor({ onBack, eventKey }: { onBack: () => vo
                                     )}
                                   </div>
                                 </FormControl>
+
+                                {/* Color Picker Modal */}
+                                {activePicker?.dressCodeIndex === index && activePicker?.colorIndex === colorIdx && (
+                                  <>
+                                    <div
+                                      className="absolute inset-0 z-[99] bg-black/20 backdrop-blur-[1px]"
+                                      onClick={() => setActivePicker(null)}
+                                    />
+
+                                    <div className="absolute top-1/2 left-1/2 z-[100] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl">
+                                      <HexColorPicker
+                                        color={colorField.value || "#FFFFFF"}
+                                        onChange={(color) => {
+                                          colorField.onChange(color.toUpperCase());
+                                          handleLiveChange();
+                                        }}
+                                      />
+
+                                      <Button type="button" className="mt-4 w-full" onClick={() => setActivePicker(null)}>
+                                        Select
+                                      </Button>
+                                    </div>
+                                  </>
+                                )}
+
+                                <FormMessage />
                               </FormItem>
                             )}
                           />
@@ -256,12 +294,17 @@ export default function DressCodeEditor({ onBack, eventKey }: { onBack: () => vo
                             variant="outline"
                             size="sm"
                             onClick={() => {
-                              form.setValue(`dressCode.${index}.hexColors`, [...colors, "#FFFFFF"], { shouldValidate: true });
+                              form.setValue(`dressCode.${index}.hexColors`, [...colors, "#FFFFFF"], {
+                                shouldValidate: true,
+                                shouldDirty: true,
+                              });
+
                               handleLiveChange();
                             }}
                             className="h-8 rounded-full border-dashed border-slate-200 bg-white px-3 text-xs font-medium text-slate-500 shadow-sm hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900"
                           >
-                            <Plus size={12} className="mr-1" strokeWidth={2.5} /> Add Color
+                            <Plus size={12} className="mr-1" strokeWidth={2.5} />
+                            Add Color
                           </Button>
                         )}
                       </div>

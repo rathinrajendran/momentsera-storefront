@@ -19,6 +19,7 @@ import DesignedByFooter from "../../../editor/[event_key]/components/DesignedByF
 import { useUnlockedSections } from "../../../../hooks/useUnlockedSections";
 import { PasswordDialog } from "../../../editor/[event_key]/components/publish/PasswordDialog";
 import Sora from "./sora/page";
+import Luna from "./luna/page";
 
 /* ─────────────────────────────────────────────
     TYPES
@@ -72,7 +73,7 @@ export default function Catalog({ data, theme, music, motion, sharing, privacy, 
   const ThemeComponent = useMemo(() => {
     const map: Record<string, React.ComponentType<any>> = {
       // aura: Aura,
-      // luna: Luna,
+      luna: Luna,
       // mira: Mira,
       // nexa: Nexa,
       // nuvo: Nuvo,

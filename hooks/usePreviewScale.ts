@@ -16,8 +16,8 @@ export function usePreviewScale(device: "mobile" | "desktop", splitScreen: boole
   const currentViewport = useMemo(() => {
     if (device === "desktop") {
       return {
-        width: "90%",
-        height: "90%",
+        width: "100%",
+        height: "100%",
       };
     }
 
@@ -27,7 +27,7 @@ export function usePreviewScale(device: "mobile" | "desktop", splitScreen: boole
   const previewSize = useMemo(() => {
     if (device === "desktop") {
       return {
-        width: "90%",
+        width: "100%",
         maxWidth: splitScreen ? "1100px" : "1024px",
         maxHeight: splitScreen ? "1100px" : "calc(100dvh - 20px)",
         aspectRatio: "16 / 9",

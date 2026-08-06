@@ -42,7 +42,7 @@ export function DatePicker({ value, onChange, disabled = false, disabledDates }:
 
   return (
     <Popover open={isOpen} onOpenChange={handleOpenChange}>
-      <PopoverTrigger>
+ 
         <div className="w-full">
           <Button
             type="button"
@@ -59,7 +59,7 @@ export function DatePicker({ value, onChange, disabled = false, disabledDates }:
             {value ? format(value, "MM/dd/yyyy") : "Select Date"}
           </Button>
         </div>
-      </PopoverTrigger>
+ 
 
       {isOpen && <div className="fixed top-0 right-0 left-0 z-[99] h-screen w-full bg-white/90 md:top-[115px] md:left-auto md:w-[350px]" />}
 

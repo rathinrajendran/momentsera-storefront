@@ -141,7 +141,7 @@ const handleBuy = () => {
                   </Button>
 
                   <Button
-                    className="rounded-full border border-[var(--border-color)] bg-white px-6 py-5 text-xs font-black tracking-[0.2em] uppercase transition-all hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)]"
+                    className="rounded-full border border-black bg-white px-6 py-5 text-xs font-black tracking-[0.2em] text-black uppercase transition-all hover:border-[var(--accent-primary)] hover:text-white"
                     onClick={() => router.push("/account/checkout")}
                   >
                     Buy Now
@@ -152,7 +152,7 @@ const handleBuy = () => {
               {/* Audio */}
               <div className="group mt-16 flex cursor-pointer items-center gap-4">
                 <div className="flex h-14 w-14 items-center justify-center rounded-full border border-[var(--border-color)] bg-white transition-all group-hover:border-[var(--accent-primary)]">
-                  <AudioPlayer src="/audio/calm.mp3" allowMute={false} />
+                  {/* <AudioPlayer src="/audio/calm.mp3" allowMute={false} inner={true} /> */}
                 </div>
 
                 <div>
