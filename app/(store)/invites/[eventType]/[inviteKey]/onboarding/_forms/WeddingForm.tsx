@@ -67,54 +67,68 @@ const dateNotConfirmed = form.watch("dateNotConfirmed");
 const locationNotConfirmed = form.watch("locationNotConfirmed");
   /* ---------------- SUBMIT ---------------- */
 
-  async function onSubmit(values: FormData) {
-    setLoading(true);
+ async function onSubmit(values: FormData) {
+   setLoading(true);
 
-    // ✅ Convert Date → ISO ONLY here
-    const weddingDateIso = values.wedding_date
-      ? new Date(`${values.wedding_date.toISOString().split("T")[0]}T00:00:00`).toISOString()
-      : null;
+   const weddingDateIso = values.wedding_date
+     ? new Date(`${values.wedding_date.toISOString().split("T")[0]}T00:00:00`).toISOString()
+     : null;
 
-    const formPayload = {
-      stage: "onboarding",
-      data: {
-        announcement: {
-            groom: { name: values.groom },
-            bride: { name: values.bride },
-        },
-        schedule: [
-          {
-            title: eventType,
-            date: weddingDateIso ?? fallbackDate,
-            startTime: weddingDateIso ?? fallbackDate,
-            locationName: values.location || "",
-            locationUrl: "",
-            note: "",
-            isPrimary: true,
-          },
-        ],
-      },
-    };
+   const formPayload = {
+     stage: "onboarding",
+     data: {
+       announcement: {
+         groom: {
+           name: values.groom,
+         },
+         bride: {
+           name: values.bride,
+         },
+       },
+       schedule: [
+         {
+           title: eventType,
+           date: weddingDateIso ?? fallbackDate,
+           startTime: weddingDateIso ?? fallbackDate,
+           locationName: values.location || "",
+           locationUrl: "",
+           note: "",
+           isPrimary: true,
+         },
+       ],
+     },
+   };
 
-    try {
-      const result = await submitOnboarding(
-        {
-          invite_key: inviteKey,
-          event_type: eventType,
-        },
-        formPayload,
-      );
+   try {
+     const result = await submitOnboarding(
+       {
+         invite_key: inviteKey,
+         event_type: eventType,
+       },
+       formPayload,
+     );
 
-      router.replace(`/editor/${result.event_key}`);
-    } catch {
-      form.setError("root", {
-        type: "manual",
-        message: "Failed to save event. Please try again.",
-      });
-    } finally {
-      setLoading(false);
-    }
-  }
+     // Save reusable onboarding data for another theme
+     sessionStorage.setItem("onboarding_data", JSON.stringify(formPayload.data));
+
+     // Current active event
+     sessionStorage.setItem("active_event_key", result.event_key);
+
+     // Pending invite is now handled
+     sessionStorage.removeItem("pending_event");
+
+     router.replace(`/editor/${result.event_key}`);
+   } catch (error) {
+     console.error("Onboarding failed:", error);
+
+     form.setError("root", {
+       type: "manual",
+       message: "Failed to save event. Please try again.",
+     });
+   } finally {
+     setLoading(false);
+   }
+ }
 
   /* ---------------- UI ---------------- */
 

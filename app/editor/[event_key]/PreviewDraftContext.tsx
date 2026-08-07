@@ -95,7 +95,7 @@ const refreshDraft = useCallback(
     startRefreshTransition(async () => {
       try {
         // Cache bust query parameter ensures network request bypasses aggressive router/browser caches
-        const freshEvent = await fetchEventByKey(`${eventKey}?timestamp=${Date.now()}`);
+        const freshEvent = await fetchEventByKey(`${eventKey}`);
         if (freshEvent) {
          setServerData({
            ...freshEvent,

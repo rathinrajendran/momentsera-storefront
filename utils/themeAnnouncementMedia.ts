@@ -26,9 +26,9 @@ export const themeAnnouncementMedia: Record<string, AnnouncementImageRule[]> = {
       key: "main",
       label: "Main Couple Image",
       required: true,
-      width: 600,
-      height: 350,
-      aspectRatio: 600 / 350,
+      width: 350,
+      height: 510,
+      aspectRatio: 350 / 510,
     },
   ],
   mira: [
@@ -69,6 +69,16 @@ export const themeAnnouncementMedia: Record<string, AnnouncementImageRule[]> = {
     },
   ],
 
+  nuvo: [
+    {
+      key: "main",
+      label: "Main Couple Image",
+      required: true,
+      width: 480,
+      height: 770,
+      aspectRatio: 480 / 770,
+    },
+  ],
   sora: [
     {
       key: "main",

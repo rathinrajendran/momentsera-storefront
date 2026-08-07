@@ -14,11 +14,11 @@ import PrintEditor from "./components/PrintEditor";
 import SharingEditor from "./components/SharingEditor";
 import TimelineEditor from "./components/TimelineEditor";
 import DressCodeEditor from "./components/DressCodeEditor";
-// import RSVPEditor from "./components/RSVPEditor";
 import FontEditor from "./components/FontEditor";
 import ColorEditor from "./components/ColorEditor";
 import ShapeEditor from "./components/ShapeEditor";
 import BackgroundEditor from "./components/BackgroundEditor";
+import RSVPEditor from "./components/RSVPEditor";
 
 type SectionItem = {
   id: string;
@@ -72,6 +72,7 @@ export default function EditorPanel({
       {activeSection === "shape" && <ShapeEditor eventKey={eventKey} onBack={() => onSectionChange("overview")} />}
       {activeSection === "privacy" && <PrivacyEditor eventKey={eventKey} onBack={() => onSectionChange("overview")} />}
       {activeSection === "sharing" && <SharingEditor eventKey={eventKey} onBack={() => onSectionChange("overview")} />}
+      {activeSection === "rsvp" && <RSVPEditor eventKey={eventKey} onBack={() => onSectionChange("overview")} />}
       {activeSection === "motionSection" && <MotionEditor eventKey={eventKey} onBack={() => onSectionChange("overview")} />}
       {activeSection === "print" && <PrintEditor eventKey={eventKey} onBack={() => onSectionChange("overview")} />}
     </>

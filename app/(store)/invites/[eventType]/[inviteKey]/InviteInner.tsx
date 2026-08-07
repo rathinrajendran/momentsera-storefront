@@ -15,6 +15,7 @@ import { H2 } from "../../../../../components/ui/H2";
 import { H6 } from "../../../../../components/ui/H6";
 import { Para } from "../../../../../components/ui/Para";
 import { useSession } from "../../../../../hooks/useSession";
+import { submitOnboarding } from "./onboarding/actions";
 
 /* ──────────────────────────────────────────
    TOKENS
@@ -73,7 +74,7 @@ export default function InviteInner({ invite }: any) {
 
   if (!mounted) return null;
 
-const handleBuy = () => {
+const handleBuy = async () => {
   sessionStorage.setItem(
     "pending_event",
     JSON.stringify({
@@ -83,11 +84,34 @@ const handleBuy = () => {
     }),
   );
 
-  if (isLoggedIn) {
-    router.push(`/invites/${invite.main_category}/${invite.invite_key}/onboarding`);
-  } else {
+  if (!isLoggedIn) {
     router.push("/account/login");
+    return;
   }
+
+  const onboarding = sessionStorage.getItem("onboarding_data");
+
+  if (onboarding) {
+    try {
+      const result = await submitOnboarding(
+        {
+          invite_key: invite.invite_key,
+          event_type: invite.main_category,
+        },
+        {
+          stage: "onboarding",
+          data: JSON.parse(onboarding),
+        },
+      );
+
+      router.push(`/editor/${result.event_key}`);
+      return;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  router.push(`/invites/${invite.main_category}/${invite.invite_key}/onboarding`);
 };
 
   return (

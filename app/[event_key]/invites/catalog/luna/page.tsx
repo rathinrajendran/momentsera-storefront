@@ -1,13 +1,22 @@
 "use client";
-
 import { useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { format, isValid } from "date-fns";
+import { format } from "date-fns";
 import { useThemeAnimation } from "../../../../../hooks/useThemeAnimations";
 import { useInviteData } from "../../../../../hooks/useInviteData";
 import { getAnimationKey } from "../../../../../utils/animation";
 import GallerySection from "../components/common/GallerySection";
 import WishesSection from "../components/common/WishesSection";
+import { LineBorder } from "../components/icons/LineBorder";
+import {
+  getSectionConfig,
+  getSectionPassword,
+  isSectionHidden,
+  isSectionProtected,
+  SectionVisibility,
+} from "../../../../../utils/section-visibility";
+import { useUnlockedSections } from "../../../../../hooks/useUnlockedSections";
+import CurvedText from "../../../../../components/ui/CurvedText";
 
 interface LunaProps {
   data: any;
@@ -15,7 +24,6 @@ interface LunaProps {
   motionData: any;
   settings: any;
 }
-
 export default function Luna({ data, eventKey, motionData, settings }: LunaProps) {
   const [wishRefreshKey, setWishRefreshKey] = useState(0);
   const wishesContainerRef = useRef<HTMLElement | null>(null);
@@ -23,23 +31,14 @@ export default function Luna({ data, eventKey, motionData, settings }: LunaProps
   const { getMotionProps } = useThemeAnimation(motionData);
   const animationKey = useMemo(() => getAnimationKey(motionData), [motionData]);
   const { key: _scheduleKey, ...scheduleProps } = getMotionProps(0);
-
-  const mainTitle = useMemo(() => {
-    if (Luna.firstName && Luna.secondName) {
-      return `${Luna.firstName} & ${Luna.secondName}`;
-    }
-    return data?.announcement?.eventTitle || 
-    // Luna.title ||
-     "Special Event";
-  }, [Luna, data]);
-
-  const organization = data?.announcement?.organization;
-  const speakerInfo = data?.announcement?.speaker;
-  const heroImage = Luna.heroImage || data?.theme?.background_image;
+  const gallery = getSectionConfig(settings.section_visibility, "gallery");
+  const wishes = getSectionConfig(settings.section_visibility, "wishes");
+  const { unlockedSections, setUnlockedSections } = useUnlockedSections(eventKey);
+  console.log("data values", data);
 
   return (
     <div
-      className="relative min-h-screen w-full overflow-x-hidden selection:bg-black/10"
+      className="relative min-h-screen overflow-hidden selection:bg-black/10"
       style={{
         background: "var(--bg-page)",
         color: "var(--primary)",
@@ -47,16 +46,16 @@ export default function Luna({ data, eventKey, motionData, settings }: LunaProps
         fontSize: "var(--font-size-primary)",
       }}
     >
-      {/* HERO SECTION */}
-      <section className="relative px-4 pt-12 pb-16 text-center sm:px-6 sm:pt-20 sm:pb-24">
+      {/* HERO */}
+      <section className="relative flex flex-col items-center justify-center text-center">
         <AnimatePresence mode="wait">
-          <motion.div key={`hero-${animationKey}`} className="mx-auto max-w-4xl">
+          <motion.div key={`hero-${animationKey}`} className="w-full">
             <HeroContent
-              message={data?.announcement?.message || Luna.message}
-              mainTitle={mainTitle}
-              organization={organization}
-              speakerInfo={speakerInfo}
-              heroImage={heroImage}
+              message={Luna.message}
+              firstName={Luna.firstName}
+              secondName={Luna.secondName}
+              heroImage={Luna.heroImage}
+              coupleOrder={Luna.coupleOrder}
               formattedDate={Luna.formattedDate}
               getMotionProps={getMotionProps}
             />
@@ -64,56 +63,47 @@ export default function Luna({ data, eventKey, motionData, settings }: LunaProps
         </AnimatePresence>
       </section>
 
-      {/* SCHEDULE / EVENTS */}
-      <section className="px-4 py-16 sm:px-6 sm:py-24" style={{ background: "var(--bg-section-1, transparent)" }}>
+      {/* EVENTS */}
+      <section className="px-6 py-24">
         <motion.h2
           {...scheduleProps}
-          className="mb-10 text-center text-3xl font-bold tracking-wider uppercase sm:mb-16 sm:text-5xl"
+          className="mb-16 text-center text-5xl"
           style={{
             color: "var(--accent)",
             fontFamily: "var(--font-accent)",
+            fontSize: "var(--font-size-accent)",
           }}
         >
           Schedule
         </motion.h2>
 
-        <div className="mx-auto flex max-w-3xl flex-col items-center space-y-6">
-          {(data?.schedule || Luna.eventFunctions)?.map?.((fn: any, i: number) => {
+        <div className="mx-auto flex max-w-4xl flex-col items-center space-y-8">
+          {Luna.eventFunctions?.map?.((fn: any, i: number) => {
             const { key: _key, ...motionProps } = getMotionProps(i * 0.2);
-
-            // Handle date formatting safely for single dates vs date ranges
-            let displayDate = "Date TBD";
-            if (fn.startDate && fn.endDate) {
-              const start = new Date(fn.startDate);
-              const end = new Date(fn.endDate);
-              if (isValid(start) && isValid(end)) {
-                displayDate = `${format(start, "MMM dd")} - ${format(end, "dd, yyyy")}`.toUpperCase();
-              }
-            } else if (fn.startDate || fn.date) {
-              const parsed = new Date(fn.startDate || fn.date);
-              if (isValid(parsed)) {
-                displayDate = format(parsed, "dd MMMM yyyy").toUpperCase();
-              }
-            }
-
             return (
               <motion.div
-                key={fn.function_key ?? fn.title ?? i}
+                key={fn.function_key ?? i}
                 {...motionProps}
-                className="flex w-full flex-col items-center justify-between gap-4 rounded-lg border border-[var(--accent)]/20 p-6 text-center sm:flex-row sm:text-left"
+                className="inline-flex items-center gap-8"
+                style={{
+                  color: "var(--primary)",
+                  fontFamily: "var(--font-primary)",
+                  fontSize: "var(--font-size-primary)",
+                }}
               >
-                <div>
-                  <h3 className="text-xl font-bold uppercase sm:text-2xl" style={{ color: "var(--accent)" }}>
-                    {fn.title}
-                  </h3>
-                  <p className="mt-1 text-sm opacity-80">
-                    {fn.venue || fn.locationName} {fn.location ? `— ${fn.location}` : ""}
+                <div className="text-right">
+                  <p>
+                    {fn?.date
+                      ? format(new Date(fn.date), "dd MMMM yyyy").replace(
+                          format(new Date(fn.date), "MMMM"),
+                          format(new Date(fn.date), "MMMM").toUpperCase(),
+                        )
+                      : "No date"}
                   </p>
                 </div>
-
-                <div className="text-center sm:text-right">
-                  <p className="text-base font-semibold tracking-wide">{displayDate}</p>
-                  {fn.time && <p className="text-sm opacity-75">{fn.time}</p>}
+                <div>
+                  <h3 className="text-2xl capitalize">{fn.title}</h3>
+                  <p>{fn.locationName}</p>
                 </div>
               </motion.div>
             );
@@ -121,95 +111,121 @@ export default function Luna({ data, eventKey, motionData, settings }: LunaProps
         </div>
       </section>
 
-  
-
-      {/* CONTACT INFORMATION */}
-      {data?.contactInfo && data.contactInfo.length > 0 && (
-        <section className="px-4 py-12 text-center">
-          <h3 className="mb-6 text-lg font-semibold tracking-widest uppercase" style={{ color: "var(--accent)" }}>
-            For More Information
-          </h3>
-          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8">
-            {data.contactInfo.map((contact: any, index: number) => (
-              <p key={index} className="text-sm font-medium">
-                <span className="font-semibold">{contact.name}:</span> <span className="opacity-80">{contact.phone}</span>
-              </p>
-            ))}
-          </div>
-        </section>
+      {/* GALLERY */}
+      {!gallery.hidden && (
+        <GallerySection
+          animationKey={animationKey}
+          getMotionProps={getMotionProps}
+          layout={Luna.galleryLayout}
+          urls={Luna.galleryUrls}
+          fallback={Luna.heroImage}
+          title="Gallery"
+          textColor="accent"
+          fontSize="accent"
+          fontFamily="accent"
+          isProtected={gallery.protected}
+          password={gallery.password}
+          unlockedSections={unlockedSections}
+          setUnlockedSections={setUnlockedSections}
+        />
       )}
-
+      {/* WISHES */}
+      {!wishes.hidden && (
+        <WishesSection
+          animationKey={animationKey}
+          getMotionProps={getMotionProps}
+          eventKey={eventKey}
+          wishesRaw={Luna.wishesRaw}
+          wishesEnabled={Luna.wishesEnabled}
+          wishesContainerRef={wishesContainerRef}
+          wishRefreshKey={wishRefreshKey}
+          setWishRefreshKey={setWishRefreshKey}
+          title={Luna.wishesTitle ?? "Best Wishes"}
+          textColor="accent"
+          fontSize="accent"
+          fontFamily="accent"
+          isIcon={false}
+          isProtected={wishes.protected}
+          password={wishes.password}
+          unlockedSections={unlockedSections}
+          setUnlockedSections={setUnlockedSections}
+        />
+      )}
       {/* FOOTER */}
-      <footer className="px-4 py-12 text-center" style={{ background: "var(--bg-section-1)", color: "var(--primary)" }}>
+
+      <footer className="py-20 text-center" style={{ background: "var(--bg-section-1)", color: "var(--primary)" }}>
         <h2
-          className="text-xl font-bold tracking-wider uppercase sm:text-2xl"
-          style={{ color: "var(--accent)", fontFamily: "var(--font-accent)" }}
+          className="text-5xl"
+          style={{
+            color: "var(--accent)",
+            fontFamily: "var(--font-accent)",
+            fontSize: "var(--font-size-accent)",
+          }}
         >
-          {organization || mainTitle}
+          <span>{Luna.brideName?.charAt(0).toUpperCase() + Luna.brideName?.slice(1).toLowerCase()}</span>
+          <span className="mx-1">&</span>
+          <span>{Luna.groomName?.charAt(0).toUpperCase() + Luna.groomName?.slice(1).toLowerCase()}</span>
         </h2>
-        <p className="mt-2 text-xs tracking-[0.25rem] opacity-75 sm:text-sm">{Luna.formattedDate?.toUpperCase()}</p>
+        <p
+          className="mt-6 tracking-[5px]"
+          style={{
+            color: "var(--primary)",
+            fontFamily: "var(--font-primary)",
+            fontSize: "var(--font-size-primary)",
+          }}
+        >
+          {Luna.formattedDate?.toUpperCase()}
+        </p>
       </footer>
     </div>
   );
 }
-
-/* REFACTORED HERO CONTENT */
-function HeroContent({ message, mainTitle, organization, speakerInfo, getMotionProps, heroImage, formattedDate }: any) {
-  const { key: _mKey, ...mProps } = getMotionProps(0.1);
-  const { key: _hKey, ...hProps } = getMotionProps(0.2);
-  const { key: _sKey, ...sProps } = getMotionProps(0.3);
-
+/* HERO */
+function HeroContent({ message, firstName, secondName, getMotionProps, heroImage, coupleOrder, formattedDate }: any) {
+  const { key: _pKey, ...pProps } = getMotionProps(0.1);
+  const { key: _hKey, ...hProps } = getMotionProps(0.3);
+  const { key: _fKey, ...fProps } = getMotionProps(0.5);
   return (
-    <div className="flex flex-col items-center justify-center space-y-6">
-      {/* Organization Header */}
-      {organization && (
-        <motion.p
-          {...mProps}
-          className="text-xs font-semibold tracking-[0.2em] uppercase sm:text-sm md:text-base"
-          style={{ color: "var(--accent)" }}
-        >
-          {organization}
-        </motion.p>
-      )}
-
-      {/* Message Subheading */}
-      {message && message !== organization && <p className="text-xs font-medium tracking-wide opacity-80 sm:text-sm">{message}</p>}
-
-      {/* Main Title Banner */}
-      <motion.h1
-        {...hProps}
-        className="w-full text-4xl leading-none font-extrabold tracking-tight uppercase sm:text-6xl md:text-8xl"
+    <div className="relative mx-auto max-w-5xl px-6 pt-24">
+      <div className="relative">
+        <div className="relative inline-block max-h-[500px] w-[100%] max-w-[180px] rounded-t-full border border-[var(--accent)] p-3 md:max-w-[250px] md:p-5">
+          <img src={heroImage} className="m-auto h-full w-full rounded-t-full object-cover" alt="Hero" />
+          <CurvedText
+            text={message}
+            className="absolute -top-[10%] left-1/2 w-[92%] -translate-x-1/2 md:-top-[15%]"
+            radius={360}
+            fontSize={40}
+            mobileRadius={160}
+            mobileFontSize={16}
+          />
+        </div>
+        <div className="absolute top-1/2 left-1/2 flex w-full -translate-x-1/2 -translate-y-1/2 flex-col gap-5">
+          <motion.h1
+            {...hProps}
+            className="text-6xl leading-none tracking-wide md:text-9xl"
+            style={{
+              color: "var(--primary)",
+              fontFamily: "var(--font-primary)",
+              fontSize: `calc(var(--font-size-accent) * var(--font-scale, 1))`,
+            }}
+          >
+            <span className="block break-all">{firstName}</span>
+            <span className="mx-3 inline">&</span>
+            <span className="block break-all">{secondName}</span>
+          </motion.h1>
+        </div>
+      </div>
+      <motion.p
+        {...pProps}
+        className="tracking-[0.5rem] capitalize"
         style={{
-          color: "var(--accent)",
-          fontFamily: "var(--font-accent)",
+          color: "var(--primary)",
+          fontFamily: "var(--font-primary)",
+          fontSize: `calc(var(--font-size-primary) * var(--font-scale, 1))`,
         }}
       >
-        {mainTitle}
-      </motion.h1>
-
-      {/* Date & Location Pill */}
-      {formattedDate && (
-        <p className="inline-block rounded-full border border-[var(--accent)] px-4 py-1 text-xs font-semibold tracking-widest uppercase sm:text-sm">
-          {formattedDate}
-        </p>
-      )}
-
-      {/* Speaker Section */}
-      {speakerInfo && (
-        <motion.div {...sProps} className="mt-4 max-w-lg rounded-lg border border-[var(--accent)]/10 bg-[var(--accent)]/5 p-4 text-center">
-          <p className="text-xs font-semibold tracking-wider uppercase opacity-75">Guest Speaker</p>
-          <p className="mt-1 text-base font-bold sm:text-xl" style={{ color: "var(--accent)" }}>
-            {speakerInfo}
-          </p>
-        </motion.div>
-      )}
-
-      {/* Poster Image (Optional Display) */}
-      {heroImage && (
-        <div className="mt-6 w-full max-w-md overflow-hidden rounded-lg border border-[var(--accent)]/20 shadow-lg">
-          <img src={heroImage} alt="Event Poster" className="h-auto w-full object-cover" />
-        </div>
-      )}
+        {formattedDate}
+      </motion.p>
     </div>
   );
 }

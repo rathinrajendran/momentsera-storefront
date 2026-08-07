@@ -175,7 +175,7 @@ export const sectionTabMapping = {
       visibilityCheck: false,
     },
     {
-      id: "motion",
+      id: "motionSection",
       title: "Motion",
       desc: "Animations & transitions",
       icon: <Sparkles className="h-4 w-4" strokeWidth={1.5} />,
@@ -519,7 +519,7 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
             <PreviewPanel device={device} splitScreen={showMenuLayer && isMobile} eventKey={eventKey} />
           </div>
           <div
-            className={`${isFullscreen ? "fixed top-0 h-full" : ""} mob-view flex w-full lg:min-w-[380px] flex-col md:w-[320px] md:min-w-[320px] lg:w-[380px]`}
+            className={`${isFullscreen ? "fixed top-0 h-full" : ""} mob-view flex w-full flex-col md:w-[320px] md:min-w-[320px] lg:w-[380px] lg:min-w-[380px]`}
           >
             {isMobile && !splitScreen ? (
               <div className="flex h-[50px] items-center justify-between rounded-t-3xl border border-slate-100 bg-white px-4 md:hidden">
@@ -553,12 +553,24 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
                 <div className="flex items-center gap-4">
                   <h6 className="font-bold capitalize">{activeSection}</h6>
                 </div>
-                <button
-                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-slate-100"
-                  onClick={() => setActiveSection("overview")}
-                >
-                  <ChevronLeftIcon strokeWidth={1.5} className="h-5 w-5" />
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-slate-100"
+                    onClick={toggleFullscreen}
+                  >
+                    {isFullscreen ? (
+                      <Minimize2 className="h-5 w-5" strokeWidth={1.5} />
+                    ) : (
+                      <Maximize2 className="h-5 w-5" strokeWidth={1.5} />
+                    )}
+                  </button>
+                  <button
+                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-slate-100"
+                    onClick={() => setActiveSection("overview")}
+                  >
+                    <ChevronLeftIcon strokeWidth={1.5} className="h-5 w-5" />
+                  </button>
+                </div>
               </div>
             ) : (
               <></>

@@ -8,9 +8,10 @@ import PasswordInput from "../../components/auth/PasswordInput";
 import GoogleButton from "../../components/auth/GoogleButton";
 import { motion } from "framer-motion";
 import GridMotion from "../../../components/ui/GridMotion";
-import { ChevronLeft, Sparkles } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { useLogin } from "../../../hooks/useLogin";
 import { Header } from "../../(marketing)/components/header/Header";
+import { submitOnboarding } from "../../(store)/invites/[eventType]/[inviteKey]/onboarding/actions";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -48,21 +49,48 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
     try {
       await loginMutation.mutateAsync({
         email,
         password,
       });
+
       const pending = sessionStorage.getItem("pending_event");
-      if (pending) {
-        const invite = JSON.parse(pending);
-        sessionStorage.removeItem("pending_event");
-        router.replace(`/invites/${invite.event_type}/${invite.invite_key}/onboarding`);
-      } else {
+
+      if (!pending) {
         router.replace("/invites");
+        return;
       }
+
+      const invite = JSON.parse(pending);
+
+      const savedOnboarding = sessionStorage.getItem("onboarding_data");
+
+      if (savedOnboarding) {
+        const result = await submitOnboarding(
+          {
+            invite_key: invite.invite_key,
+            event_type: invite.event_type,
+          },
+          {
+            stage: "onboarding",
+            data: JSON.parse(savedOnboarding),
+          },
+        );
+
+        sessionStorage.setItem("active_event_key", result.event_key);
+
+        sessionStorage.removeItem("pending_event");
+
+        router.replace(`/editor/${result.event_key}`);
+        return;
+      }
+
+      // No previous onboarding data → normal onboarding
+      router.replace(`/invites/${invite.event_type}/${invite.invite_key}/onboarding`);
     } catch (err: any) {
-      setError(err.message ?? "Login failed");
+      setError(err?.message ?? "Login failed");
     }
   };
 
@@ -86,7 +114,7 @@ export default function LoginPage() {
               duration: 1.2,
               ease: [0.16, 1, 0.3, 1],
             }}
-            className="relative hidden h-[calc(100vh-113px)] mt-[8px] md:col-span-7 md:block lg:col-span-8 pl-10"
+            className="relative mt-[8px] hidden h-[calc(100vh-113px)] pl-10 md:col-span-7 md:block lg:col-span-8"
           >
             {/* <div
             className="

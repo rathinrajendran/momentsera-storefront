@@ -7,15 +7,15 @@ export async function submitOnboarding(
   },
   data: {
     stage: string;
-    announcement?: Record<string, any>;
+    data: {
+      announcement?: Record<string, any>;
+      schedule?: Record<string, any>[];
+    };
   },
 ) {
-  const result = await upsertOnboarding({
+  return upsertOnboarding({
     invite_key: payload.invite_key,
     event_type: payload.event_type,
     ...data,
   });
-
-  sessionStorage.setItem("active_event_key", result.event_key);
-  return result;
 }

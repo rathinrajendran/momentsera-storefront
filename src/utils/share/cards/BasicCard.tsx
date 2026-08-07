@@ -45,7 +45,7 @@ export default function BasicCard({ title, description }: ShareCardProps) {
           color: "#9ca3af",
         }}
       >
-        invite.momentsera.com
+        momentsera.com
       </div>
     </div>
   );
