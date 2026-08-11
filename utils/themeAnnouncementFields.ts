@@ -31,25 +31,55 @@ export const themeAnnouncementFields: Record<string, AnnouncementField[]> = {
     },
   ],
 
-  // luna: [
-  //   {
-  //     key: "groom.name",
-  //     label: "Groom Name",
-  //     type: "text",
-  //     required: true,
-  //   },
-  //   {
-  //     key: "bride.name",
-  //     label: "Bride Name",
-  //     type: "text",
-  //     required: true,
-  //   },
-  //   {
-  //     key: "message",
-  //     label: "Invitation Message",
-  //     type: "textarea",
-  //   },
-  // ],
+  luna: [
+    // ─────────────────────────────────────
+    // Couple / Header
+    // ─────────────────────────────────────
+    {
+      key: "couple.monogram",
+      label: "Couple Monogram",
+      type: "text",
+      required: false,
+      placeholder: "A | E",
+    },
+    {
+      key: "couple.familyLabel",
+      label: "Family Invitation Label",
+      type: "text",
+      required: false,
+      placeholder: "Together with their families",
+    },
+    {
+      key: "announcement.title",
+      label: "Invitation Title",
+      type: "text",
+      required: true,
+      placeholder: "The Wedding",
+    },
+    {
+      key: "bride.name",
+      label: "Bride Name",
+      type: "text",
+      required: true,
+    },
+    {
+      key: "groom.name",
+      label: "Groom Name",
+      type: "text",
+      required: true,
+    },
+
+    // ─────────────────────────────────────
+    // Announcement
+    // ─────────────────────────────────────
+    {
+      key: "announcement.message",
+      label: "Invitation Message",
+      type: "textarea",
+      required: false,
+      placeholder: "Invite you to celebrate their wedding",
+    },
+  ],
 
   mira: [
     {
@@ -151,7 +181,7 @@ export const themeAnnouncementFields: Record<string, AnnouncementField[]> = {
     },
   ],
 
-  luna: [
+  new: [
     {
       key: "groom.name",
       label: "Groom Name",

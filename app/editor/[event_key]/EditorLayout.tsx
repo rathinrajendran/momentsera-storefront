@@ -46,6 +46,7 @@ export type EditorSection =
   | "announcement"
   | "schedule"
   | "timeline"
+  | "ourStory"
   | "gallery"
   | "dressCode"
   | "wishes"
@@ -55,7 +56,6 @@ export type EditorSection =
   | "shape"
   | "color"
   | "font"
-  | "background"
   | "sharing"
   | "motionSection"
   | "print"
@@ -124,6 +124,14 @@ export const sectionTabMapping = {
       visibilityCheck: false,
     },
     {
+      id: "ourStory",
+      title: "Our Story",
+      desc: "Sequential itinerary breakdown",
+      icon: <Clock className="h-4 w-4" strokeWidth={1.5} />,
+      iconClass: "bg-amber-50 text-amber-500",
+      visibilityCheck: false,
+    },
+    {
       id: "dressCode",
       title: "Dress Code",
       desc: "Attire rules & color palette",
@@ -142,14 +150,6 @@ export const sectionTabMapping = {
   ],
 
   design: [
-    {
-      id: "background",
-      title: "Background",
-      desc: "Background image & texture",
-      icon: <Images className="h-4 w-4" strokeWidth={1.5} />,
-      iconClass: "bg-sky-50 text-sky-500",
-      visibilityCheck: false,
-    },
     {
       id: "color",
       title: "Color",

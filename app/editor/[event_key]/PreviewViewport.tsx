@@ -35,6 +35,7 @@ export default function PreviewViewport({ device, splitScreen }: { device: Devic
               wishes: draft.wishes,
               dressCode: draft.dressCode,
               timeline: draft.timeline,
+              ourStory: draft.ourStory,
               rsvp: draft.rsvp,
             }}
             settings={draft.settings}

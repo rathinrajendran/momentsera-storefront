@@ -202,26 +202,30 @@ export default function MotionEditor({ eventKey, onBack }: { eventKey: string; o
                               key={preset.id}
                               htmlFor={`preset-${preset.id}`}
                               className={cn(
-                                "relative min-w-28 rounded-2xl border p-5 transition-all duration-300",
+                                "relative min-w-28 rounded-lg border transition-all duration-300",
                                 isSelected
-                                  ? "border-slate-900 bg-slate-900 text-white shadow-xl shadow-slate-200"
+                                  ? "border-slate-900 text-black shadow-xl shadow-slate-200"
                                   : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50",
                               )}
                             >
                               <RadioGroupItem value={preset.id} id={`preset-${preset.id}`} className="hidden" />
-
-                              <div className="mb-6 flex items-center justify-between">
-                                <div className={cn("flex items-center justify-center", isSelected ? "text-white" : "text-slate-600")}>
-                                  <Icon className="w-5" strokeWidth={1} />
+                              <div className="flex h-[48px] items-center gap-2 px-3">
+                                <div className="flex items-center justify-between">
+                                  <div className={cn("flex items-center justify-center", isSelected ? "text-black" : "text-slate-600")}>
+                                    <Icon className="w-4" strokeWidth={1} />
+                                  </div>
                                 </div>
-                              </div>
-
-                              <div>
-                                <p
-                                  className={cn("truncate text-[11px] font-bold capitalize", isSelected ? "text-white" : "text-slate-700")}
-                                >
-                                  {preset.name}
-                                </p>
+                                <div>
+                                  <p
+                                    className={cn(
+                                      "truncate text-[11px] font-bold capitalize",
+                                      isSelected ? "text-black" : "text-slate-700",
+                                    )}
+                                  >
+                                    {preset.name}
+                                  </p>
+                                  <p className="text-[10px]">sdfsdf</p>
+                                </div>
                               </div>
                             </label>
                           );
@@ -297,33 +301,34 @@ export default function MotionEditor({ eventKey, onBack }: { eventKey: string; o
                               key={effect.id}
                               htmlFor={`entry-${effect.id}`}
                               className={cn(
-                                "relative min-w-28 rounded-2xl border p-5 transition-all duration-300",
+                                "relative rounded-lg border transition-all duration-300",
                                 isSelected
                                   ? "border-slate-900 bg-slate-900 text-white shadow-xl shadow-slate-200"
                                   : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50",
                               )}
                             >
                               <RadioGroupItem value={effect.id} id={`entry-${effect.id}`} className="hidden" />
-
-                              <div className="mb-6 flex items-center justify-between">
-                                <div className={cn("flex items-center justify-center", isSelected ? "text-white" : "text-slate-600")}>
-                                  <Icon size={18} strokeWidth={1.5} />
+                              <div className="flex h-[48px] items-center gap-2 p-3">
+                                <div className="flex items-center justify-between">
+                                  <div className={cn("flex items-center justify-center", isSelected ? "text-white" : "text-slate-600")}>
+                                    <Icon size={18} strokeWidth={1.5} />
+                                  </div>
                                 </div>
-                              </div>
 
-                              <div className="space-y-1">
-                                <p
-                                  className={cn(
-                                    "text-[11px] leading-none font-bold capitalize",
-                                    isSelected ? "text-white" : "text-slate-700",
-                                  )}
-                                >
-                                  {effect.title}
-                                </p>
+                                <div>
+                                  <p
+                                    className={cn(
+                                      "text-[11px] leading-none font-bold capitalize",
+                                      isSelected ? "text-white" : "text-slate-700",
+                                    )}
+                                  >
+                                    {effect.title}
+                                  </p>
 
-                                <p className={cn("text-[9px] leading-tight", isSelected ? "text-white/60" : "text-slate-400")}>
-                                  {effect.label}
-                                </p>
+                                  <p className={cn("text-[9px] leading-tight", isSelected ? "text-white/60" : "text-slate-400")}>
+                                    {effect.label}
+                                  </p>
+                                </div>
                               </div>
                             </label>
                           );
@@ -387,33 +392,34 @@ export default function MotionEditor({ eventKey, onBack }: { eventKey: string; o
                               key={behavior.id}
                               htmlFor={`scroll-${behavior.id}`}
                               className={cn(
-                                "relative min-w-28 rounded-2xl border p-5 transition-all duration-300",
+                                "relative min-w-28 rounded-lg border transition-all duration-300",
                                 isSelected
                                   ? "border-slate-900 bg-slate-900 text-white shadow-xl shadow-slate-200"
                                   : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50",
                               )}
                             >
                               <RadioGroupItem value={behavior.id} id={`scroll-${behavior.id}`} className="hidden" />
-
-                              <div className="mb-6 flex items-center justify-between">
-                                <div className={cn("flex items-center justify-center", isSelected ? "text-white" : "text-slate-600")}>
-                                  <Icon size={18} strokeWidth={1.5} />
+                              <div className="flex h-[48px] items-center gap-2 p-3">
+                                <div className="flex items-center justify-between">
+                                  <div className={cn("flex items-center justify-center", isSelected ? "text-white" : "text-slate-600")}>
+                                    <Icon size={18} strokeWidth={1.5} />
+                                  </div>
                                 </div>
-                              </div>
 
-                              <div className="space-y-1">
-                                <p
-                                  className={cn(
-                                    "text-[11px] leading-none font-bold capitalize",
-                                    isSelected ? "text-white" : "text-slate-700",
-                                  )}
-                                >
-                                  {behavior.title}
-                                </p>
+                                <div>
+                                  <p
+                                    className={cn(
+                                      "text-[11px] leading-none font-bold capitalize",
+                                      isSelected ? "text-white" : "text-slate-700",
+                                    )}
+                                  >
+                                    {behavior.title}
+                                  </p>
 
-                                <p className={cn("text-[9px] leading-tight", isSelected ? "text-white/60" : "text-slate-400")}>
-                                  {behavior.label}
-                                </p>
+                                  <p className={cn("text-[9px] leading-tight", isSelected ? "text-white/60" : "text-slate-400")}>
+                                    {behavior.label}
+                                  </p>
+                                </div>
                               </div>
                             </label>
                           );

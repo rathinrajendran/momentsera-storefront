@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import GalleryContainer from "./GalleryContainer";
 import { PasswordDialog } from "../../../../../editor/[event_key]/components/publish/PasswordDialog";
@@ -8,7 +7,10 @@ import { PasswordDialog } from "../../../../../editor/[event_key]/components/pub
 interface GallerySectionProps {
   title?: string;
   animationKey: string;
-  getMotionProps: any;
+  getMotionProps: (index: number) => {
+    key?: string;
+    [key: string]: any;
+  };
   layout: string;
   urls: string[];
   fallback?: string;
@@ -37,41 +39,51 @@ export default function GallerySection({
   setUnlockedSections,
 }: GallerySectionProps) {
   if (!urls?.length) return null;
-  const { key: _galleryKey, ...props } = getMotionProps(0);
+
+  const { key: _galleryKey, ...motionProps } = getMotionProps(0);
+
   const sectionId = "gallery";
 
   const isUnlocked = unlockedSections.includes(sectionId);
+
   const showPassword = Boolean(isProtected && password && !isUnlocked);
 
-  return (
-    <div className="relative">
-      <section className="relative px-6 py-24" style={{ background: "var(--bg-section-1)" }}>
-        <motion.h2
-          key={`gallery-${animationKey}`}
-          {...props}
-          className="mb-8 text-center"
-          style={{
-            color: `var(--${textColor})`,
-            fontSize: `var(--font-size-${fontSize})`,
-            fontFamily: `var(--font-${fontFamily})`,
-          }}
-        >
-          {title || "A Glimpse of Our Story"}
-        </motion.h2>
+  const galleryTitle = title || "A Glimpse of Our Story";
 
-        <div className="mx-auto max-w-6xl">
-          <GalleryContainer layout={layout} urls={urls} fallback={fallback || ""} />
-        </div>
-      </section>
+  return (
+    <section
+      className="relative px-6 py-24"
+      style={{
+        background: "var(--bg-section-1)",
+      }}
+    >
+      {/* Gallery Title */}
+      <motion.h2
+        key={`gallery-${animationKey}`}
+        {...motionProps}
+        className="mb-8 text-center"
+        style={{
+          color: `var(--${textColor})`,
+          fontSize: `var(--font-size-${fontSize})`,
+          fontFamily: `var(--font-${fontFamily})`,
+        }}
+      >
+        {galleryTitle}
+      </motion.h2>
+
+      {/* Gallery */}
+      <GalleryContainer layout={layout} urls={urls} fallback={fallback || ""} />
+
+      {/* Password Protection */}
       <PasswordDialog
         open={showPassword}
-        title={title || "Gallery"}
+        title={galleryTitle}
         password={password}
         onClose={() => {}}
         onSuccess={() => {
           setUnlockedSections((prev) => (prev.includes(sectionId) ? prev : [...prev, sectionId]));
         }}
       />
-    </div>
+    </section>
   );
 }

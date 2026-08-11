@@ -16,6 +16,7 @@ import GalleryPreview from "./Gallerypreview";
 import GalleryFooter from "./Galleryfooter";
 import EditorHeader from "./EditorHeader";
 import { GalleryItem } from "../../../../types/eventFunction";
+import { getAccessToken } from "../../../../lib/api/apiClient";
 
 export type LocalGalleryItem = GalleryItem & {
   _deleted?: boolean;
@@ -55,10 +56,15 @@ export default function GalleryEditor({ onBack, eventKey }: { onBack: () => void
     const formData = new FormData();
     formData.append("image", croppedFile);
 
+    const token = getAccessToken();
+
     const res = await fetch(`${process.env.NEXT_PUBLIC_API}/gallery/upload`, {
       method: "POST",
+      credentials: "include",
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        ...(token && {
+          Authorization: `Bearer ${token}`,
+        }),
       },
       body: formData,
     });

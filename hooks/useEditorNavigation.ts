@@ -19,6 +19,7 @@ export type EditorSection =
   | "settings"
   | "dressCode"
   | "timeline"
+  | "ourStory"
   | "rsvp";
 
 export function useEditorNavigation(isDraft: boolean, onDelete: () => void) {

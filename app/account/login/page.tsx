@@ -49,24 +49,18 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-
     try {
       await loginMutation.mutateAsync({
         email,
         password,
       });
-
       const pending = sessionStorage.getItem("pending_event");
-
       if (!pending) {
         router.replace("/invites");
         return;
       }
-
       const invite = JSON.parse(pending);
-
       const savedOnboarding = sessionStorage.getItem("onboarding_data");
-
       if (savedOnboarding) {
         const result = await submitOnboarding(
           {
@@ -78,15 +72,11 @@ export default function LoginPage() {
             data: JSON.parse(savedOnboarding),
           },
         );
-
         sessionStorage.setItem("active_event_key", result.event_key);
-
         sessionStorage.removeItem("pending_event");
-
         router.replace(`/editor/${result.event_key}`);
         return;
       }
-
       // No previous onboarding data → normal onboarding
       router.replace(`/invites/${invite.event_type}/${invite.invite_key}/onboarding`);
     } catch (err: any) {

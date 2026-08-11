@@ -15,7 +15,7 @@ import { Separator } from "../../../../components/ui/separator";
 
 import { generatePassword, isValidPassword, sanitizePassword } from "../../../../utils/password";
 import EditorHeader from "./EditorHeader";
-import { SectionHeader } from "./MotionEditor";
+// import { SectionHeader } from "./MotionEditor";
 import { PasswordModeType, SectionVisibilityDialog, VisibilityType } from "../SectionVisibilityDialog";
 
 /* -------------------------------------------------------------------------- */
@@ -51,6 +51,7 @@ const PROTECTED_SECTIONS: ProtectedSection[] = [
   { id: "announcement", label: "Announcement", allowPassword: false },
   { id: "schedule", label: "Schedule", allowPassword: false },
   { id: "timeline", label: "Timeline", allowPassword: true },
+  { id: "OurStory", label: "OurStory", allowPassword: true },
   { id: "dresscode", label: "Dresscode", allowPassword: true },
   { id: "gallery", label: "Gallery", allowPassword: true },
   { id: "music", label: "Music", allowPassword: true },
@@ -202,7 +203,7 @@ export default function PrivacyEditor({ onBack, eventKey }: { onBack: () => void
           <section className="space-y-6 [&>*:last-child]:mb-6">
             {/* Access Scope Options */}
             <div className="space-y-2">
-              <SectionHeader icon={Globe} label="Invitation Access Scope" />
+              {/* <SectionHeader icon={Globe} label="Invitation Access Scope" /> */}
               <HorizontalScroll>
                 <div className="-mx-1 flex gap-3 px-1 pb-2">
                   {[
@@ -300,7 +301,7 @@ export default function PrivacyEditor({ onBack, eventKey }: { onBack: () => void
             {/* Section Buttons Matrix */}
             {allowSectionProtection && (
               <div className="animate-in fade-in space-y-2 pt-2 duration-300">
-                <SectionHeader icon={LockKeyhole} label="Module Authorization Registry" />
+                {/* <SectionHeader icon={LockKeyhole} label="Module Authorization Registry" /> */}
                 <div className="grid grid-cols-1 gap-1.5">
                   {PROTECTED_SECTIONS.map((sec) => {
                     const badge = getVisibilityBadge(sec.id);

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { EditorSection } from "./EditorLayout";
-import { Calendar, CheckCircle, ChevronRight, Clock, Eye, Heading, ImageIcon, Lock, MessageSquare, Music, Palette, Printer, Settings, Share2, Shirt, Sparkles } from "lucide-react";
+import { Calendar, CheckCircle, ChevronRight, Clock, Eye, Heading, ImageIcon, Images, Lock, MessageSquare, Music, Palette, Printer, Settings, Share2, Shirt, Sparkles } from "lucide-react";
 import { SectionVisibilityDialog, VisibilityType } from "./SectionVisibilityDialog";
 import { usePreviewDraft } from "./PreviewDraftContext";
 import { useSaveEventSection } from "../../../hooks/useEvents";
@@ -46,6 +46,14 @@ const sections = [
     title: "Timeline",
     desc: "Sequential itinerary breakdown",
     icon: <Clock className="h-4 w-4" strokeWidth={1} />,
+    iconClass: "bg-amber-50 text-amber-500",
+    visibilityCheck: false,
+  },
+  {
+    id: "ourStory",
+    title: "Our Story",
+    desc: "Sequential itinerary breakdown",
+    icon: <Clock className="h-4 w-4" strokeWidth={1.5} />,
     iconClass: "bg-amber-50 text-amber-500",
     visibilityCheck: false,
   },

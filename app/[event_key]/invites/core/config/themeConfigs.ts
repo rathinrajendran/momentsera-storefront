@@ -78,6 +78,174 @@ export const THEMES = {
       border: "#e1d5c3",
     },
   },
+
+  "Midnight Luxe": {
+    bg: {
+      page: "#0b1120",
+      section1: "#111827",
+      section2: "#172033",
+      section3: "#0f172a",
+    },
+    surfaceTokens: {
+      card: "#182235",
+      overlay: "rgba(15,23,42,0.72)",
+      border: "#334155",
+    },
+  },
+
+  "Lavender Mist": {
+    bg: {
+      page: "#f8f4fb",
+      section1: "#f1eaf7",
+      section2: "#ffffff",
+      section3: "#f6f0fa",
+    },
+    surfaceTokens: {
+      card: "#ffffff",
+      overlay: "rgba(255,255,255,0.78)",
+      border: "#ded2e8",
+    },
+  },
+
+  "Emerald Garden": {
+    bg: {
+      page: "#f2f7f3",
+      section1: "#e7f0e9",
+      section2: "#ffffff",
+      section3: "#edf5ef",
+    },
+    surfaceTokens: {
+      card: "#ffffff",
+      overlay: "rgba(255,255,255,0.78)",
+      border: "#d3e2d6",
+    },
+  },
+
+  "Champagne Gold": {
+    bg: {
+      page: "#faf6ed",
+      section1: "#f3ead8",
+      section2: "#fffdf8",
+      section3: "#f7f0e3",
+    },
+    surfaceTokens: {
+      card: "#fffdf8",
+      overlay: "rgba(255,255,255,0.72)",
+      border: "#e5d6b9",
+    },
+  },
+
+  "Terracotta Sunset": {
+    bg: {
+      page: "#fbf2ed",
+      section1: "#f5dfd5",
+      section2: "#fffaf7",
+      section3: "#f8e8df",
+    },
+    surfaceTokens: {
+      card: "#fffaf7",
+      overlay: "rgba(255,250,247,0.78)",
+      border: "#e5c6b7",
+    },
+  },
+
+  "Royal Plum": {
+    bg: {
+      page: "#f7f2f8",
+      section1: "#eee4f0",
+      section2: "#fffaff",
+      section3: "#f3eaf5",
+    },
+    surfaceTokens: {
+      card: "#fffaff",
+      overlay: "rgba(255,255,255,0.76)",
+      border: "#dfcfe3",
+    },
+  },
+
+  "Pearl White": {
+    bg: {
+      page: "#faf9f7",
+      section1: "#f3f1ee",
+      section2: "#ffffff",
+      section3: "#f7f5f2",
+    },
+    surfaceTokens: {
+      card: "#ffffff",
+      overlay: "rgba(255,255,255,0.84)",
+      border: "#e4e0da",
+    },
+  },
+
+  "Forest Linen": {
+    bg: {
+      page: "#f3f6f1",
+      section1: "#e7eee4",
+      section2: "#fcfdfb",
+      section3: "#eef3eb",
+    },
+    surfaceTokens: {
+      card: "#fcfdfb",
+      overlay: "rgba(255,255,255,0.76)",
+      border: "#d5dfd1",
+    },
+  },
+
+  "Dusty Rose": {
+    bg: {
+      page: "#fbf4f5",
+      section1: "#f4e6e9",
+      section2: "#fffafb",
+      section3: "#f8edef",
+    },
+    surfaceTokens: {
+      card: "#fffafb",
+      overlay: "rgba(255,255,255,0.78)",
+      border: "#e7cfd4",
+    },
+  },
+
+  "Ocean Breeze": {
+    bg: {
+      page: "#f1f7fa",
+      section1: "#e5f0f5",
+      section2: "#ffffff",
+      section3: "#edf5f8",
+    },
+    surfaceTokens: {
+      card: "#ffffff",
+      overlay: "rgba(255,255,255,0.8)",
+      border: "#d1e2ea",
+    },
+  },
+
+  "Mocha Cream": {
+    bg: {
+      page: "#f8f2ed",
+      section1: "#eee2d8",
+      section2: "#fffaf6",
+      section3: "#f4e9e0",
+    },
+    surfaceTokens: {
+      card: "#fffaf6",
+      overlay: "rgba(255,250,246,0.78)",
+      border: "#dfcdbd",
+    },
+  },
+
+  "Charcoal Silk": {
+    bg: {
+      page: "#18181b",
+      section1: "#27272a",
+      section2: "#202023",
+      section3: "#111113",
+    },
+    surfaceTokens: {
+      card: "#2a2a2e",
+      overlay: "rgba(24,24,27,0.76)",
+      border: "#3f3f46",
+    },
+  },
 } as const;
 /* =========================================================   ACCENT FONTS========================================================= */
 /* =========================================================
@@ -664,6 +832,30 @@ export const THEME_ACCENT_RULES: Record<ThemeKey, AccentKey[]> = {
   "Mint Green": NATURE_ACCENTS,
 
   "Warm Ivory": LUXURY_ACCENTS,
+
+  "Midnight Luxe": LUXURY_ACCENTS,
+
+  "Lavender Mist": ["lavender", "orchid", "plum", "blush", "champagne"],
+
+  "Emerald Garden": NATURE_ACCENTS,
+
+  "Champagne Gold": LUXURY_ACCENTS,
+
+  "Terracotta Sunset": ["terracotta", "copper", "coral", "sand", "mocha"],
+
+  "Royal Plum": ["plum", "orchid", "lavender", "rosewood", "champagne"],
+
+  "Pearl White": ["pearl", "champagne", "ivory", "gold", "mocha"],
+
+  "Forest Linen": NATURE_ACCENTS,
+
+  "Dusty Rose": ROMANTIC_ACCENTS,
+
+  "Ocean Breeze": ["dustyBlue", "teal", "sage", "champagne", "ivory"],
+
+  "Mocha Cream": ["mocha", "copper", "sand", "champagne", "gold"],
+
+  "Charcoal Silk": LUXURY_ACCENTS,
 };
 /* =========================================================
    HELPERS

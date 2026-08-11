@@ -5,10 +5,25 @@ import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { addDays, differenceInSeconds } from "date-fns";
 import { motion, type Variants } from "framer-motion";
-import { Sparkles, Languages, Clock, MapPin } from "lucide-react";
+import {
+  Sparkles,
+  Languages,
+  Clock,
+  MapPin,
+  Megaphone,
+  CalendarDays,
+  Shirt,
+  Images,
+  Music,
+  Heart,
+  CheckCircle,
+  Phone,
+  BookHeart,
+  CircleHelp,
+  LucideIcon,
+} from "lucide-react";
 import { Header } from "../../../../(marketing)/components/header/Header";
 import { Carousel, CarouselContent, CarouselItem } from "../../../../../components/ui/carousel";
-import AudioPlayer from "../../../../../components/ui/AudioPlayer";
 import { Footer } from "../../../../(marketing)/components/footer/Footer";
 import { Button } from "../../../../../components/ui/button";
 import { H2 } from "../../../../../components/ui/H2";
@@ -16,7 +31,21 @@ import { H6 } from "../../../../../components/ui/H6";
 import { Para } from "../../../../../components/ui/Para";
 import { useSession } from "../../../../../hooks/useSession";
 import { submitOnboarding } from "./onboarding/actions";
-
+import {
+  ShieldCheck,
+  Palette,
+  Rocket,
+  Share2,
+  Link,
+  Lock,
+  Smartphone,
+  Cloud,
+  RefreshCw,
+  Users,
+  SquarePen,
+  Printer,
+  Timer,
+} from "lucide-react";
 /* ──────────────────────────────────────────
    TOKENS
 ────────────────────────────────────────── */
@@ -49,7 +78,37 @@ export default function InviteInner({ invite }: any) {
   const [mounted, setMounted] = useState(false);
   const [secondsLeft, setSecondsLeft] = useState(0);
   const targetDate = useMemo(() => addDays(new Date(), 5), []);
-  const { user, isAuthenticated: isLoggedIn, loading, refresh } = useSession();
+  const { isAuthenticated: isLoggedIn } = useSession();
+
+  const iconMap: Record<string, LucideIcon> = {
+    megaphone: Megaphone,
+    "calendar-days": CalendarDays,
+    clock: Clock,
+    shirt: Shirt,
+    images: Images,
+    music: Music,
+    heart: Heart,
+    "check-circle": CheckCircle,
+    link: Link,
+    lock: Lock,
+    printer: Printer,
+    palette: Palette,
+    timer: Timer,
+    "map-pin": MapPin,
+    phone: Phone,
+    "book-heart": BookHeart,
+    "circle-help": CircleHelp,
+    languages: Languages,
+    rocket: Rocket,
+    "shield-check": ShieldCheck,
+    "share-2": Share2,
+    smartphone: Smartphone,
+    cloud: Cloud,
+    "refresh-cw": RefreshCw,
+    users: Users,
+    "square-pen": SquarePen,
+  };
+
   useEffect(() => {
     setMounted(true);
     const initialDiff = differenceInSeconds(targetDate, new Date());
@@ -74,45 +133,47 @@ export default function InviteInner({ invite }: any) {
 
   if (!mounted) return null;
 
-const handleBuy = async () => {
-  sessionStorage.setItem(
-    "pending_event",
-    JSON.stringify({
-      invite_key: invite.invite_key,
-      event_type: invite.main_category,
-      created_at: Date.now(),
-    }),
-  );
+  const handleBuy = async () => {
+    sessionStorage.setItem(
+      "pending_event",
+      JSON.stringify({
+        invite_key: invite.invite_key,
+        event_type: invite.main_category,
+        created_at: Date.now(),
+      }),
+    );
 
-  if (!isLoggedIn) {
-    router.push("/account/login");
-    return;
-  }
-
-  const onboarding = sessionStorage.getItem("onboarding_data");
-
-  if (onboarding) {
-    try {
-      const result = await submitOnboarding(
-        {
-          invite_key: invite.invite_key,
-          event_type: invite.main_category,
-        },
-        {
-          stage: "onboarding",
-          data: JSON.parse(onboarding),
-        },
-      );
-
-      router.push(`/editor/${result.event_key}`);
+    if (!isLoggedIn) {
+      router.push("/account/login");
       return;
-    } catch (error) {
-      console.error(error);
     }
-  }
 
-  router.push(`/invites/${invite.main_category}/${invite.invite_key}/onboarding`);
-};
+    const onboarding = sessionStorage.getItem("onboarding_data");
+
+    if (onboarding) {
+      try {
+        const result = await submitOnboarding(
+          {
+            invite_key: invite.invite_key,
+            event_type: invite.main_category,
+          },
+          {
+            stage: "onboarding",
+            data: JSON.parse(onboarding),
+          },
+        );
+
+        router.push(`/editor/${result.event_key}`);
+        return;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    router.push(`/invites/${invite.main_category}/${invite.invite_key}/onboarding`);
+  };
+
+  console.log("invite data", invite);
 
   return (
     <main className="relative min-h-screen w-full overflow-hidden bg-[var(--background)] text-[var(--text-primary)] selection:bg-[var(--accent-primary)] selection:text-white">
@@ -273,40 +334,57 @@ const handleBuy = async () => {
         ───────────────────────────── */}
 
         <div className="mt-40 grid grid-cols-1 gap-4 md:grid-cols-4">
-          {/* Feature 1 */}
-          <div className="rounded-[40px] border border-[var(--border-color)] bg-white p-10 transition-all hover:border-[var(--accent-primary)] md:col-span-2">
-            <div className="flex h-full flex-col justify-between">
-              <Languages size={32} className="text-[var(--accent-primary)]" />
+          {invite.highlights?.map((feature: any, index: number) => {
+const Icon = iconMap[feature.icon] ?? Sparkles;
 
-              <div className="mt-20">
-                <h3 className="text-2xl font-bold tracking-tight">Bilingual Logic</h3>
+            const large = index % 3 === 0;
+            return (
+              <div
+                key={feature.feature_key}
+                className={`rounded-[40px] border border-[var(--border-color)] bg-white p-10 transition-all hover:border-[var(--accent-primary)] ${
+                  large ? "md:col-span-2" : ""
+                }`}
+              >
+                <div className="flex h-full flex-col justify-between">
+                  <Icon size={32} className="text-[var(--accent-primary)]" />
+                  <div className="mt-20">
+                    <h3 className={`font-bold tracking-tight ${large ? "text-2xl" : "text-xl"}`}>{feature.name}</h3>
 
-                <p className="mt-2 text-sm text-[var(--text-secondary)]">
-                  Seamlessly switch between English and Malayalam with a single tap.
-                </p>
+                    {<p className="mt-2 text-sm text-[var(--text-secondary)]">{feature.description}</p>}
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+            );
+          })}
 
-          {/* Feature 2 */}
-          <div className="rounded-[40px] border border-[var(--border-color)] bg-white p-10">
-            <div className="flex h-full flex-col justify-between">
-              <Clock size={32} className="text-[var(--text-muted)]" />
+          <div className="my-8 h-px bg-[var(--border-color)] md:col-span-4" />
+        </div>
+        <div className="mt-40 grid grid-cols-1 gap-4 md:grid-cols-4">
+          {invite.features?.map((feature: any, index: number) => {
+            const Icon = iconMap[feature.icon as keyof typeof iconMap] ?? Sparkles;
 
-              <h3 className="mt-20 text-xl font-bold tracking-tight">Live Timeline</h3>
-            </div>
-          </div>
+            const large = index % 3 === 0;
 
-          {/* Feature 3 */}
-          <div className="rounded-[40px] border border-[var(--border-color)] bg-white p-10">
-            <div className="flex h-full flex-col justify-between">
-              <MapPin size={32} className="text-[var(--text-muted)]" />
+            return (
+              <div
+                key={feature.feature_key}
+                className={`rounded-[40px] border border-[var(--border-color)] bg-white p-10 transition-all hover:border-[var(--accent-primary)] ${
+                  large ? "md:col-span-2" : ""
+                }`}
+              >
+                <div className="flex h-full flex-col justify-between">
+                  <Icon size={32} strokeWidth={1} className={large ? "text-[var(--accent-primary)]" : "text-[var(--text-muted)]"} />
 
-              <h3 className="mt-20 text-xl font-bold tracking-tight">One-Tap Nav</h3>
-            </div>
-          </div>
+                  <div className="mt-20">
+                    <h3 className="text-2xl font-bold tracking-tight">{feature.name}</h3>
 
-          {/* Divider */}
+                    <p className="mt-2 text-sm text-[var(--text-secondary)]">{feature.description}</p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+
           <div className="my-8 h-px bg-[var(--border-color)] md:col-span-4" />
         </div>
       </div>

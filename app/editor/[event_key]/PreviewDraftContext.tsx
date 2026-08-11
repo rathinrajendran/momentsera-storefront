@@ -11,6 +11,7 @@ type Draft = {
   music: any;
   dressCode: any;
   timeline: any;
+  ourStory: any;
   rsvp: any;
   print: any;
   announcement: any;
@@ -76,20 +77,20 @@ export function PreviewDraftProvider({ initialData, children }: { initialData: D
   /* ---------------- RESET / REFRESH ---------------- */
   const resetDraft = useCallback(() => setDraft(serverData), [serverData]);
 
-const refreshDraft = useCallback(
-  (data: Draft) => {
-    setServerData({
-      ...data,
-      frontendUrl,
-    });
+  const refreshDraft = useCallback(
+    (data: Draft) => {
+      setServerData({
+        ...data,
+        frontendUrl,
+      });
 
-    setDraft({
-      ...data,
-      frontendUrl,
-    });
-  },
-  [frontendUrl],
-);
+      setDraft({
+        ...data,
+        frontendUrl,
+      });
+    },
+    [frontendUrl],
+  );
 
   const refreshEvent = useCallback(async (eventKey: string) => {
     startRefreshTransition(async () => {
@@ -97,15 +98,15 @@ const refreshDraft = useCallback(
         // Cache bust query parameter ensures network request bypasses aggressive router/browser caches
         const freshEvent = await fetchEventByKey(`${eventKey}`);
         if (freshEvent) {
-         setServerData({
-           ...freshEvent,
-           frontendUrl,
-         });
+          setServerData({
+            ...freshEvent,
+            frontendUrl,
+          });
 
-         setDraft({
-           ...freshEvent,
-           frontendUrl,
-         });
+          setDraft({
+            ...freshEvent,
+            frontendUrl,
+          });
         }
       } catch (error) {
         console.error("Failed to refresh event draft:", error);

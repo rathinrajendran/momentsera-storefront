@@ -59,6 +59,7 @@ export default function PreviewClient({ initialData, eventKey }: PreviewClientPr
         wishes: data.wishes,
         dressCode: data.dressCode,
         timeline: data.timeline,
+        OurStory: data.OurStory,
         rsvp: data.rsvp,
       },
       theme: data.theme,

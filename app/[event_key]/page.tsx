@@ -67,6 +67,7 @@ export default async function EventPage({ params }: PageProps) {
     dressCode,
     rsvp,
     timeline,
+    ourStory,
     settings,
     wishes,
     music,
@@ -88,6 +89,7 @@ export default async function EventPage({ params }: PageProps) {
         dressCode,
         rsvp,
         timeline,
+        ourStory,
       }}
       settings={settings}
       music={music}
