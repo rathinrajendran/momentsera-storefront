@@ -137,54 +137,68 @@ export default function GalleryEditor({ onBack, eventKey }: { onBack: () => void
       <div className="flex flex-1 flex-col justify-between space-y-6 p-5 pb-0 md:min-h-[calc(100dvh-115px)] md:rounded-none [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-[2px] [&::-webkit-scrollbar-thumb]:rounded-[10px] [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-slate-100">
         <section className="space-y-6 [&>*:last-child]:mb-6">
           {/* Layout Picker Container */}
+          {/* Layout Picker Container */}
           <div className="space-y-2">
             <LabelForm className="text-xs font-semibold text-slate-700">Gallery Layout</LabelForm>
-            <RadioGroup value={currentLayout} onValueChange={(value) => handleLayoutChange(value as GalleryLayout)}>
-              <HorizontalScroll className="pb-1">
-                {(["grid", "masonry", "carousel", "thumbnail"] as GalleryLayout[]).map((layout) => {
-                  const active = currentLayout === layout;
+
+            <RadioGroup
+              value={currentLayout}
+              onValueChange={(value) => handleLayoutChange(value as GalleryLayout)}
+              className="grid grid-cols-1"
+            >
+              <HorizontalScroll className="w-full min-w-0 pb-1">
+                {[
+                  {
+                    id: "grid",
+                    label: "Grid",
+                    icon: LayoutGrid,
+                  },
+                  {
+                    id: "masonry",
+                    label: "Masonry",
+                    icon: LayoutPanelLeft,
+                  },
+                  {
+                    id: "carousel",
+                    label: "Carousel",
+                    icon: GalleryHorizontal,
+                  },
+                  {
+                    id: "thumbnail",
+                    label: "Thumbnail",
+                    icon: Tally2,
+                  },
+                ].map((item) => {
+                  const active = currentLayout === item.id;
+                  const Icon = item.icon;
+
                   return (
                     <LabelForm
-                      key={layout}
+                      key={item.id}
+                      htmlFor={`gallery-layout-${item.id}`}
                       className={cn(
-                        "group flex h-[68px] min-w-[96px] shrink-0 cursor-pointer flex-col justify-between rounded-xl border p-3 capitalize transition-all duration-300 md:h-[76px] md:min-w-[104px]",
+                        "group flex h-[68px] min-w-[100px] shrink-0 cursor-pointer flex-col justify-between rounded-xl border p-3 transition-all duration-300 md:h-[76px] md:min-w-[104px]",
                         active
                           ? "border-slate-900 bg-slate-900 text-white shadow-md shadow-slate-900/10"
                           : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50/50 hover:text-slate-900",
                       )}
                     >
-                      <RadioGroupItem value={layout} id={layout} className="hidden" />
+                      <RadioGroupItem id={`gallery-layout-${item.id}`} value={item.id} className="hidden" />
 
-                      <div className="flex items-center text-sm">
-                        {layout === "grid" && (
-                          <LayoutGrid
-                            className={cn("h-4 w-4", active ? "text-white" : "text-slate-400 group-hover:text-slate-600")}
-                            strokeWidth={1.5}
-                          />
-                        )}
-                        {layout === "masonry" && (
-                          <LayoutPanelLeft
-                            className={cn("h-4 w-4", active ? "text-white" : "text-slate-400 group-hover:text-slate-600")}
-                            strokeWidth={1.5}
-                          />
-                        )}
-                        {layout === "carousel" && (
-                          <GalleryHorizontal
-                            className={cn("h-4 w-4", active ? "text-white" : "text-slate-400 group-hover:text-slate-600")}
-                            strokeWidth={1.5}
-                          />
-                        )}
-                        {layout === "thumbnail" && (
-                          <div className="flex h-4 w-4 items-center justify-center">
-                            <Tally2
-                              className={cn("h-4 w-4 rotate-90", active ? "text-white" : "text-slate-400 group-hover:text-slate-600")}
-                              strokeWidth={1.5}
-                            />
-                          </div>
-                        )}
+                      <div className="flex items-center">
+                        <Icon
+                          className={cn(
+                            "h-4 w-4",
+                            item.id === "thumbnail" && "rotate-90",
+                            active ? "text-white" : "text-slate-400 group-hover:text-slate-600",
+                          )}
+                          strokeWidth={1.5}
+                        />
                       </div>
 
-                      <p className="text-[11px] font-semibold tracking-wide">{layout}</p>
+                      <p className={cn("truncate text-[11px] font-semibold tracking-wide", active ? "text-white/90" : "text-slate-500")}>
+                        {item.label}
+                      </p>
                     </LabelForm>
                   );
                 })}

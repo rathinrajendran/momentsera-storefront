@@ -3,12 +3,29 @@ import React, { useMemo } from "react";
 import { ThemeWrapper } from "../core/wrappers/ThemeWrapper";
 import Luna from "./luna/page";
 import Sora from "./sora/page";
-import AudioPlayer from "../../../../components/ui/AudioPlayer";
 import { getThemeRadius } from "../core/config/themeConfigs";
 import EventCalendar from "../../../../components/ui/EventCalendar";
 import DesignedByFooter from "../../../editor/[event_key]/components/DesignedByFooter";
 import { useUnlockedSections } from "../../../../hooks/useUnlockedSections";
 import { PasswordDialog } from "../../../editor/[event_key]/components/publish/PasswordDialog";
+import Aura from "./aura/page";
+import Nuvo from "./nuvo/page";
+import Mira from "./mira/page";
+import Vibe from "./vibe/page";
+import Nexa from "./nexa/page";
+import Ziva from "./nexa/page";
+import Veda from "./veda/page";
+import Heritage from "./heritage/page";
+import Athel from "./athel/page";
+import Zora from "./zora/page";
+import Lumi from "./lumi/page";
+import Alma from "./alma/page";
+import Nora from "./nora/page";
+import Remi from "./remi/page";
+import Cleo from "./cleo/page";
+import Milo from "./milo/page";
+import Crescent from "./crescent/page";
+import Iris from "./iris/page";
 
 /* ─────────────────────────────────────────────
     HELPERS & TYPES
@@ -62,6 +79,10 @@ export default function Catalog({ data, theme, music, motion, sharing, privacy, 
   const inviteUnlocked = unlockedSections.includes(MAIN_ACCESS_KEY);
   const showInvitePassword = inviteProtected && invitePassword && !inviteUnlocked;
 
+
+console.log("motion data", data);
+
+
   /* ─────────────────────────────────────────────
       THEME & COLORS
     ───────────────────────────────────────────── */
@@ -113,6 +134,10 @@ export default function Catalog({ data, theme, music, motion, sharing, privacy, 
     accentSpacing: theme?.accent_letter_spacing ?? "0em",
     bodySpacing: theme?.body_letter_spacing ?? "0em",
 
+    headingLineHeight: theme?.heading_line_height ?? "1.2",
+    accentLineHeight: theme?.accent_line_height ?? "1.2",
+    bodyLineHeight: theme?.body_line_height ?? "1.5",
+
     headingTransform: theme?.heading_text_transform ?? "none",
     accentTransform: theme?.accent_text_transform ?? "none",
     bodyTransform: theme?.body_text_transform ?? "none",
@@ -125,14 +150,10 @@ export default function Catalog({ data, theme, music, motion, sharing, privacy, 
   const backgroundSettings = {
     type: theme?.background_type ?? "solid",
     image: theme?.background_image ?? "",
-    overlayOpacity: theme?.background_type === "solid" ? 0:  theme?.background_overlay_opacity ?? 45,
+    overlayOpacity: theme?.background_type === "solid" ? 0 : (theme?.background_overlay_opacity ?? 45),
     position: theme?.background_position ?? "center",
     size: theme?.background_size ?? "cover",
-    texture: theme?.texture ?? "none",
-    effect: theme?.background_effect ?? "none",
-    blur: theme?.background_blur ?? 0,
-    brightness: theme?.background_brightness ?? 100,
-    contrast: theme?.background_contrast ?? 100,
+    repeat: theme?.background_repeat ?? "repeat",
   };
 
   const inviteKey = data?.invite?.invite_key;
@@ -144,6 +165,24 @@ export default function Catalog({ data, theme, music, motion, sharing, privacy, 
     const map: Record<string, React.ComponentType<any>> = {
       luna: Luna,
       sora: Sora,
+      aura: Aura,
+      nuvo: Nuvo,
+      mira: Mira,
+      vibe: Vibe,
+      nexa: Nexa,
+      ziva: Ziva,
+      veda: Veda,
+      zora: Zora,
+      athel: Athel,
+      lumi: Lumi,
+      alma: Alma,
+      nora: Nora,
+      remi: Remi,
+      cleo: Cleo,
+      milo: Milo,
+      crescent: Crescent,
+      iris: Iris,
+      heritage: Heritage,
     };
 
     return map[inviteKey] || Sora;
@@ -242,9 +281,33 @@ export default function Catalog({ data, theme, music, motion, sharing, privacy, 
           "--letter-spacing-accent": typography.accentSpacing,
           "--letter-spacing-body": typography.bodySpacing,
 
+          "--line-height-heading": typography.headingLineHeight,
+          "--line-height-accent": typography.accentLineHeight,
+          "--line-height-body": typography.bodyLineHeight,
+
           "--text-transform-heading": typography.headingTransform,
           "--text-transform-accent": typography.accentTransform,
           "--text-transform-body": typography.bodyTransform,
+
+          /* Typography role aliases used by theme components */
+          "--font-heading-family": typography.headingFont,
+          "--font-accent-family": typography.accentFont,
+          "--font-body-family": typography.bodyFont,
+          "--font-heading-size": `${typography.headingSize}px`,
+          "--font-accent-size": `${typography.accentSize}px`,
+          "--font-body-size": `${typography.bodySize}px`,
+          "--font-heading-weight": typography.headingWeight,
+          "--font-accent-weight": typography.accentWeight,
+          "--font-body-weight": typography.bodyWeight,
+          "--font-heading-spacing": typography.headingSpacing,
+          "--font-accent-spacing": typography.accentSpacing,
+          "--font-body-spacing": typography.bodySpacing,
+          "--font-heading-line-height": typography.headingLineHeight,
+          "--font-accent-line-height": typography.accentLineHeight,
+          "--font-body-line-height": typography.bodyLineHeight,
+          "--font-heading-transform": typography.headingTransform,
+          "--font-accent-transform": typography.accentTransform,
+          "--font-body-transform": typography.bodyTransform,
 
           /* ================================================================
            * BACKGROUND SETTINGS & IMAGE TOKENS
@@ -254,33 +317,69 @@ export default function Catalog({ data, theme, music, motion, sharing, privacy, 
           "--bg-overlay-opacity": `${backgroundSettings.overlayOpacity / 100}`,
           "--bg-position": backgroundSettings.position,
           "--bg-size": backgroundSettings.size,
-          "--background-texture": backgroundSettings.texture,
-          "--background-effect": backgroundSettings.effect,
-          "--background-blur": `${backgroundSettings.blur}px`,
-          "--background-brightness": backgroundSettings.brightness,
-          "--background-contrast": backgroundSettings.contrast,
+          "--bg-repeat": backgroundSettings.repeat,
 
           /* ================================================================
-           * BORDER RADIUS
+           * SHAPE SYSTEM
            * ================================================================ */
           "--radius-theme": getThemeRadius(theme?.border_radius ?? "soft"),
+
+          "--shape-border-width":
+            theme?.border_width === "thin"
+              ? "1px"
+              : theme?.border_width === "medium"
+                ? "2px"
+                : theme?.border_width === "thick"
+                  ? "3px"
+                  : "0px",
+
+          "--shape-border-style":
+            theme?.border_style === "dashed"
+              ? "dashed"
+              : theme?.border_style === "dotted"
+                ? "dotted"
+                : theme?.border_style === "double"
+                  ? "double"
+                  : "solid",
+
+          "--shape-shadow":
+            theme?.shadow === "soft"
+              ? "0 4px 14px rgba(20, 20, 20, 0.08)"
+              : theme?.shadow === "medium"
+                ? "0 10px 28px rgba(20, 20, 20, 0.12)"
+                : theme?.shadow === "floating"
+                  ? "0 18px 42px rgba(20, 20, 20, 0.16)"
+                  : "none",
+
+          "--shape-image-radius":
+            theme?.image_shape === "rectangle"
+              ? "0px"
+              : theme?.image_shape === "rounded"
+                ? "12px"
+                : theme?.image_shape === "circle"
+                  ? "9999px"
+                  : theme?.image_shape === "arch"
+                    ? "9999px 9999px 0 0"
+                    : "var(--radius-theme)",
+
+          /* ================================================================
+           * ANIMATION SETTINGS
+           * ================================================================ */
+          "--animation-enabled": motion?.animations === false ? "0" : "1",
+          "--animation-style": motion?.animation_style ?? "smooth",
+          "--animation-entry": motion?.animation_entry ?? "fade-up",
+          "--animation-scroll": motion?.scroll_behavior ?? "on-scroll",
+          "--animation-duration": motion?.animation_duration ?? "1s",
+          "--animation-delay": motion?.animation_delay ?? "0ms",
+          "--animation-speed": `${motion?.animation_speed ?? 50}`,
+          "--animation-loop": motion?.animation_loop ? "1" : "0",
         } as React.CSSProperties
       }
     >
-      {print?.enable ? <>testttt</> : <ThemeComponent data={data} theme={theme} motion={motion} settings={settings} eventKey={eventKey} />}
-
-      {/* MUSIC */}
-      {music?.music && (
-        <AudioPlayer
-          src={music.background_audio}
-          autoplay={music.autoplay_music}
-          allowMute={music.allow_mute}
-          isLive={isLive}
-          loop={music.loop_music}
-          fadeIn={music.fade_in}
-          fadeOut={music.fade_out}
-          volume={music.volume_level}
-        />
+      {print?.enable ? (
+        <>testttt</>
+      ) : (
+        <ThemeComponent data={data} theme={theme} motionData={motion} music={music} settings={settings} eventKey={eventKey} />
       )}
 
       {/* CALENDAR */}

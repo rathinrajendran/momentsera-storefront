@@ -21,6 +21,7 @@ import {
   BookHeart,
   CircleHelp,
   LucideIcon,
+  ChevronLeftIcon,
 } from "lucide-react";
 import { Header } from "../../../../(marketing)/components/header/Header";
 import { Carousel, CarouselContent, CarouselItem } from "../../../../../components/ui/carousel";
@@ -199,6 +200,12 @@ export default function InviteInner({ invite }: any) {
         <div className="grid grid-cols-1 items-start gap-16 md:grid-cols-12">
           {/* LEFT */}
           <div className="md:col-span-5 lg:col-span-5">
+            <button
+              className="flex h-8 w-auto cursor-pointer items-center justify-center text-xs mb-2 -ml-1"
+              onClick={() => router.push(`/invites/`)}
+            >
+              <ChevronLeftIcon strokeWidth={1} className="h-5 w-5" /> Back to invites
+            </button>
             <motion.div initial="hidden" animate="show" variants={fadeUp}>
               <H6>
                 {invite?.main_category}
@@ -335,7 +342,7 @@ export default function InviteInner({ invite }: any) {
 
         <div className="mt-40 grid grid-cols-1 gap-4 md:grid-cols-4">
           {invite.highlights?.map((feature: any, index: number) => {
-const Icon = iconMap[feature.icon] ?? Sparkles;
+            const Icon = iconMap[feature.icon] ?? Sparkles;
 
             const large = index % 3 === 0;
             return (

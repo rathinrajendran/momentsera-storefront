@@ -1,6 +1,6 @@
 "use client";
 
-import { RefObject, useEffect, useCallback } from "react";
+import { RefObject, useCallback, useEffect } from "react";
 
 type UseIframeDraftSyncProps = {
   iframeRef: RefObject<HTMLIFrameElement | null>;
@@ -9,36 +9,36 @@ type UseIframeDraftSyncProps = {
 };
 
 export function useIframeDraftSync({ iframeRef, enabled, draft }: UseIframeDraftSyncProps) {
-  // Highly optimized postMessage dispatcher
   const syncDraft = useCallback(() => {
-    if (!enabled || !draft || !iframeRef.current?.contentWindow) {
-      return;
-    }
+    if (!enabled || !draft) return;
+
+    const iframe = iframeRef.current;
+
+    if (!iframe?.contentWindow) return;
 
     try {
-      iframeRef.current.contentWindow.postMessage(
+      iframe.contentWindow.postMessage(
         {
           type: "UPDATE_DRAFT",
-          payload: JSON.parse(JSON.stringify(draft)), // Deep clone ensures structured clone algorithm doesn't drop proxy-wrapped states
+          payload: structuredClone(draft),
         },
         window.location.origin,
       );
     } catch (error) {
-      console.error("[IframeSync] Core postMessage transmission failed:", error);
+      console.error("[IframeSync] Failed to sync draft:", error);
     }
   }, [enabled, draft, iframeRef]);
 
-  // Effect 1: Sync whenever the parent state updates
+  // Sync whenever the draft changes.
   useEffect(() => {
     syncDraft();
   }, [syncDraft]);
 
-  // Effect 2: Bi-directional Handshake
-  // If the iframe refreshes or hard-loads, it signals it's ready. We push immediately.
+  // Re-sync when the iframe is ready/reloaded.
   useEffect(() => {
     if (!enabled) return;
 
-    const handleHandshake = (event: MessageEvent) => {
+    const handleMessage = (event: MessageEvent) => {
       if (event.origin !== window.location.origin) return;
 
       if (event.data?.type === "IFRAME_READY") {
@@ -46,7 +46,10 @@ export function useIframeDraftSync({ iframeRef, enabled, draft }: UseIframeDraft
       }
     };
 
-    window.addEventListener("message", handleHandshake);
-    return () => window.removeEventListener("message", handleHandshake);
+    window.addEventListener("message", handleMessage);
+
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
   }, [enabled, syncDraft]);
 }

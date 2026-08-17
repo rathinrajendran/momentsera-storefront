@@ -7,5 +7,6 @@ export function getAnimationKey(motion: any) {
     behavior: motion?.scroll_behavior,
     duration: motion?.animation_duration,
     delay: motion?.animation_delay,
+    loop: motion?.animation_loop,
   });
 }

@@ -42,28 +42,24 @@ export function CustomDatePicker({ value, onChange, disabled = false, disabledDa
 
   return (
     <Popover open={isOpen} onOpenChange={handleOpenChange}>
-     
-        <div className="w-full">
-          <Button
-            type="button"
-            variant="outline"
-            disabled={disabled}
-            className={cn(
-              "h-[38px] w-full justify-start rounded-md border bg-[#ECEFF1] px-3 py-2 text-xs font-medium tracking-normal shadow-[inset_0_80px_0_#ffffff] transition-colors outline-none md:h-[42px]",
-              "text-[#171717] placeholder:text-[#cccccc]",
-              "border-slate-200",
-              "focus-visible:border-slate-400 focus-visible:ring-0",
-              "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
-            )}
-          >
-            {value ? format(value, "MM/dd/yyyy") : "Select Date"}
-          </Button>
-        </div>
-     
+      <PopoverTrigger>
+        <Button
+          type="button"
+          variant="outline"
+          disabled={disabled}
+          className={cn(
+            "h-[38px] w-full justify-start rounded-md border bg-[#ECEFF1] px-3 py-2 text-xs font-medium tracking-normal shadow-[inset_0_80px_0_#ffffff] transition-colors outline-none md:h-[42px]",
+            "text-[#171717] placeholder:text-[#cccccc]",
+            "border-slate-200",
+            "focus-visible:border-slate-400 focus-visible:ring-0",
+            "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
+          )}
+        >
+          {value ? format(value, "MM/dd/yyyy") : "Select Date"}
+        </Button>
+      </PopoverTrigger>
 
-      {isOpen && <div className="fixed top-0 right-0 left-0 z-[99] h-screen w-full bg-white/90 md:top-[115px] md:left-auto md:w-[350px]" />}
-
-      <PopoverContent className="datepicker-popover z-[100] w-auto border-0 p-0 shadow-none">
+      <PopoverContent align="start" side="bottom" sideOffset={6} className="z-[9999] w-auto border-0 bg-transparent p-0 shadow-none">
         <CustomCalendar
           mode="single"
           selected={tempDate}

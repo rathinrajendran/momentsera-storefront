@@ -1,4 +1,6 @@
 import React, { useMemo } from "react";
+import { THEME_TYPOGRAPHY } from "../../app/[event_key]/invites/core/core/themeTypography";
+import { THEME_COLORS } from "../../app/[event_key]/invites/core/core/themeColors";
 
 type WeddingCalendarProps = {
   year?: number;
@@ -69,60 +71,23 @@ export default function WeddingCalendar({
   }).format(new Date(year, month, 1));
 
   return (
-    <section
-      className={[
-        "relative w-full overflow-hidden",
-        className,
-      ].join(" ")}
-    >
+    <section className={["relative w-full overflow-hidden", className].join(" ")}>
       {/* Very subtle paper texture */}
-      <div
-        aria-hidden="true"
-        className="
-          pointer-events-none absolute inset-0
-          opacity-[0.18]
-          [background-size:5px_5px]
-        "
-      />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 [background-size:5px_5px] opacity-[0.18]" />
 
       <div className="relative mx-auto max-w-[520px]">
         {/* Month */}
-        <h2
-          className="
-            mb-5
-            text-center
-            font-sans
-            text-[18px]
-            font-medium
-            uppercase
-            tracking-[0.32em]
-            sm:text-[20px]
-          "
-        >
+        <h2 className="mb-5 text-center uppercase" style={{ ...THEME_TYPOGRAPHY.heading, color: THEME_COLORS.text }}>
           {monthName} {year}
         </h2>
 
         {/* Weekday headings */}
-        <div
-          className="
-            grid grid-cols-7
-            mb-2
-          "
-        >
+        <div className="mb-2 grid grid-cols-7">
           {WEEKDAYS.map((day, index) => (
             <div
               key={`${day}-${index}`}
-              className="
-                flex
-                h-9
-                items-center
-                justify-center
-                font-sans
-                text-[14px]
-                font-medium
-                text-[#35322f]
-                sm:text-[15px]
-              "
+              className="flex h-9 items-center justify-center font-sans text-[14px] font-medium text-[#35322f] sm:text-[15px]"
+              style={{ ...THEME_TYPOGRAPHY.body, color: THEME_COLORS.text }}
             >
               {day}
             </div>
@@ -132,36 +97,21 @@ export default function WeddingCalendar({
         {/* Calendar */}
         <div className="grid grid-cols-7">
           {calendarDays.map((day) => {
-            const isSelected =
-              day.currentMonth && day.date === selectedDate;
+            const isSelected = day.currentMonth && day.date === selectedDate;
 
             return (
-              <div
-                key={day.key}
-                className="
-                  relative
-                  flex
-                  h-[42px]
-                  items-center
-                  justify-center
-                  sm:h-[48px]
-                "
-              >
+              <div key={day.key} className="relative flex h-[42px] items-center justify-center sm:h-[48px]">
                 {isSelected ? (
                   <SelectedDate date={day.date} />
                 ) : (
                   <span
                     className={[
                       "relative z-10",
-                      "font-sans",
-                      "text-[15px] sm:text-[16px]",
-                      "font-normal",
                       "leading-none",
                       "tabular-nums",
-                      day.currentMonth
-                        ? "text-[#292724]"
-                        : "text-[#b7b3ae]",
+                      day.currentMonth ? "text-[#292724]" : "text-[#b7b3ae]",
                     ].join(" ")}
+                    style={{ ...THEME_TYPOGRAPHY.body, color: THEME_COLORS.text }}
                   >
                     {day.date}
                   </span>
@@ -179,64 +129,16 @@ function SelectedDate({ date }: { date: number }) {
   return (
     <div className="relative flex h-10 w-10 items-center justify-center sm:h-11 sm:w-11">
       {/* Heart */}
-      <div
-        className="
-          absolute
-          left-1/2
-          top-1/2
-          h-[30px]
-          w-[30px]
-          -translate-x-1/2
-          -translate-y-[43%]
-          rotate-[-45deg]
-          rounded-[4px]
-          bg-[#64151b]
-          sm:h-[32px]
-          sm:w-[32px]
-        "
-      >
-        <span
-          className="
-            absolute
-            left-0
-            top-[-8px]
-            h-[30px]
-            w-[30px]
-            rounded-full
-            bg-[#64151b]
-            sm:h-[32px]
-            sm:w-[32px]
-          "
-        />
+      <div className="absolute top-1/2 left-1/2 h-[30px] w-[30px] -translate-x-1/2 -translate-y-[43%] rotate-[-45deg] rounded-[4px] bg-[#64151b] sm:h-[32px] sm:w-[32px]">
+        <span className="absolute top-[-8px] left-0 h-[30px] w-[30px] rounded-full bg-[#64151b] sm:h-[32px] sm:w-[32px]" />
 
-        <span
-          className="
-            absolute
-            left-[8px]
-            top-[-8px]
-            h-[30px]
-            w-[30px]
-            rounded-full
-            bg-[#64151b]
-            sm:h-[32px]
-            sm:w-[32px]
-          "
-        />
+        <span className="absolute top-[-8px] left-[8px] h-[30px] w-[30px] rounded-full bg-[#64151b] sm:h-[32px] sm:w-[32px]" />
       </div>
 
       {/* Date */}
       <span
-        className="
-          relative
-          z-10
-          -translate-y-[1px]
-          font-sans
-          text-[14px]
-          font-medium
-          tabular-nums
-          text-white
-          sm:text-[15px]
-        "
+        className="relative z-10 -translate-y-[1px] tabular-nums"
+        style={{ ...THEME_TYPOGRAPHY.body, color: THEME_COLORS.text }}
       >
         {date}
       </span>

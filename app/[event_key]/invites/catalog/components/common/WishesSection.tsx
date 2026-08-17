@@ -8,6 +8,10 @@ import WishesList from "../WishesList";
 import Wishes from "../Wishes";
 
 import { PasswordDialog } from "../../../../../editor/[event_key]/components/publish/PasswordDialog";
+import { THEME_COLORS } from "../../../core/core/themeColors";
+import { THEME_TYPOGRAPHY } from "../../../core/core/themeTypography";
+import { getShapeCardStyle } from "../../../core/core/themeShapes";
+import { ThemeSectionTitle } from "../../../core/core/ThemeSectionTitle";
 
 interface WishesSectionProps {
   title?: string;
@@ -87,18 +91,13 @@ export default function WishesSection({
     setShowForm(false);
   };
 
-
-
-  console.log("wishesRaw", wishesRaw);
-  
-
   return (
     <div className="gallery-block relative">
       <section
         ref={wishesContainerRef}
         className="relative isolate overflow-visible px-6 py-24 text-center"
         style={{
-          background: "var(--bg-section-3)",
+          background: "var(--bg-primary)",
         }}
       >
         {/* Optional Icon */}
@@ -112,21 +111,8 @@ export default function WishesSection({
             strokeWidth={1}
           />
         ) : null}
-
+        <ThemeSectionTitle decoration="floral">{showForm ? "Send Your Wishes" : title}</ThemeSectionTitle>
         {/* Title */}
-        <motion.h2
-          key={`wishes-${animationKey}`}
-          {...motionProps}
-          className="mb-12"
-          style={{
-            color: `var(--${textColor})`,
-            fontSize: `var(--font-size-${fontSize})`,
-            fontFamily: `var(--font-${fontFamily})`,
-          }}
-        >
-          {showForm ? "Send Your Wishes" : title}
-        </motion.h2>
-
         {/* ─────────────────────────────
             WISHES LIST
         ───────────────────────────── */}
@@ -139,13 +125,11 @@ export default function WishesSection({
             <button
               type="button"
               onClick={handleAddWish}
-              className="mx-auto mt-10 flex cursor-pointer items-center gap-3 px-7 py-4 font-light transition-all duration-300 hover:scale-105"
+              className="mx-auto mt-10 flex cursor-pointer items-center gap-3 px-7 py-4 transition-all duration-300 hover:scale-105"
               style={{
-                background: "var(--surface-overlay)",
-                color: "var(--primary)",
-                fontFamily: "var(--font-secondary)",
-                fontSize: "calc(var(--font-size-secondary) * 0.70)",
-                borderRadius: "var(--radius-theme)",
+                ...getShapeCardStyle(),
+                borderColor: THEME_COLORS.line,
+                background: THEME_COLORS.paper,
               }}
             >
               <Send size={15} strokeWidth={1} />

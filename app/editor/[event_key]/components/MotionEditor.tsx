@@ -4,14 +4,12 @@ import { useForm, FormProvider } from "react-hook-form";
 import { usePreviewDraft } from "../PreviewDraftContext";
 import { useSaveEventSection } from "../../../../hooks/useEvents";
 import { Button } from "../../../../components/ui/button";
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "../../../../components/ui/form";
+import { FormField, FormItem, FormControl, FormMessage } from "../../../../components/ui/form";
 import { Slider } from "../../../../components/ui/Slider";
 import { cn } from "../../../../utils/utils";
-import { AUDIO_PRESETS } from "../../../../public/constants/Presets";
 import { Switch } from "../../../../components/ui/switch";
-import { useRef, useState } from "react";
 import { RadioGroup, RadioGroupItem } from "../../../../components/ui/radio-group";
-import { ChevronLeft, Music, Pause, Play, Save, X } from "lucide-react";
+import {  Save, X } from "lucide-react";
 import { HorizontalScroll } from "../../../../components/ui/HorizontalScroll";
 import {
   Sparkles,
@@ -28,14 +26,13 @@ import {
   MousePointerClick,
   Repeat,
   Layers3,
-  Volume2,
-  Zap,
 } from "lucide-react";
 import EditorHeader from "./EditorHeader";
 
 /* ---------------- TYPES ---------------- */
 
 type DesignForm = {
+  animations: boolean;
   animation_style: string;
   animation_entry: string;
   scroll_behavior: string;
@@ -90,7 +87,7 @@ export function SectionHeader({ icon: Icon, label }: { icon: React.ElementType; 
 function ToggleRow({ label, checked, onCheckedChange }: { label: string; checked: boolean; onCheckedChange: (val: boolean) => void }) {
   return (
     <div className="flex items-center justify-between">
-      <span className="capitalize mb-0 text-[0.7rem] font-medium tracking-normal text-[#424242]">{label}</span>
+      <span className="mb-0 text-[0.7rem] font-medium tracking-normal text-[#424242] capitalize">{label}</span>
       <Switch checked={checked} onCheckedChange={onCheckedChange} />
     </div>
   );
@@ -102,28 +99,27 @@ export default function MotionEditor({ eventKey, onBack }: { eventKey: string; o
   /* ---------------- HOOKS ---------------- */
 
   const { draft, replaceSection, resetDraft, refreshEvent } = usePreviewDraft();
-
   const eventId = draft.invite.id;
-
   const mutation = useSaveEventSection(eventKey, eventId);
 
-  /* ---------------- STATE ---------------- */
-
-  const [previewing, setPreviewing] = useState<string | null>(null);
-
-  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   /* ---------------- FORM ---------------- */
+
+
+
+console.log("draft.motion.animation_style", draft.motion.animation_style);
 
   const form = useForm<DesignForm>({
     defaultValues: {
       ...draft.motion,
+      animations: draft.motion.animations !== false,
       animation_style: draft.motion.animation_style ?? "smooth",
       animation_entry: draft.motion.animation_entry ?? "fade-up",
       scroll_behavior: draft.motion.scroll_behavior ?? "on-scroll",
       animation_duration: draft.motion.animation_duration ?? "1s",
       animation_delay: draft.motion.animation_delay ?? "100ms",
       animation_speed: draft.motion.animation_speed ?? 50,
+      animation_loop: draft.motion.animation_loop ?? false,
     },
   });
 
@@ -176,13 +172,50 @@ export default function MotionEditor({ eventKey, onBack }: { eventKey: string; o
           className="flex flex-1 flex-col justify-between space-y-5 p-5 pb-0 md:min-h-[calc(100dvh-115px)] md:rounded-none [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-[2px] [&::-webkit-scrollbar-thumb]:rounded-[10px] [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-[#78909C]"
         >
           <section className="space-y-6 [&>*:last-child]:mb-6">
+            {/* Animation Controls */}
+            <div className="space-y-3 rounded-xl border border-slate-100 bg-slate-50/70 p-3">
+              <FormField
+                control={form.control}
+                name="animations"
+                render={({ field }) => (
+                  <FormItem>
+                    <ToggleRow
+                      label="Enable animations"
+                      checked={field.value}
+                      onCheckedChange={(value) => {
+                        field.onChange(value);
+                        handleLiveChange("animations", value);
+                      }}
+                    />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="animation_loop"
+                render={({ field }) => (
+                  <FormItem>
+                    <ToggleRow
+                      label="Loop animation"
+                      checked={field.value}
+                      onCheckedChange={(value) => {
+                        field.onChange(value);
+                        handleLiveChange("animation_loop", value);
+                      }}
+                    />
+                  </FormItem>
+                )}
+              />
+            </div>
+
             {/* Animation Preset */}
             <FormField
               control={form.control}
               name="animation_style"
               render={({ field }) => (
                 <FormItem className={cn("transition-all duration-300")}>
-                  <span className="capitalize mb-0 text-[0.7rem] font-medium tracking-normal text-[#424242]">Animation Preset</span>
+                  <span className="mb-0 text-[0.7rem] font-medium tracking-normal text-[#424242] capitalize">Animation Preset</span>
                   <FormControl>
                     <RadioGroup
                       value={field.value}
@@ -224,7 +257,7 @@ export default function MotionEditor({ eventKey, onBack }: { eventKey: string; o
                                   >
                                     {preset.name}
                                   </p>
-                                  <p className="text-[10px]">sdfsdf</p>
+                                  <p className="text-[10px] text-slate-400">{preset.description}</p>
                                 </div>
                               </div>
                             </label>
@@ -244,7 +277,7 @@ export default function MotionEditor({ eventKey, onBack }: { eventKey: string; o
               name="animation_entry"
               render={({ field }) => (
                 <FormItem className={cn("transition-all duration-300")}>
-                  <span className="capitalize mb-0 text-[0.7rem] font-medium tracking-normal text-[#424242]">Entrance Effect</span>
+                  <span className="mb-0 text-[0.7rem] font-medium tracking-normal text-[#424242] capitalize">Entrance Effect</span>
                   <FormControl>
                     <RadioGroup
                       value={field.value}
@@ -347,7 +380,7 @@ export default function MotionEditor({ eventKey, onBack }: { eventKey: string; o
               name="scroll_behavior"
               render={({ field }) => (
                 <FormItem className={cn("transition-all duration-300")}>
-                  <span className="capitalize mb-0 text-[0.7rem] font-medium tracking-normal text-[#424242]">Scroll Behavior</span>
+                  <span className="mb-0 text-[0.7rem] font-medium tracking-normal text-[#424242] capitalize">Scroll Behavior</span>
                   <FormControl>
                     <RadioGroup
                       value={field.value}
@@ -438,7 +471,7 @@ export default function MotionEditor({ eventKey, onBack }: { eventKey: string; o
               name="animation_duration"
               render={({ field }) => (
                 <FormItem className={cn("transition-all duration-300")}>
-                  <span className="capitalize mb-0 text-[0.7rem] font-medium tracking-normal text-[#424242]">Duration</span>
+                  <span className="mb-0 text-[0.7rem] font-medium tracking-normal text-[#424242] capitalize">Duration</span>
                   <div className="flex gap-1 rounded-xl border border-slate-100 bg-slate-50 p-1">
                     {["0.5s", "1s", "1.5s", "2s"].map((t) => (
                       <button
@@ -466,7 +499,7 @@ export default function MotionEditor({ eventKey, onBack }: { eventKey: string; o
               name="animation_delay"
               render={({ field }) => (
                 <FormItem className={cn("transition-all duration-300")}>
-                  <span className="capitalize mb-0 text-[0.7rem] font-medium tracking-normal text-[#424242]">Delay</span>
+                  <span className="mb-0 text-[0.7rem] font-medium tracking-normal text-[#424242] capitalize">Delay</span>
                   <div className="flex gap-1 rounded-xl border border-slate-100 bg-slate-50 p-1">
                     {["0ms", "100ms", "300ms", "500ms"].map((d) => (
                       <button
@@ -495,8 +528,8 @@ export default function MotionEditor({ eventKey, onBack }: { eventKey: string; o
               render={({ field }) => (
                 <FormItem className={cn("transition-all duration-300")}>
                   <div className="mb-2 flex items-center justify-between">
-                    <span className="capitalize mb-0 text-[0.7rem] font-medium tracking-normal text-[#424242]">Speed</span>
-                    <span className="capitalize mb-0 text-[0.7rem] font-medium tracking-normal text-[#424242]">{field.value ?? 50}%</span>
+                    <span className="mb-0 text-[0.7rem] font-medium tracking-normal text-[#424242] capitalize">Speed</span>
+                    <span className="mb-0 text-[0.7rem] font-medium tracking-normal text-[#424242] capitalize">{field.value ?? 50}%</span>
                   </div>
                   <FormControl>
                     <Slider

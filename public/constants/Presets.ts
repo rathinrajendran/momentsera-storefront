@@ -45,6 +45,30 @@ export const BACKGROUND_PRESETS: Preset[] = [
     url: Images.bg6.src,
     themeMode: "Rose & Cream",
   },
+  {
+    id: "bg7",
+    name: "Rose & Cream",
+    url: Images.bg7.src,
+    themeMode: "Rose & Cream",
+  },
+  {
+    id: "bg8",
+    name: "Rose & Cream",
+    url: Images.bg8.src,
+    themeMode: "Rose & Cream",
+  },
+  {
+    id: "bg9",
+    name: "Rose & Cream",
+    url: Images.bg9.src,
+    themeMode: "Rose & Cream",
+  },
+  {
+    id: "bg10",
+    name: "Rose & Cream",
+    url: Images.bg10.src,
+    themeMode: "Rose & Cream",
+  },
 ];
 
 export const AUDIO_PRESETS = [

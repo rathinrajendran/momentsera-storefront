@@ -23,19 +23,15 @@ function CustomCalendar({
   const displayDate = selected instanceof Date ? selected : new Date();
 
   return (
-    <div className="w-[320px] rounded-3xl overflow-hidden bg-[#f3f4f6] border-0 flex flex-col font-sans">
+    <div className="flex w-[320px] flex-col overflow-hidden rounded-3xl border-0 bg-[#f3f4f6] font-sans">
       {/* Header */}
-      <div className="bg-[#84a59d] py-4 px-5 text-white flex justify-between items-start">
+      <div className="flex items-start justify-between bg-[#84a59d] px-5 py-4 text-white">
         <div>
-          <p className="text-xs font-light tracking-widest uppercase opacity-80">
-            Select Date
-          </p>
-          <h1 className="text-2xl mt-3 font-semibold tracking-wide">
-            {format(displayDate, "EEE, MMM d")}
-          </h1>
+          <p className="text-xs font-light tracking-widest uppercase opacity-80">Select Date</p>
+          <h1 className="mt-3 text-2xl font-semibold tracking-wide">{format(displayDate, "EEE, MMM d")}</h1>
         </div>
       </div>
-      <div className="px-1 p-0">
+      <div className="p-0 px-1">
         <DayPicker
           selected={selected}
           showOutsideDays={showOutsideDays}
@@ -49,20 +45,18 @@ function CustomCalendar({
             caption: "flex justify-between items-center mb-3",
             caption_label: "font-semibold text-sm",
             nav: "flex gap-2",
-            nav_button:
-              "h-8 w-8 p-0 rounded-full flex items-center justify-center text-[#1C2D42] hover:bg-gray-200/50 transition-colors",
+            nav_button: "h-8 w-8 p-0 rounded-full flex items-center justify-center text-[#1C2D42] hover:bg-gray-200/50 transition-colors",
             table: "w-full",
             head_row: "flex justify-between w-full mb-2",
             head_cell: "w-9 text-center text-xs text-[#90A4AE] font-semibold",
             row: "flex justify-between w-full mt-1.5",
-            cell: "w-9 h-8 flex items-center justify-center p-0 relative focus-within:relative focus-within:z-20 text-xs text-[#616161] font-semibold",
+            cell: "relative flex h-9 w-9 items-center justify-center p-0 text-center focus-within:relative focus-within:z-20 text-xs text-[#616161] font-semibold",
 
             day: cn(
               buttonVariants({ variant: "ghost" }),
-              "w-9 h-8 p-0 font-normal text-[2px] text-[#1C2D42] rounded-full hover:bg-gray-200/60 transition-colors",
+              "h-8 w-9 rounded-full p-0 text-xs font-normal text-[#1C2D42] transition-colors hover:bg-gray-200/60",
             ),
-            day_selected:
-              "border border-[#98B4CE] bg-transparent text-[#1C2D42] rounded-full hover:bg-[#000000]/10 font-medium",
+            day_selected: "border border-[#98B4CE] bg-transparent text-[#1C2D42] rounded-full hover:bg-[#000000]/10 font-medium",
             day_today: "font-bold text-blue-100",
             day_disabled: "opacity-30",
             day_hidden: "invisible",
@@ -80,14 +74,14 @@ function CustomCalendar({
       <div className="flex justify-end gap-5 px-6 pb-4">
         <button
           onClick={onCancel}
-          className="cursor-pointer text-xs font-semibold text-[#84a59d] hover:text-[#7ba2c7] transition-colors px-2 py-1 rounded"
+          className="cursor-pointer rounded px-2 py-1 text-xs font-semibold text-[#84a59d] transition-colors hover:text-[#7ba2c7]"
         >
           Cancel
         </button>
 
         <button
           onClick={onOk}
-          className="cursor-pointer text-xs font-semibold text-[#84a59d] hover:text-[#7ba2c7] transition-colors px-2 py-1 rounded"
+          className="cursor-pointer rounded px-2 py-1 text-xs font-semibold text-[#84a59d] transition-colors hover:text-[#7ba2c7]"
         >
           OK
         </button>

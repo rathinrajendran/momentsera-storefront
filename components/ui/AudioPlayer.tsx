@@ -1,197 +1,280 @@
 "use client";
 
-import { Pause, Play, Volume, VolumeX } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { AudioPlayerProps, AudioPlayerVariant, AudioPlayerViewProps } from "./AudioPlayerTypes";
 
-interface AudioPlayerProps {
-  src: string;
-  autoplay?: boolean;
-  allowMute?: boolean;
-  isLive?: boolean;
+import {
+  CardAudioPlayer,
+  CompactAudioPlayer,
+  ElegantAudioPlayer,
+  FloatingAudioPlayer,
+  MinimalAudioPlayer,
+  PillAudioPlayer,
+  VinylAudioPlayer,
+  WaveAudioPlayer,
+} from "./AudioPlayerVariants";
 
-  loop?: boolean;
-  fadeIn?: boolean;
-  fadeOut?: boolean;
-  volume?: number;
-  showPlayer?: boolean;
-}
+const WAVEFORM = [
+  8, 13, 18, 11, 15, 7, 20, 12, 17, 9, 15, 21, 10, 17, 7, 14, 19, 11, 16, 9, 18, 13, 21, 8, 15, 11, 19, 10, 16, 7, 14, 20, 12, 17, 9, 15,
+  19, 11, 16, 8,
+];
 
-const AudioPlayer = ({
+const VARIANTS: Record<AudioPlayerVariant, React.ComponentType<AudioPlayerViewProps>> = {
+  minimal: MinimalAudioPlayer,
+  card: CardAudioPlayer,
+  pill: PillAudioPlayer,
+  elegant: ElegantAudioPlayer,
+  wave: WaveAudioPlayer,
+  compact: CompactAudioPlayer,
+  floating: FloatingAudioPlayer,
+  vinyl: VinylAudioPlayer,
+};
+
+export default function AudioPlayer({
   src,
+  name = "Background Music",
+  cover,
+  variant = "minimal",
+
   autoplay = false,
   allowMute = true,
   isLive = false,
+
   loop = true,
   fadeIn = false,
   fadeOut = false,
   volume = 60,
+
   showPlayer = true,
-}: AudioPlayerProps) => {
+  className,
+}: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const fadeTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
 
-  if (!showPlayer) return null;
+  const targetVolume = useMemo(() => Math.max(0, Math.min(100, volume)) / 100, [volume]);
 
-  /* ---------------- INIT AUDIO ---------------- */
-
-  useEffect(() => {
-    if (!audioRef.current) return;
-
-    const audio = audioRef.current;
-
-    audio.loop = loop;
-    audio.volume = (volume || 60) / 100;
-    audio.muted = muted;
-  }, [loop, volume, muted]);
-
-  /* ---------------- AUTOPLAY ---------------- */
-
-  useEffect(() => {
-    if (!audioRef.current || !autoplay) return;
-
-    const audio = audioRef.current;
-
-    audio
-      .play()
-      .then(() => {
-        setPlaying(true);
-
-        if (fadeIn) {
-          audio.volume = 0;
-
-          let v = 0;
-          const target = (volume || 60) / 100;
-
-          const interval = setInterval(() => {
-            v += 0.05;
-
-            if (v >= target) {
-              audio.volume = target;
-              clearInterval(interval);
-            } else {
-              audio.volume = v;
-            }
-          }, 100);
-        }
-      })
-      .catch(() => setPlaying(false));
-  }, [autoplay, src]);
-
-  /* ---------------- PLAY / PAUSE ---------------- */
-
-  const togglePlay = async () => {
-    if (!audioRef.current) return;
-
-    const audio = audioRef.current;
-
-    if (audio.paused) {
-      await audio.play().catch(() => {});
-      setPlaying(true);
-    } else {
-      if (fadeOut) {
-        let v = audio.volume;
-
-        const interval = setInterval(() => {
-          v -= 0.05;
-
-          if (v <= 0) {
-            audio.pause();
-            clearInterval(interval);
-            setPlaying(false);
-          } else {
-            audio.volume = v;
-          }
-        }, 100);
-      } else {
-        audio.pause();
-        setPlaying(false);
-      }
+  const clearFade = () => {
+    if (fadeTimerRef.current) {
+      clearInterval(fadeTimerRef.current);
+      fadeTimerRef.current = null;
     }
   };
 
-  /* ---------------- MUTE ---------------- */
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    audio.loop = loop;
+    audio.muted = muted;
+
+    if (!fadeIn || !playing) {
+      audio.volume = targetVolume;
+    }
+  }, [loop, muted, fadeIn, playing, targetVolume]);
+
+  useEffect(() => {
+    if (!src || !autoplay) return;
+
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    let cancelled = false;
+
+    const start = async () => {
+      try {
+        if (fadeIn) {
+          audio.volume = 0;
+        } else {
+          audio.volume = targetVolume;
+        }
+
+        await audio.play();
+
+        if (cancelled) return;
+
+        setPlaying(true);
+
+        if (fadeIn) {
+          clearFade();
+
+          let current = 0;
+
+          fadeTimerRef.current = setInterval(() => {
+            current += 0.05;
+
+            if (current >= targetVolume) {
+              audio.volume = targetVolume;
+              clearFade();
+            } else {
+              audio.volume = current;
+            }
+          }, 100);
+        }
+      } catch {
+        setPlaying(false);
+      }
+    };
+
+    void start();
+
+    return () => {
+      cancelled = true;
+      clearFade();
+    };
+  }, [autoplay, src]);
+
+  useEffect(() => {
+    return () => {
+      clearFade();
+      audioRef.current?.pause();
+    };
+  }, []);
+
+  const play = async () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    clearFade();
+
+    audio.volume = fadeIn ? 0 : targetVolume;
+
+    try {
+      await audio.play();
+      setPlaying(true);
+    } catch {
+      setPlaying(false);
+      return;
+    }
+
+    if (!fadeIn) return;
+
+    let current = 0;
+
+    fadeTimerRef.current = setInterval(() => {
+      current += 0.05;
+
+      if (current >= targetVolume) {
+        audio.volume = targetVolume;
+        clearFade();
+      } else {
+        audio.volume = current;
+      }
+    }, 100);
+  };
+
+  const pause = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    clearFade();
+
+    if (!fadeOut) {
+      audio.pause();
+      setPlaying(false);
+      return;
+    }
+
+    let current = audio.volume;
+
+    fadeTimerRef.current = setInterval(() => {
+      current -= 0.05;
+
+      if (current <= 0) {
+        audio.volume = 0;
+        audio.pause();
+        audio.volume = targetVolume;
+        clearFade();
+        setPlaying(false);
+      } else {
+        audio.volume = current;
+      }
+    }, 100);
+  };
+
+  const togglePlay = () => {
+    if (audioRef.current?.paused) {
+      void play();
+    } else {
+      pause();
+    }
+  };
 
   const toggleMute = () => {
-    if (!allowMute) return;
-    setMuted((prev) => !prev);
+    if (!allowMute || !audioRef.current) return;
+
+    const next = !muted;
+
+    audioRef.current.muted = next;
+    setMuted(next);
+  };
+
+  const seek = (percentage: number) => {
+    const audio = audioRef.current;
+    if (!audio || !Number.isFinite(audio.duration)) return;
+
+    const nextTime = (percentage / 100) * audio.duration;
+
+    audio.currentTime = nextTime;
+    setCurrentTime(nextTime);
+  };
+
+  if (!showPlayer || !src) return null;
+
+  const progress = duration > 0 ? Math.min(100, Math.max(0, (currentTime / duration) * 100)) : 0;
+
+  const Variant = VARIANTS[variant] ?? VARIANTS.minimal;
+
+  const viewProps: AudioPlayerViewProps = {
+    name,
+    cover,
+    playing,
+    muted,
+    currentTime,
+    duration,
+    progress,
+
+    onTogglePlay: togglePlay,
+    onToggleMute: toggleMute,
+    onSeek: seek,
+
+    allowMute,
+    waveform: WAVEFORM,
   };
 
   return (
-    <div
-      className={`
-        z-[99999] flex items-center justify-end bottom-5 right-5 w-[75px]
-        ${
-          isLive
-            ? "fixed"
-            : "sticky -mt-[42px] ml-auto"
-        }
-      `}
-    >
-      <div
-        className={`
-          flex items-center justify-center overflow-hidden
-           rounded-[var(--radius-theme)] border border-[var(--accent)]
-          bg-[var(--surface-card)]
-          px-[10px] py-1
-          ${isLive ? "w-full" : "w-auto"}
-        `}
-      >
-        <audio
-          ref={audioRef}
-          src={src}
-          playsInline
-          preload="auto"
-          onPlay={() => setPlaying(true)}
-          onPause={() => setPlaying(false)}
-        />
+    <>
+      <audio
+        ref={audioRef}
+        src={src}
+        playsInline
+        preload="metadata"
+        onLoadedMetadata={(event) => {
+          setDuration(event.currentTarget.duration || 0);
+          event.currentTarget.loop = loop;
+          event.currentTarget.volume = targetVolume;
+          event.currentTarget.muted = muted;
+        }}
+        onTimeUpdate={(event) => {
+          setCurrentTime(event.currentTarget.currentTime);
+        }}
+        onPlay={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
+        onEnded={() => {
+          if (!loop) {
+            setPlaying(false);
+            setCurrentTime(0);
+          }
+        }}
+      />
 
-        {/* ▶ Play / Pause */}
-        <button
-          onClick={togglePlay}
-          className="flex h-8 w-5 cursor-pointer items-center justify-center rounded-[var(--radius-theme)] bg-transparent"
-        >
-          {playing ? (
-            <Pause strokeWidth={1} className="w-4 text-[var(--primary)]" />
-          ) : (
-            <Play strokeWidth={1} className="w-4 text-[var(--primary)]" />
-          )}
-        </button>
-
-        {/* 🎵 Wave */}
-        <div className="mx-[5px] flex h-4 items-end gap-x-[5px]">
-          {[16, 10, 14, 8, 16].map((height, index) => (
-            <span
-              key={index}
-              className={`
-                block w-[1.4px] rounded bg-[var(--primary)]
-                ${playing ? "animate-wave opacity-100" : "opacity-40"}
-              `}
-              style={{
-                height: `${height}px`,
-                animationDelay: `${index * 0.1}s`,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* 🔊 Mute */}
-        {/* {allowMute && (
-          <button
-            onClick={toggleMute}
-            className="flex h-8 w-5 cursor-pointer items-center justify-center rounded-full bg-transparent"
-          >
-            {muted ? (
-              <VolumeX strokeWidth={1} className="w-4" />
-            ) : (
-              <Volume strokeWidth={1} className="w-4" />
-            )}
-          </button>
-        )} */}
+      <div className={`w-full ${isLive ? "fixed right-4 bottom-4 z-[99999] w-[min(420px,calc(100vw-2rem))]" : ""} ${className ?? ""}`}>
+        <Variant {...viewProps} />
       </div>
-    </div>
+    </>
   );
-};
-
-export default AudioPlayer;
+}

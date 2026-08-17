@@ -4,12 +4,9 @@ import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Trash2, X, Plus, Save } from "lucide-react";
-
 import { usePreviewDraft } from "../PreviewDraftContext";
 import { useSaveEventSection } from "../../../../hooks/useEvents";
-
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "../../../../components/ui/form";
-
 import { Input } from "../../../../components/ui/input";
 import { Button } from "../../../../components/ui/button";
 import { Textarea } from "../../../../components/ui/textarea";
@@ -25,14 +22,6 @@ function startOfDay(date: Date) {
   const result = new Date(date);
   result.setHours(0, 0, 0, 0);
   return result;
-}
-
-function isValidDate(value?: string) {
-  if (!value) return false;
-
-  const date = new Date(value);
-
-  return !Number.isNaN(date.getTime());
 }
 
 /* -------------------------------------------------------------------------- */
@@ -234,15 +223,14 @@ export default function ScheduleEditor({ onBack, eventKey }: { onBack: () => voi
   /* Form                                                                     */
   /* ------------------------------------------------------------------------ */
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(schema),
-
-    mode: "onChange",
-
-    defaultValues: {
-      schedule: scheduleData,
-    },
-  });
+const form = useForm<FormValues>({
+  resolver: zodResolver(schema),
+  mode: "onChange",
+  reValidateMode: "onChange",
+  defaultValues: {
+    schedule: scheduleData,
+  },
+});
 
   const { formState, control, handleSubmit } = form;
 

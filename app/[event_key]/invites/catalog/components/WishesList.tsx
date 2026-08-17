@@ -4,10 +4,13 @@ import React, { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { useWishes } from "../../../../../hooks/useWishes";
+import { THEME_COLORS } from "../../core/core/themeColors";
+import { THEME_TYPOGRAPHY } from "../../core/core/themeTypography";
+import { getShapeCardStyle } from "../../core/core/themeShapes";
 
 const DEFAULT_WISH = {
   id: "default-company-wish",
-  wishes_from: "Momentsera Invitations",
+  wishes_from: "Momentsera",
   wishes_type: "text",
   wishes:
     "Wishing you a lifetime filled with love, laughter, and unforgettable memories. May this beautiful celebration mark the beginning of a joyful journey together. Thank you for celebrating this special occasion with us.",
@@ -85,10 +88,11 @@ export default function WishesList({ eventKey }: { eventKey: string }) {
     <div className="w-full">
       {/* Wish Card */}
       <div
-        className="relative flex h-[200px] w-full items-center justify-center overflow-hidden px-6"
+        className="relative flex h-auto min-h-[200px] w-full items-center justify-center px-7 py-8"
         style={{
-          background: "var(--surface-overlay)",
-          borderRadius: "var(--radius-theme)",
+          ...getShapeCardStyle(),
+          borderColor: THEME_COLORS.line,
+          background: THEME_COLORS.paper,
         }}
       >
         <AnimatePresence mode="wait" initial={false}>
@@ -110,39 +114,21 @@ export default function WishesList({ eventKey }: { eventKey: string }) {
               duration: 0.8,
               ease: "easeInOut",
             }}
-            className="absolute w-full px-10 text-center"
+            className="w-full text-center"
           >
             {/* Sender */}
             <p
-              className="mb-4 font-light tracking-widest capitalize"
-              style={{
-                color: "var(--accent)",
-                fontFamily: "var(--font-accent)",
-                fontSize: "calc(var(--font-size-accent) * 0.40)",
-              }}
+              className="mb-4"
+              style={{ ...THEME_TYPOGRAPHY.accent, color: THEME_COLORS.muted, fontSize: THEME_TYPOGRAPHY.heading.fontSize }}
             >
               {currentWish.wishes_from}
             </p>
 
             {/* Wish */}
             {currentWish.wishes_type === "text" ? (
-              <p
-                className="leading-relaxed font-light"
-                style={{
-                  color: "var(--primary)",
-                  fontFamily: "var(--font-primary)",
-                  fontSize: "calc(var(--font-size-primary) * 0.80)",
-                }}
-              >
-                {currentWish.wishes}
-              </p>
+              <p style={{ ...THEME_TYPOGRAPHY.body, color: THEME_COLORS.muted }}>{currentWish.wishes}</p>
             ) : (
-              <div
-                className="inline-block rounded-full border border-[var(--border)] px-4 py-2 text-[10px] tracking-widest uppercase"
-                style={{
-                  color: "var(--primary)",
-                }}
-              >
+              <div className="inline-block rounded-full border border-[var(--border)] px-4 py-2">
                 Sent a {currentWish.wishes_type} message
               </div>
             )}

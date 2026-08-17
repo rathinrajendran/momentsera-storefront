@@ -11,14 +11,20 @@ import { AUDIO_PRESETS } from "../../../../public/constants/Presets";
 import { Switch } from "../../../../components/ui/switch";
 import { useRef, useState } from "react";
 import { RadioGroup, RadioGroupItem } from "../../../../components/ui/radio-group";
-import { ChevronLeft, Music, Pause, Play, Save, X } from "lucide-react";
+import { Music, Pause, Play, Save, X } from "lucide-react";
 import { HorizontalScroll } from "../../../../components/ui/HorizontalScroll";
 import EditorHeader from "./EditorHeader";
+import type { AudioPlayerVariant } from "../../../../components/ui/AudioPlayerTypes";
+import { AUDIO_PLAYER_PRESETS } from "../../../../components/ui/audioPlayerConfig";
+// import { AUDIO_PLAYER_PRESETS } from "@/components/invitation/audio/audioPlayerConfig";
+// import type { AudioPlayerVariant } from "@/components/invitation/audio/AudioPlayerTypes";
 
 /* ---------------- TYPES ---------------- */
 
 type DesignForm = {
   background_audio?: string;
+  background_audio_name?: string;
+  audio_player_variant: AudioPlayerVariant;
   music: boolean;
   allow_mute: boolean;
   loop_music: boolean;
@@ -26,7 +32,6 @@ type DesignForm = {
   fade_out: boolean;
   volume_level: number;
 };
-
 /* ---------------- SECTION HEADER ---------------- */
 
 export function SectionHeader({ icon: Icon, label }: { icon: React.ElementType; label: string }) {
@@ -62,17 +67,27 @@ export default function MusicEditor({ eventKey, onBack }: { eventKey: string; on
   const [previewing, setPreviewing] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-
   /* ---------------- FORM ---------------- */
+  const selectedAudio = AUDIO_PRESETS.find((audio) => audio.url === draft.music?.background_audio);
 
   const form = useForm<DesignForm>({
     defaultValues: {
       ...draft.music,
+
       music: draft.music.music ?? true,
+
       background_audio: draft.music.background_audio ?? AUDIO_PRESETS[0]?.url,
+
+      background_audio_name: draft.music.background_audio_name ?? selectedAudio?.name ?? AUDIO_PRESETS[0]?.name ?? "",
+
+      audio_player_variant: (draft.music.audio_player_variant as AudioPlayerVariant | undefined) ?? "minimal",
+
       loop_music: draft.music.loop_music ?? true,
+
       fade_in: draft.music.fade_in ?? true,
+
       fade_out: draft.music.fade_out ?? true,
+
       volume_level: draft.music.volume_level ?? 60,
     },
   });
@@ -195,8 +210,18 @@ export default function MusicEditor({ eventKey, onBack }: { eventKey: string; on
                     <RadioGroup
                       value={field.value}
                       onValueChange={(url) => {
-                        field.onChange(url);
-                        handleLiveChange("background_audio", url);
+                        const selectedAudio = AUDIO_PRESETS.find((audio) => audio.url === url);
+
+                        const audioName = selectedAudio?.name ?? "";
+
+                        form.setValue("background_audio", url);
+                        form.setValue("background_audio_name", audioName);
+
+                        replaceSection("music", {
+                          ...form.getValues(),
+                          background_audio: url,
+                          background_audio_name: audioName,
+                        });
                       }}
                       className="grid grid-cols-1"
                     >
@@ -266,6 +291,145 @@ export default function MusicEditor({ eventKey, onBack }: { eventKey: string; on
                     </RadioGroup>
                   </FormControl>
                   <FormMessage className="text-destructive text-[10px] font-medium" />
+                </FormItem>
+              )}
+            />
+
+            {/* Audio Player Layout */}
+            <FormField
+              control={form.control}
+              name="audio_player_variant"
+              render={({ field }) => (
+                <FormItem className="space-y-2">
+                  <span className="text-xs font-semibold text-slate-700">Audio Player Layout</span>
+
+                  <FormControl>
+                    <RadioGroup
+                      value={field.value}
+                      onValueChange={(value) => {
+                        const variant = value as AudioPlayerVariant;
+
+                        field.onChange(variant);
+                        handleLiveChange("audio_player_variant", variant);
+                      }}
+                      className="grid grid-cols-1"
+                    >
+                      <HorizontalScroll className="pb-1">
+                        {AUDIO_PLAYER_PRESETS.map((item) => {
+                          const active = field.value === item.value;
+
+                          return (
+                            <label
+                              key={item.value}
+                              htmlFor={`audio-layout-${item.value}`}
+                              className={cn(
+                                "group flex h-[76px] min-w-[112px] shrink-0 cursor-pointer flex-col justify-between rounded-xl border p-3 transition-all duration-300 md:h-[82px] md:min-w-[128px]",
+                                active
+                                  ? "border-slate-900 bg-slate-900 text-white shadow-md shadow-slate-900/10"
+                                  : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50/50 hover:text-slate-900",
+                              )}
+                            >
+                              <RadioGroupItem id={`audio-layout-${item.value}`} value={item.value} className="hidden" />
+
+                              {/* Small visual preview */}
+                              <div className="flex h-7 items-center">
+                                {item.value === "minimal" && (
+                                  <div className="flex items-center gap-1">
+                                    <span className="flex h-5 w-5 items-center justify-center rounded-full border border-current">
+                                      <Play size={8} fill="currentColor" className="ml-[1px]" />
+                                    </span>
+                                    <span className="flex items-end gap-[2px]">
+                                      {[8, 13, 6, 15, 10].map((height, index) => (
+                                        <span key={index} className="w-[2px] rounded-full bg-current opacity-70" style={{ height }} />
+                                      ))}
+                                    </span>
+                                  </div>
+                                )}
+
+                                {item.value === "card" && (
+                                  <div className="flex w-full items-center gap-2">
+                                    <span className="h-6 w-6 rounded-md border border-current opacity-60" />
+                                    <span className="flex-1">
+                                      <span className="mb-1 block h-1.5 w-12 rounded-full bg-current opacity-70" />
+                                      <span className="block h-1 w-full rounded-full bg-current opacity-25" />
+                                    </span>
+                                    <span className="flex h-5 w-5 items-center justify-center rounded-full border border-current">
+                                      <Play size={7} fill="currentColor" className="ml-[1px]" />
+                                    </span>
+                                  </div>
+                                )}
+
+                                {item.value === "pill" && (
+                                  <div className="flex w-full items-center gap-2 rounded-full border border-current px-2 py-1">
+                                    <Play size={8} fill="currentColor" className="ml-[1px]" />
+                                    <span className="h-1.5 flex-1 rounded-full bg-current opacity-30" />
+                                    <span className="flex items-end gap-[2px]">
+                                      <span className="h-2 w-[2px] rounded-full bg-current" />
+                                      <span className="h-3 w-[2px] rounded-full bg-current" />
+                                      <span className="h-2 w-[2px] rounded-full bg-current" />
+                                    </span>
+                                  </div>
+                                )}
+
+                                {item.value === "elegant" && (
+                                  <div className="w-full text-center">
+                                    <span className="mx-auto block h-1 w-12 rounded-full bg-current opacity-30" />
+                                    <span className="mx-auto mt-2 block h-1 w-20 rounded-full bg-current opacity-60" />
+                                  </div>
+                                )}
+
+                                {item.value === "wave" && (
+                                  <div className="flex w-full items-center justify-center gap-[2px]">
+                                    {[5, 11, 18, 9, 15, 7, 20, 12, 17, 8, 14].map((height, index) => (
+                                      <span key={index} className="w-[2px] rounded-full bg-current opacity-70" style={{ height }} />
+                                    ))}
+                                  </div>
+                                )}
+
+                                {item.value === "compact" && (
+                                  <div className="flex items-center gap-2">
+                                    <span className="flex h-5 w-5 items-center justify-center rounded-full border border-current">
+                                      <Play size={7} fill="currentColor" className="ml-[1px]" />
+                                    </span>
+                                    <span className="h-1.5 w-14 rounded-full bg-current opacity-30" />
+                                  </div>
+                                )}
+
+                                {item.value === "floating" && (
+                                  <span className="flex h-7 w-7 items-center justify-center rounded-full border border-current">
+                                    <Play size={9} fill="currentColor" className="ml-[1px]" />
+                                  </span>
+                                )}
+
+                                {item.value === "vinyl" && (
+                                  <span className="relative flex h-7 w-7 items-center justify-center rounded-full border border-current">
+                                    <span className="h-2 w-2 rounded-full border border-current" />
+                                  </span>
+                                )}
+                              </div>
+
+                              <div className="min-w-0">
+                                <p
+                                  className={cn(
+                                    "truncate text-[10px] font-semibold tracking-wide",
+                                    active ? "text-white" : "text-slate-700",
+                                  )}
+                                >
+                                  {item.label}
+                                </p>
+
+                                <p className={cn("mt-0.5 truncate text-[8px]", active ? "text-white/60" : "text-slate-400")}>
+                                  {item.description}
+                                </p>
+                              </div>
+                            </label>
+                          );
+                        })}
+                      </HorizontalScroll>
+                    </RadioGroup>
+                  </FormControl>
+
+                  <FormMessage />
                 </FormItem>
               )}
             />

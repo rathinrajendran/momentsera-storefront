@@ -16,8 +16,11 @@ import { HexColorPicker } from "react-colorful";
 /* ---------------- SCHEMA ---------------- */
 const dressCodeItemSchema = z.object({
   id: z.string().optional(),
-  title: z.string().trim().min(1, "Dress code title is required"),
-  description: z.string().trim().min(1, "Description or guidelines are required"),
+
+  title: z.string().trim().optional(),
+
+  description: z.string().trim().optional(),
+
   hexColors: z.array(z.string().regex(/^#[0-9A-Fa-f]{6}$/, "Must be a valid hex color (#FFFFFF)")).max(5, "Maximum 5 colors allowed"),
 });
 
@@ -78,9 +81,7 @@ const [activePicker, setActivePicker] = useState<{
     name: "dressCode",
   });
 
-  const hasIncompleteDressCode = watchedDressCode?.some(
-    (item) => !item?.title?.trim() || !item?.description?.trim() || item?.hexColors?.some((c) => !c),
-  );
+const hasIncompleteDressCode = watchedDressCode?.some((item) => item?.hexColors?.some((c) => !c));
 
   // Live state syncing wrapper[cite: 2]
   function handleLiveChange() {

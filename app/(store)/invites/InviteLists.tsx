@@ -289,7 +289,7 @@ export default function InviteLists({ invites, filters }: InviteListsProps) {
                   <div className="relative aspect-[16/18]">
                     {/* IMAGE */}
                     <Image
-                      src={img}
+                      src={invite.mob_image}
                       alt={invite.shortname}
                       fill
                       className="object-cover opacity-90 transition-all duration-1000 group-hover:scale-110 group-hover:brightness-105"
@@ -312,7 +312,7 @@ export default function InviteLists({ invites, filters }: InviteListsProps) {
                 {/* METADATA */}
                 <div className="flex flex-col items-start justify-between rounded-lg bg-white pt-1 pb-4">
                   <div>
-                    <h3 className="text-xs md:text-md font-bold tracking-tighter text-[var(--text-primary)] capitalize transition-colors group-hover:text-[var(--accent-primary)]">
+                    <h3 className="md:text-md text-xs font-bold tracking-tighter text-[var(--text-primary)] capitalize transition-colors group-hover:text-[var(--accent-primary)]">
                       {invite.shortname}
                     </h3>
                   </div>

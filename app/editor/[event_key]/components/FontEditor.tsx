@@ -11,7 +11,7 @@ import { RadioGroup, RadioGroupItem } from "../../../../components/ui/radio-grou
 import { cn } from "../../../../utils/utils";
 import { ACCENT_FONTS, AccentFontKey, TYPOGRAPHY_FONTS, TypographyFontKey } from "../../../[event_key]/invites/core/config/themeConfigs";
 
-import { Save, X, Pipette } from "lucide-react";
+import { Save, X } from "lucide-react";
 import { HorizontalScroll } from "../../../../components/ui/HorizontalScroll";
 import EditorHeader from "./EditorHeader";
 
@@ -43,6 +43,10 @@ export type DesignForm = {
   heading_letter_spacing?: string;
   accent_letter_spacing?: string;
   body_letter_spacing?: string;
+
+  heading_line_height?: string;
+  accent_line_height?: string;
+  body_line_height?: string;
 
   heading_text_transform?: TextTransformValue;
   accent_text_transform?: TextTransformValue;
@@ -84,20 +88,32 @@ const TYPOGRAPHY_ROLE_CONFIGS: RoleConfig[] = [
     fontCategory: "typography",
   },
 ];
-
+const LINE_HEIGHT_OPTIONS = [
+  { label: "Tight", value: "1.1" },
+  { label: "Compact", value: "1.25" },
+  { label: "Normal", value: "1.5" },
+  { label: "Relaxed", value: "1.65" },
+  { label: "Loose", value: "1.8" },
+  { label: "Extra Loose", value: "2" },
+] as const;
 const FONT_SIZE_OPTIONS = [
   { label: "XS", value: 12 },
   { label: "Small", value: 14 },
   { label: "Medium", value: 16 },
   { label: "Large", value: 18 },
   { label: "XL", value: 22 },
-  { label: "Display", value: 28 },
+  { label: "2XL", value: 28 },
+  { label: "3XL", value: 32 },
+  { label: "Display", value: 36 },
+  { label: "Large Display", value: 42 },
+  { label: "Hero", value: 48 },
+  { label: "Large Hero", value: 56 },
+  { label: "Poster", value: 64 },
 ] as const;
-
 const LETTER_SPACING_OPTIONS = [
   { label: "Tighter", value: "-0.05em" },
   { label: "Normal", value: "0em" },
-  { label: "Wide", value: "0.05em" },
+  { label: "Wide", value: ".05em" },
   { label: "Wider", value: "0.1em" },
   { label: "Widest", value: "0.2em" },
 ] as const;
@@ -294,6 +310,7 @@ export default function FontEditor({ eventKey, onBack }: { eventKey: string; onB
       size: number;
       weight: FontWeightValue;
       spacing: string;
+      lineHeight: string;
       transform: TextTransformValue;
     }
   > = {
@@ -302,6 +319,7 @@ export default function FontEditor({ eventKey, onBack }: { eventKey: string; onB
       size: 28,
       weight: "400",
       spacing: "0em",
+      lineHeight: "1.2",
       transform: "none",
     },
     accent: {
@@ -309,6 +327,7 @@ export default function FontEditor({ eventKey, onBack }: { eventKey: string; onB
       size: 24,
       weight: "400",
       spacing: "0em",
+      lineHeight: "1.2",
       transform: "none",
     },
     body: {
@@ -316,6 +335,7 @@ export default function FontEditor({ eventKey, onBack }: { eventKey: string; onB
       size: 16,
       weight: "400",
       spacing: "0em",
+      lineHeight: "1.5",
       transform: "none",
     },
   };
@@ -339,6 +359,7 @@ export default function FontEditor({ eventKey, onBack }: { eventKey: string; onB
     const sizeKey = `${cfg.role}_font_size`;
     const weightKey = `${cfg.role}_font_weight`;
     const spacingKey = `${cfg.role}_letter_spacing`;
+    const lineHeightKey = `${cfg.role}_line_height`;
     const transformKey = `${cfg.role}_text_transform`;
 
     const fallback = defaults[cfg.role];
@@ -359,6 +380,10 @@ export default function FontEditor({ eventKey, onBack }: { eventKey: string; onB
       defaultValuesRecord[spacingKey] = fallback.spacing;
     }
 
+    if (!defaultValuesRecord[lineHeightKey]) {
+      defaultValuesRecord[lineHeightKey] = fallback.lineHeight;
+    }
+
     if (!defaultValuesRecord[transformKey]) {
       defaultValuesRecord[transformKey] = fallback.transform;
     }
@@ -372,7 +397,7 @@ export default function FontEditor({ eventKey, onBack }: { eventKey: string; onB
   /* LIVE PREVIEW                                                             */
   /* ------------------------------------------------------------------------ */
 
-  function handleLiveChange(key: keyof DesignForm, value: DesignForm[keyof DesignForm]) {
+  function handleLiveChange<K extends keyof DesignForm>(key: K, value: DesignForm[K]) {
     const latest = form.getValues();
 
     replaceSection("theme", {
@@ -424,15 +449,11 @@ export default function FontEditor({ eventKey, onBack }: { eventKey: string; onB
           <section className="space-y-6 [&>*:last-child]:mb-6">
             {TYPOGRAPHY_ROLE_CONFIGS.map((cfg) => {
               const fontFieldName = `${cfg.role}_font` as keyof DesignForm;
-
               const sizeFieldName = `${cfg.role}_font_size` as keyof DesignForm;
-
               const spacingFieldName = `${cfg.role}_letter_spacing` as keyof DesignForm;
-
               const weightFieldName = `${cfg.role}_font_weight` as keyof DesignForm;
-
+              const lineHeightFieldName = `${cfg.role}_line_height` as keyof DesignForm;
               const transformFieldName = `${cfg.role}_text_transform` as keyof DesignForm;
-
               const isAccent = cfg.fontCategory === "accent";
               const fontKeys = isAccent ? ACCENT_FONT_KEYS : TYPOGRAPHY_FONT_KEYS;
 
@@ -447,7 +468,7 @@ export default function FontEditor({ eventKey, onBack }: { eventKey: string; onB
                   {/* FONT FAMILY */}
                   <FormField
                     control={form.control}
-                    name={fontFieldName}
+                    name={fontFieldName as any}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-xs font-medium tracking-wider text-slate-500 uppercase">Font</FormLabel>
@@ -494,7 +515,7 @@ export default function FontEditor({ eventKey, onBack }: { eventKey: string; onB
                   {/* FONT SIZE */}
                   <FormField
                     control={form.control}
-                    name={sizeFieldName}
+                    name={sizeFieldName as any}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-xs font-medium tracking-wider text-slate-500 uppercase">Font Size</FormLabel>
@@ -518,36 +539,26 @@ export default function FontEditor({ eventKey, onBack }: { eventKey: string; onB
                   {/* FONT WEIGHT */}
                   <FormField
                     control={form.control}
-                    name={weightFieldName}
+                    name={weightFieldName as any}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-xs font-medium tracking-wider text-slate-500 uppercase">Font Weight</FormLabel>
 
                         <FormControl>
-                          <div className="flex flex-wrap gap-1.5 pt-1">
-                            {FONT_WEIGHT_OPTIONS.map((opt) => {
-                              const active = field.value === opt.value;
-
-                              return (
-                                <button
-                                  key={opt.value}
-                                  type="button"
-                                  onClick={() => {
-                                    field.onChange(opt.value);
-                                    handleLiveChange(weightFieldName, opt.value);
-                                  }}
-                                  className={cn(
-                                    "rounded-md border px-2.5 py-1 text-xs font-medium transition-all",
-                                    active
-                                      ? "border-slate-900 bg-slate-900 text-white shadow-sm"
-                                      : "border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-300",
-                                  )}
-                                >
-                                  {opt.label}
-                                </button>
-                              );
-                            })}
-                          </div>
+                          <TypographyOptionSelector
+                            namePrefix={`${cfg.role}-font-weight`}
+                            value={(field.value as string) ?? "400"}
+                            options={FONT_WEIGHT_OPTIONS.map((option) => ({
+                              label: option.label,
+                              value: option.value,
+                              description: option.value,
+                            }))}
+                            ariaLabel={`${cfg.label} font weight`}
+                            onChange={(value) => {
+                              field.onChange(value);
+                              handleLiveChange(weightFieldName, value);
+                            }}
+                          />
                         </FormControl>
 
                         <FormMessage className="text-xs" />
@@ -558,7 +569,7 @@ export default function FontEditor({ eventKey, onBack }: { eventKey: string; onB
                   {/* LETTER SPACING */}
                   <FormField
                     control={form.control}
-                    name={spacingFieldName}
+                    name={spacingFieldName as any}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-xs font-medium tracking-wider text-slate-500 uppercase">Letter Spacing</FormLabel>
@@ -584,11 +595,39 @@ export default function FontEditor({ eventKey, onBack }: { eventKey: string; onB
                       </FormItem>
                     )}
                   />
+                  {/* LINE HEIGHT */}
+                  <FormField
+                    control={form.control}
+                    name={lineHeightFieldName as any}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-xs font-medium tracking-wider text-slate-500 uppercase">Line Height</FormLabel>
 
+                        <FormControl>
+                          <TypographyOptionSelector
+                            namePrefix={`${cfg.role}-line-height`}
+                            value={(field.value as string) ?? "1.5"}
+                            options={LINE_HEIGHT_OPTIONS.map((option) => ({
+                              label: option.label,
+                              value: option.value,
+                              description: option.value,
+                            }))}
+                            ariaLabel={`${cfg.label} line height`}
+                            onChange={(value) => {
+                              field.onChange(value);
+                              handleLiveChange(lineHeightFieldName, value);
+                            }}
+                          />
+                        </FormControl>
+
+                        <FormMessage className="text-xs" />
+                      </FormItem>
+                    )}
+                  />
                   {/* TEXT TRANSFORM */}
                   <FormField
                     control={form.control}
-                    name={transformFieldName}
+                    name={transformFieldName as any}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-xs font-medium tracking-wider text-slate-500 uppercase">Text Transform</FormLabel>

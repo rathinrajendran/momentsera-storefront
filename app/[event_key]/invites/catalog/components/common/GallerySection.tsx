@@ -3,6 +3,9 @@
 import { motion } from "framer-motion";
 import GalleryContainer from "./GalleryContainer";
 import { PasswordDialog } from "../../../../../editor/[event_key]/components/publish/PasswordDialog";
+import { THEME_COLORS } from "../../../core/core/themeColors";
+import { THEME_TYPOGRAPHY } from "../../../core/core/themeTypography";
+import { ThemeSectionTitle } from "../../../core/core/ThemeSectionTitle";
 
 interface GallerySectionProps {
   title?: string;
@@ -14,9 +17,6 @@ interface GallerySectionProps {
   layout: string;
   urls: string[];
   fallback?: string;
-  textColor?: string;
-  fontSize?: string;
-  fontFamily?: string;
   isProtected?: boolean;
   password?: string;
   unlockedSections: string[];
@@ -30,9 +30,6 @@ export default function GallerySection({
   layout,
   urls,
   fallback,
-  textColor,
-  fontSize,
-  fontFamily,
   isProtected = false,
   password = "",
   unlockedSections,
@@ -41,36 +38,15 @@ export default function GallerySection({
   if (!urls?.length) return null;
 
   const { key: _galleryKey, ...motionProps } = getMotionProps(0);
-
   const sectionId = "gallery";
-
   const isUnlocked = unlockedSections.includes(sectionId);
-
   const showPassword = Boolean(isProtected && password && !isUnlocked);
-
   const galleryTitle = title || "A Glimpse of Our Story";
 
   return (
-    <section
-      className="relative px-6 py-24"
-      style={{
-        background: "var(--bg-section-1)",
-      }}
-    >
+    <section className="relative px-6 py-24">
       {/* Gallery Title */}
-      <motion.h2
-        key={`gallery-${animationKey}`}
-        {...motionProps}
-        className="mb-8 text-center"
-        style={{
-          color: `var(--${textColor})`,
-          fontSize: `var(--font-size-${fontSize})`,
-          fontFamily: `var(--font-${fontFamily})`,
-        }}
-      >
-        {galleryTitle}
-      </motion.h2>
-
+      <ThemeSectionTitle decoration="floral">{galleryTitle}</ThemeSectionTitle>
       {/* Gallery */}
       <GalleryContainer layout={layout} urls={urls} fallback={fallback || ""} />
 
