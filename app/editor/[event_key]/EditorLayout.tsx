@@ -323,21 +323,13 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent, 
 
   const [activeSection, setActiveSection] = useState<EditorSection>("overview");
   const [activeTab, setActiveTab] = useState<keyof typeof sectionTabMetadata | "preview">("invitation");
-
   const [device, setDevice] = useState<DeviceType>("mobile");
-
   const [isMobile, setIsMobile] = useState(false);
-
   const [overviewScrollTop, setOverviewScrollTop] = useState(0);
-
   const [showMenuLayer, setShowMenuLayer] = useState(false);
-
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
-
   const [customizeDialogOpen, setCustomizeDialogOpen] = useState(false);
-
   const [isFullscreen, setIsFullscreen] = useState(false);
-
   const privacySections = useMemo<PrivacySection[]>(() => privacyData?.sections ?? [], [privacyData?.sections]);
 
   // -----------------------------------------------------------------------------
