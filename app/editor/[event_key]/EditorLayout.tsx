@@ -32,6 +32,8 @@ import {
   MessagesSquare,
   Images,
   ScrollText,
+  Heart,
+  EyeOff,
 } from "lucide-react";
 import { PreviewToolbar, safeDecode } from "./PreviewToolbar";
 import { useRouter } from "next/navigation";
@@ -62,90 +64,125 @@ export type EditorSection =
   | "settings";
 
 export type DeviceType = "desktop" | "mobile";
+export type SectionVisibility = "visible" | "hidden" | "protected";
 
+export type SectionPasswordMode = "inherit" | "custom";
+
+export type PrivacySection = {
+  id: string;
+  visibility: SectionVisibility;
+  passwordMode?: SectionPasswordMode;
+  password?: string;
+  hint?: string;
+};
+
+export type DynamicSection = {
+  id: EditorSection;
+  title: string;
+  desc: string;
+
+  icon: React.ReactNode;
+  iconBg: string;
+  iconColor: string;
+
+  visibilityCheck: boolean;
+
+  visibilityLabel: "Visible" | "Hidden" | "Protected";
+
+  visibilityIcon: React.ReactNode;
+
+  visibility: SectionVisibility;
+  passwordMode: SectionPasswordMode;
+  password: string;
+  hint: string;
+};
 export type EditorLayoutProps = {
   eventKey: string;
   eventId: number;
   KeyInvite: string;
   typeEvent: string;
+  privacyData: {
+    sections?: PrivacySection[];
+    [key: string]: any;
+  };
 };
 
-export const sectionTabMapping = {
+export const sectionTabMetadata = {
   invitation: [
     {
       id: "announcement",
       title: "Announcement",
       desc: "Names & greeting",
       icon: <ScrollText className="h-4 w-4" strokeWidth={1.5} />,
-      iconClass: "bg-rose-50 text-rose-500",
-      visibilityCheck: false,
+      iconBg: "bg-rose-50",
+      iconColor: "text-rose-500",
     },
-    {
-      id: "gallery",
-      title: "Gallery",
-      desc: "Photos & videos",
-      icon: <Images className="h-4 w-4" strokeWidth={1.5} />,
-      iconClass: "bg-pink-50 text-pink-500",
-      visibilityCheck: true,
-    },
-    {
-      id: "wishes",
-      title: "Wishes",
-      desc: "Guest messages & congratulations",
-      icon: <MessagesSquare className="h-4 w-4" strokeWidth={1.5} />,
-      iconClass: "bg-violet-50 text-violet-500",
-      visibilityCheck: true,
-    },
-    {
-      id: "music",
-      title: "Music",
-      desc: "Background audio track",
-      icon: <Music4 className="h-4 w-4" strokeWidth={1.5} />,
-      iconClass: "bg-fuchsia-50 text-fuchsia-500",
-      visibilityCheck: true,
-    },
-  ],
-
-  event: [
     {
       id: "schedule",
       title: "Schedule",
       desc: "Events, venues & timings",
       icon: <Calendar className="h-4 w-4" strokeWidth={1.5} />,
-      iconClass: "bg-red-50 text-red-500",
-      visibilityCheck: false,
+      iconBg: "bg-sky-50",
+      iconColor: "text-sky-500",
+    },
+
+    {
+      id: "ourStory",
+      title: "Our Story",
+      desc: "Our journey together",
+      icon: <Heart className="h-4 w-4" strokeWidth={1.5} />,
+      iconBg: "bg-pink-50",
+      iconColor: "text-pink-500",
     },
     {
       id: "timeline",
       title: "Timeline",
       desc: "Sequential itinerary breakdown",
       icon: <Clock className="h-4 w-4" strokeWidth={1.5} />,
-      iconClass: "bg-amber-50 text-amber-500",
-      visibilityCheck: false,
+      iconBg: "bg-amber-50",
+      iconColor: "text-amber-500",
     },
     {
-      id: "ourStory",
-      title: "Our Story",
-      desc: "Sequential itinerary breakdown",
-      icon: <Clock className="h-4 w-4" strokeWidth={1.5} />,
-      iconClass: "bg-amber-50 text-amber-500",
-      visibilityCheck: false,
+      id: "gallery",
+      title: "Gallery",
+      desc: "Photos & videos",
+      icon: <Images className="h-4 w-4" strokeWidth={1.5} />,
+      iconBg: "bg-violet-50",
+      iconColor: "text-violet-500",
     },
     {
       id: "dressCode",
       title: "Dress Code",
       desc: "Attire rules & color palette",
       icon: <Shirt className="h-4 w-4" strokeWidth={1.5} />,
-      iconClass: "bg-orange-50 text-orange-500",
-      visibilityCheck: false,
+      iconBg: "bg-orange-50",
+      iconColor: "text-orange-500",
+    },
+
+    {
+      id: "wishes",
+      title: "Wishes",
+      desc: "Guest messages & congratulations",
+      icon: <MessagesSquare className="h-4 w-4" strokeWidth={1.5} />,
+      iconBg: "bg-indigo-50",
+      iconColor: "text-indigo-500",
     },
     {
       id: "rsvp",
       title: "RSVP",
       desc: "Attendance tracking",
       icon: <CheckCircle className="h-4 w-4" strokeWidth={1.5} />,
-      iconClass: "bg-emerald-50 text-emerald-500",
-      visibilityCheck: true,
+      iconBg: "bg-emerald-50",
+      iconColor: "text-emerald-500",
+    },
+
+    {
+      id: "music",
+      title: "Music",
+      desc: "Background audio track",
+      icon: <Music4 className="h-4 w-4" strokeWidth={1.5} />,
+      iconBg: "bg-fuchsia-50",
+      iconColor: "text-fuchsia-500",
     },
   ],
 
@@ -155,32 +192,32 @@ export const sectionTabMapping = {
       title: "Color",
       desc: "Primary & accent colors",
       icon: <Droplets className="h-4 w-4" strokeWidth={1.5} />,
-      iconClass: "bg-cyan-50 text-cyan-500",
-      visibilityCheck: false,
+      iconBg: "bg-cyan-50",
+      iconColor: "text-cyan-500",
     },
     {
       id: "font",
       title: "Font",
       desc: "Typography selection",
       icon: <Type className="h-4 w-4" strokeWidth={1.5} />,
-      iconClass: "bg-indigo-50 text-indigo-500",
-      visibilityCheck: false,
+      iconBg: "bg-indigo-50",
+      iconColor: "text-indigo-500",
     },
     {
       id: "shape",
       title: "Shape",
       desc: "Corners & decorative elements",
       icon: <Shapes className="h-4 w-4" strokeWidth={1.5} />,
-      iconClass: "bg-purple-50 text-purple-500",
-      visibilityCheck: false,
+      iconBg: "bg-purple-50",
+      iconColor: "text-purple-500",
     },
     {
       id: "motionSection",
       title: "Motion",
       desc: "Animations & transitions",
       icon: <Sparkles className="h-4 w-4" strokeWidth={1.5} />,
-      iconClass: "bg-yellow-50 text-yellow-500",
-      visibilityCheck: false,
+      iconBg: "bg-yellow-50",
+      iconColor: "text-yellow-500",
     },
   ],
 
@@ -190,35 +227,62 @@ export const sectionTabMapping = {
       title: "Sharing",
       desc: "Invite link & QR code",
       icon: <Share2 className="h-4 w-4" strokeWidth={1.5} />,
-      iconClass: "bg-blue-50 text-blue-500",
-      visibilityCheck: false,
+      iconBg: "bg-blue-50",
+      iconColor: "text-blue-500",
     },
     {
       id: "privacy",
       title: "Privacy",
       desc: "Password & visibility controls",
       icon: <Lock className="h-4 w-4" strokeWidth={1.5} />,
-      iconClass: "bg-slate-100 text-slate-600",
-      visibilityCheck: false,
+      iconBg: "bg-slate-100",
+      iconColor: "text-slate-600",
     },
     {
       id: "print",
       title: "Print",
       desc: "Printable invitation layout",
       icon: <Printer className="h-4 w-4" strokeWidth={1.5} />,
-      iconClass: "bg-teal-50 text-teal-500",
-      visibilityCheck: false,
+      iconBg: "bg-teal-50",
+      iconColor: "text-teal-500",
     },
     {
       id: "settings",
       title: "Settings",
       desc: "Preferences, locale & analytics",
       icon: <Settings className="h-4 w-4" strokeWidth={1.5} />,
-      iconClass: "bg-zinc-100 text-zinc-600",
-      visibilityCheck: false,
+      iconBg: "bg-zinc-100",
+      iconColor: "text-zinc-600",
     },
   ],
 } as const;
+
+/**
+ * ---------------------------------------------------------------------------
+ * SECTION ID NORMALIZATION
+ * ---------------------------------------------------------------------------
+ *
+ * Privacy configuration and editor configuration use slightly different
+ * IDs for some sections.
+ */
+const normalizeSectionId = (id: string): EditorSection => {
+  switch (id) {
+    case "dresscode":
+      return "dressCode";
+
+    case "motion":
+      return "motionSection";
+
+    default:
+      return id as EditorSection;
+  }
+};
+
+/**
+ * ---------------------------------------------------------------------------
+ * SIDE MENU
+ * ---------------------------------------------------------------------------
+ */
 
 const sideMenuItems = [
   {
@@ -226,11 +290,7 @@ const sideMenuItems = [
     label: "Invitation",
     icon: <SquareLibrary className="h-5 w-5" strokeWidth={1.75} />,
   },
-  {
-    id: "event",
-    label: "Event",
-    icon: <Calendar className="h-5 w-5" strokeWidth={1.75} />,
-  },
+
   {
     id: "design",
     label: "Design",
@@ -241,9 +301,9 @@ const sideMenuItems = [
     label: "Settings",
     icon: <Settings className="h-5 w-5" strokeWidth={1.75} />,
   },
-];
+] as const;
 
-export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }: EditorLayoutProps) {
+export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent, privacyData }: EditorLayoutProps) {
   // -----------------------------------------------------------------------------
   // Constants
   // -----------------------------------------------------------------------------
@@ -262,14 +322,23 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
   // -----------------------------------------------------------------------------
 
   const [activeSection, setActiveSection] = useState<EditorSection>("overview");
-  const [activeTab, setActiveTab] = useState<keyof typeof sectionTabMapping | "preview">("invitation");
+  const [activeTab, setActiveTab] = useState<keyof typeof sectionTabMetadata | "preview">("invitation");
+
   const [device, setDevice] = useState<DeviceType>("mobile");
+
   const [isMobile, setIsMobile] = useState(false);
+
   const [overviewScrollTop, setOverviewScrollTop] = useState(0);
+
   const [showMenuLayer, setShowMenuLayer] = useState(false);
+
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
+
   const [customizeDialogOpen, setCustomizeDialogOpen] = useState(false);
+
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  const privacySections = useMemo<PrivacySection[]>(() => privacyData?.sections ?? [], [privacyData?.sections]);
 
   // -----------------------------------------------------------------------------
   // Draft Data
@@ -328,7 +397,9 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
     async (value: string) => {
       try {
         const response = await updateEventKeyMutation.mutateAsync(value);
-        if (!response?.success || !response.event_key) return;
+        if (!response?.success || !response.event_key) {
+          return;
+        }
         router.replace(`/editor/${response.event_key}`);
       } catch (error) {
         console.error("Failed to update invite URL:", error);
@@ -337,9 +408,9 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
     [router, updateEventKeyMutation],
   );
 
-  const toggleFullscreen = () => {
-    setIsFullscreen(!isFullscreen);
-  };
+  const toggleFullscreen = useCallback(() => {
+    setIsFullscreen((prev) => !prev);
+  }, []);
 
   const handlePreview = useCallback(() => {
     window.open(`/preview/${eventKey}`, "_blank");
@@ -366,7 +437,9 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
 
     window.addEventListener("resize", updateMobile);
 
-    return () => window.removeEventListener("resize", updateMobile);
+    return () => {
+      window.removeEventListener("resize", updateMobile);
+    };
   }, []);
 
   // -----------------------------------------------------------------------------
@@ -374,11 +447,93 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
   // -----------------------------------------------------------------------------
 
   const splitScreen = activeSection !== "overview" && isMobile;
-  const currentSections = activeTab === "preview" ? [] : sectionTabMapping[activeTab];
+  const currentSections = useMemo<DynamicSection[]>(() => {
+    if (activeTab === "preview") {
+      return [];
+    }
 
-  // -----------------------------------------------------------------------------
-  // Menu Items
-  // -----------------------------------------------------------------------------
+    const metadata = sectionTabMetadata[activeTab];
+
+    if (!metadata) {
+      return [];
+    }
+
+    const metadataMap = new Map(metadata.map((section) => [normalizeSectionId(section.id), section]));
+
+    return privacySections.reduce<DynamicSection[]>((result, privacySection) => {
+      const sectionId = normalizeSectionId(privacySection.id);
+
+      const sectionMetadata = metadataMap.get(sectionId);
+
+      if (!sectionMetadata) {
+        return result;
+      }
+
+      const visibility = privacySection.visibility ?? "visible";
+
+      /**
+       * Visibility controls are only available for sections
+       * that have privacy/password configuration in
+       * privacy.sections.
+       *
+       * Example:
+       * announcement -> passwordMode/password/hint -> show control
+       * color        -> no password fields              -> hide control
+       */
+      const hasPasswordConfiguration =
+        privacySection.passwordMode !== undefined || privacySection.password !== undefined || privacySection.hint !== undefined;
+
+      const visibilityLabel: DynamicSection["visibilityLabel"] =
+        visibility === "visible" ? "Visible" : visibility === "hidden" ? "Hidden" : "Protected";
+
+      const visibilityIcon: React.ReactNode =
+        visibility === "visible" ? (
+          <Eye className="h-3.5 w-3.5 text-emerald-500" strokeWidth={1.75} />
+        ) : visibility === "hidden" ? (
+          <EyeOff className="h-3.5 w-3.5 text-slate-400" strokeWidth={1.75} />
+        ) : (
+          <Lock className="h-3.5 w-3.5 text-amber-500" strokeWidth={1.75} />
+        );
+
+      result.push({
+        ...sectionMetadata,
+
+        id: sectionId,
+
+        // Dynamic visibility state.
+        visibility,
+
+        // Dynamic password configuration.
+        passwordMode: privacySection.passwordMode ?? "inherit",
+
+        password: privacySection.password ?? "",
+
+        hint: privacySection.hint ?? "",
+
+        // Controls whether the visibility button is rendered.
+        // It is based on field availability, not visibility state.
+        visibilityCheck: hasPasswordConfiguration,
+
+        visibilityLabel,
+        visibilityIcon,
+      });
+
+      return result;
+    }, []);
+  }, [activeTab, privacySections]);
+
+  /**
+   * -------------------------------------------------------------------------
+   * MENU HEIGHT
+   * -------------------------------------------------------------------------
+   */
+  const panelHeight = `h-[calc(${isFullscreen ? "100dvh" : "55dvh"}-50px)`;
+
+  const menuHeight = showMenuLayer ? panelHeight : "md:h-[calc(100dvh-115px)]";
+
+  // ---------------------------------------------------------------------------
+  // Tools Menu
+  // ---------------------------------------------------------------------------
 
   const ToolsMenuItems = useMemo(
     () => [
@@ -404,8 +559,6 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
     [handlePreview, handleShare, handleInviteLink],
   );
 
-  const panelHeight = `h-[calc(${isFullscreen ? "100dvh" : "55dvh"}-50px)]`;
-  const menuHeight = showMenuLayer ? panelHeight : "md:h-[calc(100dvh-115px)]";
 
   return (
     <HomeWrapper
@@ -444,7 +597,7 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
         </div>
       </motion.div>
 
-      <div className="max-w-8xl mx-auto bg-[#f3f4f6] md:mt-[64px]">
+      <div className="max-w-8xl mx-auto bg-[#f3f4f6]">
         <PreviewToolbar
           inviteUrl={eventKey}
           onInviteUrlChange={handleInviteUrlChange}
@@ -457,58 +610,71 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
           className="hidden md:flex"
         />
         <div
-          className={`${showMenuLayer && isMobile ? "mt-0 h-[100dvh]" : "h-[calc(100dvh-0px)] md:h-[calc(100dvh-115px)]"} justify-between overflow-hidden md:flex`}
+          className={`${
+            showMenuLayer && isMobile ? "mt-0 h-[100dvh]" : "h-[calc(100dvh-0px)] md:h-[calc(100dvh-150px)]"
+          } justify-between overflow-hidden md:flex`}
         >
-          <div
-            className={`hidden flex-col overflow-auto bg-white p-4 text-zinc-400 md:flex md:h-full md:w-[90px] lg:w-[200px] [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]`}
-          >
-            <div className="flex w-full pb-3 md:justify-center lg:justify-start">
-              <h3 className="text-center text-xs font-bold tracking-wide text-black uppercase lg:text-left">Editor</h3>
+          <div className="flex">
+            <div className="hidden flex-col overflow-auto bg-white p-4 text-zinc-400 md:flex md:h-full md:w-[80px] lg:w-[80px] [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]">
+              <div className="flex w-full md:justify-center lg:justify-start">
+                <h3 className="text-center text-[0.6rem] font-bold tracking-wide text-black uppercase lg:text-left">Editor</h3>
+              </div>
+
+              <nav className="flex w-full flex-col items-center justify-around">
+                {sideMenuItems.map((item) => {
+                  const isActive = activeTab === item.id;
+
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => {
+                        setActiveTab(item.id as keyof typeof sectionTabMetadata);
+
+                        setActiveSection("overview");
+
+                        setShowMenuLayer(true);
+                      }}
+                      className={`my-3 flex cursor-pointer items-center gap-1 rounded-md text-[10px] font-medium text-black capitalize transition-all md:w-11 md:justify-center lg:w-full lg:justify-start ${
+                        isActive ? "text-green bg-[#ebf2ef]" : "text-black"
+                      }`}
+                    >
+                      {item.icon}
+
+                      <span className="hidden max-w-full truncate">{item.label}</span>
+                    </button>
+                  );
+                })}
+              </nav>
+
+              <div className="flex w-full pt-4 pb-3 md:justify-center lg:justify-start">
+                <h3 className="text-center text-xs font-bold tracking-wide text-black uppercase lg:text-left">Tools</h3>
+              </div>
+
+              <nav className="flex w-full flex-col items-center justify-around">
+                {ToolsMenuItems.map((item) => {
+                  const isActive = activeTab === item.id;
+
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => {
+                        setActiveSection("overview");
+                        item.onClick();
+                      }}
+                      className={`flex w-full cursor-pointer items-center gap-1 rounded-md px-3 py-2.5 text-[10px] font-medium text-black capitalize transition-all md:justify-center md:text-[10px] lg:justify-start ${
+                        isActive ? "text-green bg-[#ebf2ef]" : "text-black"
+                      }`}
+                    >
+                      {item.icon}
+
+                      <span className="hidden max-w-full truncate">{item.label}</span>
+                    </button>
+                  );
+                })}
+              </nav>
             </div>
-            <nav className="flex w-full flex-col items-center justify-around">
-              {sideMenuItems.map((item) => {
-                const isActive = activeTab === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => {
-                      setActiveTab(item.id as keyof typeof sectionTabMapping);
-                      setActiveSection("overview");
-                      setShowMenuLayer(true);
-                    }}
-                    className={`d:text-[10px] flex cursor-pointer items-center gap-1 rounded-md px-3 py-2.5 text-[10px] font-medium text-black capitalize transition-all md:w-11 md:justify-center lg:w-full lg:justify-start ${
-                      isActive ? "text-green bg-[#ebf2ef]" : "text-black"
-                    }`}
-                  >
-                    {item.icon}
-                    <span className="hidden max-w-full truncate lg:block">{item.label}</span>
-                  </button>
-                );
-              })}
-            </nav>
-            <div className="flex w-full pt-4 pb-3 md:justify-center lg:justify-start">
-              <h3 className="text-center text-xs font-bold tracking-wide text-black uppercase lg:text-left">Tools</h3>
-            </div>
-            <nav className="flex w-full flex-col items-center justify-around">
-              {ToolsMenuItems.map((item) => {
-                const isActive = activeTab === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => {
-                      setActiveSection("overview");
-                      item.onClick();
-                    }}
-                    className={`flex w-full cursor-pointer items-center gap-1 rounded-md px-3 py-2.5 text-[10px] font-medium text-black capitalize transition-all md:justify-center md:text-[10px] lg:justify-start ${
-                      isActive ? "text-green bg-[#ebf2ef]" : "text-black"
-                    }`}
-                  >
-                    {item.icon}
-                    <span className="hidden max-w-full truncate lg:block">{item.label}</span>
-                  </button>
-                );
-              })}
-            </nav>
           </div>
           {/* LEFT – LIVE VIEW PREVIEW */}
           <div
@@ -577,7 +743,9 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
             )}
             <div className="flex h-full w-full">
               <div
-                className={`${isFullscreen ? "h-[calc(100dvh-50px)]" : "h-[calc(55dvh-50px)] md:h-auto"} ${showMenuLayer && !splitScreen ? "block w-[130px] sm:w-[180px]" : "hidden md:block"} mob-160px z-10 flex flex-col overflow-auto border-r border-slate-100 bg-white p-4 text-zinc-400 md:hidden md:h-full [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]`}
+                className={`${isFullscreen ? "h-[calc(100dvh-50px)]" : "h-[calc(55dvh-50px)] md:h-auto"} ${
+                  showMenuLayer && !splitScreen ? "block w-[130px] sm:w-[180px]" : "hidden md:block"
+                } mob-160px z-10 flex flex-col overflow-auto border-r border-slate-100 bg-white p-4 text-zinc-400 md:hidden md:h-full [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]`}
               >
                 <div className="flex w-full justify-start pb-3">
                   <h3 className="text-left text-xs font-bold tracking-wide text-black uppercase">Editor</h3>
@@ -589,7 +757,7 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
                       <button
                         key={item.id}
                         onClick={() => {
-                          setActiveTab(item.id as keyof typeof sectionTabMapping);
+                          setActiveTab(item.id as keyof typeof sectionTabMetadata);
                           setActiveSection("overview");
                           setShowMenuLayer(true);
                         }}
@@ -630,7 +798,11 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent }
 
               {/* RIGHT Persistent Workspace Panel Wrapper Container */}
               <div
-                className={`${isFullscreen ? "h-[calc(100dvh-50px)]" : "h-[calc(55dvh-50px)] md:h-auto"} ${showMenuLayer ? "block" : "hidden md:block"} ${menuHeight} ${splitScreen ? "w-full" : "w-[calc(100%-130px)] sm:w-[calc(100%-180px)]"} menu-layer flex flex-col overflow-auto bg-white md:relative md:h-full md:w-full`}
+                className={`${isFullscreen ? "h-[calc(100dvh-50px)]" : "h-[calc(55dvh-50px)] md:h-auto"} ${
+                  showMenuLayer ? "block" : "hidden md:block"
+                } ${menuHeight} ${
+                  splitScreen ? "w-full" : "w-[calc(100%-130px)] sm:w-[calc(100%-180px)]"
+                } menu-layer flex flex-col overflow-auto bg-white md:relative md:h-full md:w-full`}
               >
                 <div className="h-auto w-full overflow-y-auto md:h-[calc(100dvh-115px)] md:bg-white [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]">
                   <EditorPanel

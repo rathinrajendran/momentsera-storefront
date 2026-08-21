@@ -1,6 +1,6 @@
 "use client";
 
-import { EditorSection } from "./EditorLayout";
+import { DynamicSection, EditorSection } from "./EditorLayout";
 import EditorOverview from "./EditorOverview";
 import GalleryEditor from "./components/GalleryEditor";
 import WishesEditor from "./components/WishesEditor";
@@ -20,13 +20,17 @@ import ShapeEditor from "./components/ShapeEditor";
 import RSVPEditor from "./components/RSVPEditor";
 import OurStoryEditor from "./components/OurStoryEditor";
 
-type SectionItem = {
-  id: string;
-  title: string;
-  desc: string;
-  icon: React.ReactNode;
-  iconClass: string;
-  visibilityCheck: boolean;
+type SectionItem = DynamicSection;
+
+type EditorPanelProps = {
+  activeSection: EditorSection;
+  onSectionChange: (section: EditorSection) => void;
+  eventKey: string;
+  overviewScrollTop: number;
+  onOverviewScrollChange: (value: number) => void;
+  activeTab: string;
+  currentSections: readonly SectionItem[];
+  sections?: any;
 };
 
 export default function EditorPanel({
@@ -35,8 +39,9 @@ export default function EditorPanel({
   onSectionChange,
   overviewScrollTop,
   onOverviewScrollChange,
-  activeTab, // Added parameter from layout
-  currentSections, // Added parameter from layout
+  activeTab,
+  currentSections,
+  sections,
 }: {
   activeSection: EditorSection;
   onSectionChange: (s: EditorSection) => void;
