@@ -32,8 +32,8 @@ const DUMMY_HERO = "https://images.unsplash.com/photo-1519741497674-611481863552
 
 export default function Aura({ data, eventKey, motionData, settings, music }: AuraProps) {
   const auraData = useInviteData(data);
-  const { getMotionProps } = useThemeAnimation(motionData);
-  const animationKey = useMemo(() => getAnimationKey(motionData), [motionData]);
+  const { getMotionProps } = useThemeAnimation(design?.motion);
+  const animationKey = useMemo(() => getAnimationKey(design?.motion), [design?.motion]);
 
   // Scroll Progress References for Complex Parallax
   const containerRef = useRef<HTMLDivElement>(null);
@@ -307,14 +307,14 @@ export default function Aura({ data, eventKey, motionData, settings, music }: Au
       {/* MUSIC AUDIO PLAYER */}
       <section id="music" className="relative z-10 mx-auto max-w-3xl px-4 py-12">
         <AudioPlayer
-          src={music?.background_audio ?? ""}
-          name={music?.background_audio_name ?? "Atmospheric Soundtrack"}
-          variant={music?.audio_player_variant}
-          allowMute={music?.allow_mute ?? true}
-          loop={music?.loop_music ?? true}
-          fadeIn={music?.fade_in ?? false}
-          fadeOut={music?.fade_out ?? false}
-          volume={music?.volume_level ?? 60}
+          src={data?.music?.background_audio ?? ""}
+          name={data?.music?.background_audio_name ?? "Atmospheric Soundtrack"}
+          variant={data?.music?.audio_player_variant}
+          allowMute={data?.music?.allow_mute ?? true}
+          loop={data?.music?.loop_music ?? true}
+          fadeIn={data?.music?.fade_in ?? false}
+          fadeOut={data?.music?.fade_out ?? false}
+          volume={data?.music?.volume_level ?? 60}
         />
       </section>
 

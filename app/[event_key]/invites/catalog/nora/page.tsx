@@ -33,8 +33,8 @@ const DUMMY_COLLAGE = [
 export default function Nora({ data, eventKey, motionData, settings, music }: NoraProps) {
   // Using Luna Data structure without using Luna UI
   const noraData = useInviteData(data);
-  const { getMotionProps } = useThemeAnimation(motionData);
-  const animationKey = useMemo(() => getAnimationKey(motionData), [motionData]);
+  const { getMotionProps } = useThemeAnimation(design?.motion);
+  const animationKey = useMemo(() => getAnimationKey(design?.motion), [design?.motion]);
 
   const [wishRefreshKey, setWishRefreshKey] = useState(0);
   const wishesContainerRef = useRef<HTMLElement | null>(null);
@@ -288,15 +288,15 @@ export default function Nora({ data, eventKey, motionData, settings, music }: No
         <section className="border-y border-[#e5ded3] bg-[#f4efe6] px-6 py-8">
           <div className="mx-auto max-w-md">
             <AudioPlayer
-              src={music?.background_audio ?? ""}
-              name={music?.background_audio_name ?? "Wedding Melody"}
+              src={data?.music?.background_audio ?? ""}
+              name={data?.music?.background_audio_name ?? "Wedding Melody"}
               cover={DUMMY_COLLAGE[1]}
               variant={music.audio_player_variant}
-              allowMute={music?.allow_mute ?? true}
-              loop={music?.loop_music ?? true}
-              fadeIn={music?.fade_in ?? false}
-              fadeOut={music?.fade_out ?? false}
-              volume={music?.volume_level ?? 60}
+              allowMute={data?.music?.allow_mute ?? true}
+              loop={data?.music?.loop_music ?? true}
+              fadeIn={data?.music?.fade_in ?? false}
+              fadeOut={data?.music?.fade_out ?? false}
+              volume={data?.music?.volume_level ?? 60}
             />
           </div>
         </section>

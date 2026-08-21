@@ -149,8 +149,8 @@ function MetaLine({ left, right, dark = false }: { left: string; right: string; 
 
 export default function Athel({ data, eventKey, motionData, settings, music, theme }: AthelProps) {
   const lunaData = useInviteData(data);
-  const { getMotionProps } = useThemeAnimation(motionData);
-  const animationKey = useMemo(() => getAnimationKey(motionData), [motionData]);
+  const { getMotionProps } = useThemeAnimation(design?.motion);
+  const animationKey = useMemo(() => getAnimationKey(design?.motion), [design?.motion]);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [rsvp, setRsvp] = useState<"yes" | "no" | null>(null);
@@ -234,13 +234,13 @@ export default function Athel({ data, eventKey, motionData, settings, music, the
       className="relative mx-auto w-full"
       style={
         {
-          "--animation-enabled": motionData?.animations === false ? "0" : "1",
-          "--animation-style": motionData?.animation_style ?? "smooth",
-          "--animation-scroll": motionData?.scroll_behavior ?? "on-scroll",
-          "--animation-duration": motionData?.animation_duration ?? "1s",
-          "--animation-delay": motionData?.animation_delay ?? "0ms",
-          "--animation-speed": `${motionData?.animation_speed ?? 50}`,
-          "--animation-loop": motionData?.animation_loop ? "1" : "0",
+          "--animation-enabled": design?.motion?.animations === false ? "0" : "1",
+          "--animation-style": design?.motion?.animation_style ?? "smooth",
+          "--animation-scroll": design?.motion?.scroll_behavior ?? "on-scroll",
+          "--animation-duration": design?.motion?.animation_duration ?? "1s",
+          "--animation-delay": design?.motion?.animation_delay ?? "0ms",
+          "--animation-speed": `${design?.motion?.animation_speed ?? 50}`,
+          "--animation-loop": design?.motion?.animation_loop ? "1" : "0",
           "--section-bg-primary": THEME_COLORS.page,
           "--section-bg-secondary": THEME_COLORS.paper,
           backgroundImage: hasThemeBackgroundImage ? `url(${theme.background_image.trim()})` : "none",
@@ -947,15 +947,15 @@ export default function Athel({ data, eventKey, motionData, settings, music, the
 
                 <div className="mt-7">
                   <AudioPlayer
-                    src={music?.background_audio ?? ""}
-                    name={music?.background_audio_name || `${firstName} & ${secondName} · Wedding Soundtrack`}
+                    src={data?.music?.background_audio ?? ""}
+                    name={data?.music?.background_audio_name || `${firstName} & ${secondName} · Wedding Soundtrack`}
                     cover={heroImage}
-                    variant={music?.audio_player_variant}
-                    allowMute={music?.allow_mute ?? true}
-                    loop={music?.loop_music ?? true}
-                    fadeIn={music?.fade_in ?? false}
-                    fadeOut={music?.fade_out ?? false}
-                    volume={music?.volume_level ?? 60}
+                    variant={data?.music?.audio_player_variant}
+                    allowMute={data?.music?.allow_mute ?? true}
+                    loop={data?.music?.loop_music ?? true}
+                    fadeIn={data?.music?.fade_in ?? false}
+                    fadeOut={data?.music?.fade_out ?? false}
+                    volume={data?.music?.volume_level ?? 60}
                   />
                 </div>
               </div>

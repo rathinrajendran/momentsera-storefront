@@ -71,8 +71,8 @@ const CloseIcon = ({ className = "w-6 h-6" }) => (
 
 export default function Iris({ data, eventKey, motionData, settings, music }: IrisProps) {
   const IrisData = useInviteData(data);
-  const { getMotionProps } = useThemeAnimation(motionData);
-  const animationKey = useMemo(() => getAnimationKey(motionData), [motionData]);
+  const { getMotionProps } = useThemeAnimation(design?.motion);
+  const animationKey = useMemo(() => getAnimationKey(design?.motion), [design?.motion]);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [rsvpStatus, setRsvpStatus] = useState<"yes" | "no" | null>(null);
@@ -119,10 +119,10 @@ export default function Iris({ data, eventKey, motionData, settings, music }: Ir
       className="relative mx-auto min-h-screen w-full max-w-[430px] overflow-x-hidden bg-[#ECE8E1] font-serif text-[#23211E] md:max-w-[1100px]"
       style={
         {
-          "--animation-enabled": motionData?.animations === false ? "0" : "1",
-          "--animation-style": motionData?.animation_style ?? "smooth",
-          "--animation-scroll": motionData?.scroll_behavior ?? "on-scroll",
-          "--animation-duration": motionData?.animation_duration ?? "1s",
+          "--animation-enabled": design?.motion?.animations === false ? "0" : "1",
+          "--animation-style": design?.motion?.animation_style ?? "smooth",
+          "--animation-scroll": design?.motion?.scroll_behavior ?? "on-scroll",
+          "--animation-duration": design?.motion?.animation_duration ?? "1s",
         } as CSSProperties
       }
     >
@@ -371,20 +371,20 @@ export default function Iris({ data, eventKey, motionData, settings, music }: Ir
       )}
 
       {/* MUSIC AUDIO PLAYER SECTION */}
-      {music?.background_audio && (
+      {data?.music?.background_audio && (
         <section className="border-y border-[#DCD5CB] bg-[#E3DDD4] px-5 py-8">
           <div className="mx-auto max-w-[500px] text-center">
             <p className="mb-2 font-sans text-[10px] tracking-[0.2em] text-[#736B60] uppercase">Background Score</p>
             <AudioPlayer
               src={music.background_audio}
-              name={music?.background_audio_name ?? "Celebration Melody"}
+              name={data?.music?.background_audio_name ?? "Celebration Melody"}
               cover={DEFAULT_PORTRAIT_1}
-              variant={music?.audio_player_variant || "minimal"}
-              allowMute={music?.allow_mute ?? true}
-              loop={music?.loop_music ?? true}
-              fadeIn={music?.fade_in ?? false}
-              fadeOut={music?.fade_out ?? false}
-              volume={music?.volume_level ?? 60}
+              variant={data?.music?.audio_player_variant || "minimal"}
+              allowMute={data?.music?.allow_mute ?? true}
+              loop={data?.music?.loop_music ?? true}
+              fadeIn={data?.music?.fade_in ?? false}
+              fadeOut={data?.music?.fade_out ?? false}
+              volume={data?.music?.volume_level ?? 60}
             />
           </div>
         </section>

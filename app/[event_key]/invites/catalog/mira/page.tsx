@@ -39,9 +39,9 @@ function cn(...values: Array<string | false | null | undefined>) {
 
 export default function Mira({ data, eventKey, motionData, settings, music }: MiraProps) {
   const invite = useInviteData(data);
-  const { getMotionProps } = useThemeAnimation(motionData);
+  const { getMotionProps } = useThemeAnimation(design?.motion);
 
-  const animationKey = useMemo(() => getAnimationKey(motionData), [motionData]);
+  const animationKey = useMemo(() => getAnimationKey(design?.motion), [design?.motion]);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [rsvp, setRsvp] = useState<"yes" | "no" | null>(null);
@@ -148,13 +148,13 @@ export default function Mira({ data, eventKey, motionData, settings, music }: Mi
   };
 
   const shellStyle = {
-    "--animation-enabled": motionData?.animations === false ? "0" : "1",
-    "--animation-style": motionData?.animation_style ?? "smooth",
-    "--animation-scroll": motionData?.scroll_behavior ?? "on-scroll",
-    "--animation-duration": motionData?.animation_duration ?? "1s",
-    "--animation-delay": motionData?.animation_delay ?? "0ms",
-    "--animation-speed": `${motionData?.animation_speed ?? 50}`,
-    "--animation-loop": motionData?.animation_loop ? "1" : "0",
+    "--animation-enabled": design?.motion?.animations === false ? "0" : "1",
+    "--animation-style": design?.motion?.animation_style ?? "smooth",
+    "--animation-scroll": design?.motion?.scroll_behavior ?? "on-scroll",
+    "--animation-duration": design?.motion?.animation_duration ?? "1s",
+    "--animation-delay": design?.motion?.animation_delay ?? "0ms",
+    "--animation-speed": `${design?.motion?.animation_speed ?? 50}`,
+    "--animation-loop": design?.motion?.animation_loop ? "1" : "0",
     background: "#d9d9d0",
     color: "#45483f",
     ...({
@@ -702,15 +702,15 @@ export default function Mira({ data, eventKey, motionData, settings, music }: Mi
 
           <div className="px-6 pb-8 md:px-10 md:pb-10">
             <AudioPlayer
-              src={music?.background_audio ?? ""}
-              name={music?.background_audio_name ?? "Our soundtrack"}
+              src={data?.music?.background_audio ?? ""}
+              name={data?.music?.background_audio_name ?? "Our soundtrack"}
               cover={FALLBACK_GALLERY[1]}
-              variant={music?.audio_player_variant}
-              allowMute={music?.allow_mute ?? true}
-              loop={music?.loop_music ?? true}
-              fadeIn={music?.fade_in ?? false}
-              fadeOut={music?.fade_out ?? false}
-              volume={music?.volume_level ?? 60}
+              variant={data?.music?.audio_player_variant}
+              allowMute={data?.music?.allow_mute ?? true}
+              loop={data?.music?.loop_music ?? true}
+              fadeIn={data?.music?.fade_in ?? false}
+              fadeOut={data?.music?.fade_out ?? false}
+              volume={data?.music?.volume_level ?? 60}
             />
           </div>
         </section>

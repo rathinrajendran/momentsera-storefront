@@ -139,11 +139,11 @@ function PortalButton({ children, onClick }: { children: ReactNode; onClick?: ()
     <button
       type="button"
       onClick={onClick}
-      className="group inline-flex h-14 items-center gap-5 overflow-hidden rounded-full border border-[#6D3A5C]/[0.09] bg-white pr-2 pl-6 text-[9px] tracking-[0.24em] text-[#6D3A5C] uppercase shadow-[0_10px_30px_rgba(23,23,22,.05)] transition-all duration-500 hover:-translate-y-0.5 hover:border-[#6D3A5C]/20 hover:shadow-[0_18px_42px_rgba(23,23,22,.09)]"
+      className="group inline-flex h-14 items-center gap-5 overflow-hidden rounded-full border border-black/[0.09] bg-white pr-2 pl-6 text-[9px] tracking-[0.24em] text-[#171716] uppercase shadow-[0_10px_30px_rgba(23,23,22,.05)] transition-all duration-500 hover:-translate-y-0.5 hover:border-black/20 hover:shadow-[0_18px_42px_rgba(23,23,22,.09)]"
     >
       <span className="whitespace-nowrap">{children}</span>
 
-      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#6D3A5C] text-white transition-transform duration-500 group-hover:rotate-45">
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#171716] text-white transition-transform duration-500 group-hover:rotate-45">
         <ArrowUpRight className="h-4 w-4" strokeWidth={1.4} />
       </span>
     </button>
@@ -184,7 +184,7 @@ function ParallaxExperienceCard({ item, index }: { item: (typeof experienceCards
     <motion.div
       ref={cardRef}
       style={{ y, rotate }}
-      className="group relative h-full min-h-0 overflow-hidden rounded-[24px] border border-[#6D3A5C]/[0.07] bg-[#FBF8F9] p-5 text-[#211D20] transition-all duration-500 hover:-translate-y-1 hover:bg-[#6D3A5C] hover:text-white hover:shadow-[0_25px_70px_rgba(0,0,0,.10)] sm:rounded-[30px] sm:p-6"
+      className="group relative h-full min-h-0 overflow-hidden rounded-[24px] border border-black/[0.07] bg-[#fafaf8] p-5 text-[#171716] transition-all duration-500 hover:-translate-y-1 hover:bg-[#171716] hover:text-white hover:shadow-[0_25px_70px_rgba(0,0,0,.10)] sm:rounded-[30px] sm:p-6"
     >
       <div className="flex items-start justify-between">
         <div>
@@ -193,7 +193,7 @@ function ParallaxExperienceCard({ item, index }: { item: (typeof experienceCards
           <p className="mt-2 text-[7px] tracking-[0.18em] uppercase opacity-25">{item.event}</p>
         </div>
 
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#6D3A5C]/[0.07] bg-white text-[#6D3A5C]/60 transition-all group-hover:border-white/15 group-hover:bg-white/10 group-hover:text-white sm:h-12 sm:w-12 sm:rounded-2xl">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-black/[0.07] bg-white text-[#171716]/60 transition-all group-hover:border-white/15 group-hover:bg-white/10 group-hover:text-white sm:h-12 sm:w-12 sm:rounded-2xl">
           {item.icon}
         </div>
       </div>
@@ -307,12 +307,12 @@ export default function Home() {
   };
 
   return (
-    <main className="relative overflow-x-clip bg-[#FFFFFF] text-[#211D20] selection:bg-[#6D3A5C] selection:text-white">
+    <main className="relative overflow-x-clip bg-[#f7f7f5] text-[#171716] selection:bg-[#171716] selection:text-white">
       <Header />
 
       {/* HERO */}
       <section ref={heroRef} className="relative h-[155vh] px-0 sm:h-[160vh] md:h-[170vh]">
-        <div className="sticky top-0 mx-2 h-[calc(100svh-64px)] min-h-[560px] overflow-hidden rounded-[30px] border border-[#6D3A5C]/[0.06] bg-white shadow-[0_25px_90px_rgba(0,0,0,.05)] sm:mx-3 sm:rounded-[40px] md:mx-4 md:h-[calc(100svh-72px)] md:min-h-[650px] md:rounded-[56px]">
+        <div className="sticky top-0 mx-2 h-[calc(100svh-64px)] min-h-[560px] overflow-hidden rounded-[30px] border border-black/[0.06] bg-white shadow-[0_25px_90px_rgba(0,0,0,.05)] sm:mx-3 sm:rounded-[40px] md:mx-4 md:h-[calc(100svh-72px)] md:min-h-[650px] md:rounded-[56px]">
           <div className="pointer-events-none absolute inset-0">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_65%_42%,rgba(255,255,255,.98),transparent_30%),radial-gradient(circle_at_48%_85%,rgba(215,226,220,.30),transparent_34%)]" />
             <div className="absolute inset-0 [background-image:linear-gradient(rgba(0,0,0,.7)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,.7)_1px,transparent_1px)] [background-size:80px_80px] opacity-[0.035]" />
@@ -325,17 +325,15 @@ export default function Home() {
           >
             <div>
               <div className="flex items-center gap-3">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#B86B83]" />
-                <span className="text-[7px] tracking-[0.28em] text-[#211D20]/40 uppercase sm:text-[8px] sm:tracking-[0.32em]">
-                  MomentsEra
-                </span>
+                <span className="h-1.5 w-1.5 rounded-full bg-[#8eb9a6]" />
+                <span className="text-[7px] tracking-[0.28em] text-black/40 uppercase sm:text-[8px] sm:tracking-[0.32em]">MomentsEra</span>
               </div>
 
-              <p className="mt-3 text-[7px] tracking-[0.24em] text-[#211D20]/20 uppercase">Digital invitations for meaningful occasions</p>
+              <p className="mt-3 text-[7px] tracking-[0.24em] text-black/20 uppercase">Digital invitations for meaningful occasions</p>
             </div>
 
             <div className="hidden text-right sm:block">
-              <p className="text-[8px] tracking-[0.25em] text-[#211D20]/25 uppercase">Collection</p>
+              <p className="text-[8px] tracking-[0.25em] text-black/25 uppercase">Collection</p>
               <p className="mt-1 text-xs font-semibold tracking-[0.2em]">{activeSlide.number} / 04</p>
             </div>
           </motion.div>
@@ -356,18 +354,18 @@ export default function Home() {
                 exit={{ opacity: 0, y: -20, filter: "blur(8px)" }}
                 transition={{ duration: 0.7, ease }}
               >
-                <p className="text-[9px] tracking-[0.36em] text-[#211D20]/40 uppercase">{activeSlide.category}</p>
+                <p className="text-[9px] tracking-[0.36em] text-black/40 uppercase">{activeSlide.category}</p>
 
-                <p className="mt-5 text-[8px] tracking-[0.28em] text-[#211D20]/25 uppercase">Collection / {activeSlide.number}</p>
+                <p className="mt-5 text-[8px] tracking-[0.28em] text-black/25 uppercase">Collection / {activeSlide.number}</p>
 
                 <h1 className="mt-3 text-[clamp(3.25rem,15vw,5.8rem)] leading-[0.76] font-black tracking-[-0.085em] sm:text-[clamp(4rem,10vw,7rem)] md:text-[clamp(4rem,9vw,9rem)]">
                   <span className="block">{activeSlide.title}</span>
-                  <span className="mt-1 block [font-family:var(--font-windsong)] text-[0.66em] font-light tracking-[-0.025em] text-[#211D20]/60">
+                  <span className="mt-1 block [font-family:var(--font-windsong)] text-[0.66em] font-light tracking-[-0.025em] text-black/60">
                     {activeSlide.accent}
                   </span>
                 </h1>
 
-                <p className="mt-5 max-w-[350px] text-[13px] leading-5 text-[#211D20]/45 sm:mt-7 sm:text-sm sm:leading-6">
+                <p className="mt-5 max-w-[350px] text-[13px] leading-5 text-black/45 sm:mt-7 sm:text-sm sm:leading-6">
                   {activeSlide.description}
                 </p>
 
@@ -390,7 +388,7 @@ export default function Home() {
               {/* Previous / next ghost panels */}
               <motion.div
                 style={{ x: heroGhostLeftX }}
-                className="absolute left-[5%] hidden h-[62%] w-[25%] overflow-hidden rounded-[28px] border border-[#6D3A5C]/[0.08] bg-white/75 opacity-45 md:block"
+                className="absolute left-[5%] hidden h-[62%] w-[25%] overflow-hidden rounded-[28px] border border-black/[0.08] bg-white/75 opacity-45 md:block"
               >
                 <Image
                   src={heroSlides[(activeIndex - 1 + heroSlides.length) % heroSlides.length].image}
@@ -403,7 +401,7 @@ export default function Home() {
 
               <motion.div
                 style={{ x: heroGhostRightX }}
-                className="absolute right-[5%] hidden h-[58%] w-[24%] overflow-hidden rounded-[28px] border border-[#6D3A5C]/[0.08] bg-white/75 opacity-40 md:block"
+                className="absolute right-[5%] hidden h-[58%] w-[24%] overflow-hidden rounded-[28px] border border-black/[0.08] bg-white/75 opacity-40 md:block"
               >
                 <Image src={heroSlides[(activeIndex + 1) % heroSlides.length].image} alt="" fill sizes="24vw" className="object-contain" />
               </motion.div>
@@ -433,7 +431,7 @@ export default function Home() {
                 >
                   <ParallaxImage src={activeSlide.image} alt={`${activeSlide.title} invitation`} y={heroImageY} scale={heroImageScale} />
 
-                  <div className="pointer-events-none absolute inset-[7%] rounded-[30px] border border-[#6D3A5C]/[0.08]" />
+                  <div className="pointer-events-none absolute inset-[7%] rounded-[30px] border border-black/[0.08]" />
                 </motion.div>
               </AnimatePresence>
 
@@ -442,10 +440,10 @@ export default function Home() {
                 style={{
                   y: useTransform(smoothHeroProgress, [0, 1], ["0%", "-45%"]),
                 }}
-                className="absolute top-[20%] right-[5%] z-20 hidden rounded-[20px] border border-[#6D3A5C]/[0.08] bg-white/90 px-4 py-3 shadow-[0_15px_40px_rgba(23,23,22,.05)] backdrop-blur-xl md:block"
+                className="absolute top-[20%] right-[5%] z-20 hidden rounded-[20px] border border-black/[0.08] bg-white/90 px-4 py-3 shadow-[0_15px_40px_rgba(23,23,22,.05)] backdrop-blur-xl md:block"
               >
-                <span className="block text-[7px] tracking-[0.25em] text-[#211D20]/30 uppercase">Guest experience</span>
-                <span className="mt-1 block text-[10px] text-[#211D20]/70">RSVP · Wishes · Details</span>
+                <span className="block text-[7px] tracking-[0.25em] text-black/30 uppercase">Guest experience</span>
+                <span className="mt-1 block text-[10px] text-black/70">RSVP · Wishes · Details</span>
               </motion.div>
             </div>
           </motion.div>
@@ -455,8 +453,8 @@ export default function Home() {
             style={{ opacity: heroHudOpacity }}
             className="absolute right-5 bottom-6 z-30 hidden items-center gap-3 md:right-10 md:bottom-8 md:flex"
           >
-            <span className="text-[7px] tracking-[0.28em] text-[#211D20]/25 uppercase">Scroll to explore</span>
-            <ArrowDown className="h-3.5 w-3.5 text-[#211D20]/35" />
+            <span className="text-[7px] tracking-[0.28em] text-black/25 uppercase">Scroll to explore</span>
+            <ArrowDown className="h-3.5 w-3.5 text-black/35" />
           </motion.div>
 
           {/* Carousel controls */}
@@ -465,7 +463,7 @@ export default function Home() {
               type="button"
               aria-label="Previous collection"
               onClick={previous}
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-[#6D3A5C]/[0.09] bg-white/85 text-[#211D20]/45 shadow-sm backdrop-blur-md transition-all hover:border-[#6D3A5C]/20 hover:text-[#211D20]"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-black/[0.09] bg-white/85 text-black/45 shadow-sm backdrop-blur-md transition-all hover:border-black/20 hover:text-black"
             >
               <ChevronLeft className="h-4 w-4" strokeWidth={1.2} />
             </button>
@@ -477,18 +475,18 @@ export default function Home() {
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
                   transition={{ duration: 5.2, ease: "linear" }}
-                  className="h-full w-full origin-left bg-[#D8B878]"
+                  className="h-full w-full origin-left bg-black/55"
                 />
               </div>
 
-              <span className="text-[8px] tracking-[0.2em] text-[#211D20]/35">{activeSlide.number} / 04</span>
+              <span className="text-[8px] tracking-[0.2em] text-black/35">{activeSlide.number} / 04</span>
             </div>
 
             <button
               type="button"
               aria-label="Next collection"
               onClick={next}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-[#6D3A5C]/[0.09] bg-white/85 text-[#211D20]/45 shadow-sm backdrop-blur-md transition-all hover:border-[#6D3A5C]/20 hover:text-[#211D20]"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-black/[0.09] bg-white/85 text-black/45 shadow-sm backdrop-blur-md transition-all hover:border-black/20 hover:text-black"
             >
               <ChevronRight className="h-4 w-4" strokeWidth={1.2} />
             </button>
@@ -497,25 +495,25 @@ export default function Home() {
       </section>
 
       {/* VALUE / TRUST */}
-      <section className="relative z-10 mx-2 overflow-hidden rounded-[40px] border border-[#6D3A5C]/[0.05] bg-white text-[#6D3A5C] shadow-[0_24px_90px_rgba(0,0,0,.04)] sm:mx-3 sm:rounded-[48px] md:mx-4 md:rounded-[60px]">
+      <section className="relative z-10 mx-2 overflow-hidden rounded-[40px] border border-black/[0.05] bg-white text-[#171716] shadow-[0_24px_90px_rgba(0,0,0,.04)] sm:mx-3 sm:rounded-[48px] md:mx-4 md:rounded-[60px]">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -top-40 right-[-8%] h-[420px] w-[420px] rounded-full bg-[#F8EEF2] blur-[110px]" />
-          <div className="absolute bottom-[-180px] left-[-8%] h-[420px] w-[420px] rounded-full bg-[#F6F0E3] blur-[110px]" />
+          <div className="absolute -top-40 right-[-8%] h-[420px] w-[420px] rounded-full bg-[#edf4f0] blur-[110px]" />
+          <div className="absolute bottom-[-180px] left-[-8%] h-[420px] w-[420px] rounded-full bg-[#f4eee5] blur-[110px]" />
         </div>
 
         <div className="relative mx-auto max-w-[1500px] px-5 py-24 sm:px-7 md:px-10 md:py-32">
           <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
             <div>
-              <p className="text-[8px] font-medium tracking-[0.35em] text-[#211D20]/30 uppercase">01 / Why MomentsEra</p>
+              <p className="text-[8px] font-medium tracking-[0.35em] text-black/30 uppercase">01 / Why MomentsEra</p>
 
-              <h2 className="mt-7 max-w-[620px] text-[clamp(2rem,7vw,2.5rem)] leading-[0.78] font-black tracking-[-0.085em]">
+              <h2 className="mt-7 max-w-[620px] text-[clamp(3.4rem,7vw,7rem)] leading-[0.78] font-black tracking-[-0.085em]">
                 Made for
                 <br />
-                <span className="[font-family:var(--font-windsong)] font-light tracking-normal text-[#211D20]/35">your celebration.</span>
+                <span className="[font-family:var(--font-windsong)] font-light tracking-normal text-black/35">your celebration.</span>
               </h2>
             </div>
 
-            <p className="max-w-[720px] text-lg leading-8 text-[#211D20]/50 sm:text-xl md:text-2xl md:leading-9">
+            <p className="max-w-[720px] text-lg leading-8 text-black/50 sm:text-xl md:text-2xl md:leading-9">
               Every invitation is shaped around your event — the people, places, timings, memories and moments your guests should
               experience.
             </p>
@@ -565,12 +563,12 @@ export default function Home() {
                   ease,
                 }}
                 whileHover={{ y: -5 }}
-                className="group relative min-h-[270px] overflow-hidden rounded-[28px] border border-[#6D3A5C]/[0.07] bg-[#FBF8F9] p-6 text-left transition-all duration-500 hover:bg-[#6D3A5C] hover:text-white hover:shadow-[0_25px_65px_rgba(0,0,0,.10)] md:min-h-[290px] md:p-7"
+                className="group relative min-h-[270px] overflow-hidden rounded-[28px] border border-black/[0.07] bg-[#fafaf8] p-6 text-left transition-all duration-500 hover:bg-[#171716] hover:text-white hover:shadow-[0_25px_65px_rgba(0,0,0,.10)] md:min-h-[290px] md:p-7"
               >
                 <div className="flex items-start justify-between">
-                  <span className="text-[8px] tracking-[0.3em] text-[#211D20]/25 uppercase group-hover:text-white/35">{item.number}</span>
+                  <span className="text-[8px] tracking-[0.3em] text-black/25 uppercase group-hover:text-white/35">{item.number}</span>
 
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[#6D3A5C]/[0.07] bg-white text-[#211D20]/50 transition-all group-hover:border-white/15 group-hover:bg-white/10 group-hover:text-white">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-full border border-black/[0.07] bg-white text-black/50 transition-all group-hover:border-white/15 group-hover:bg-white/10 group-hover:text-white">
                     {item.icon === "lock" && (
                       <span className="relative h-3.5 w-3.5 rounded-[4px] border border-current">
                         <span className="absolute -top-2 left-1/2 h-2 w-2 -translate-x-1/2 rounded-t-full border border-b-0 border-current" />
@@ -590,13 +588,13 @@ export default function Home() {
                 </div>
 
                 <div className="absolute right-6 bottom-6 left-6 md:right-7 md:bottom-7 md:left-7">
-                  <p className="mb-3 text-[7px] font-medium tracking-[0.3em] text-[#211D20]/25 uppercase group-hover:text-white/35">
+                  <p className="mb-3 text-[7px] font-medium tracking-[0.3em] text-black/25 uppercase group-hover:text-white/35">
                     {item.label}
                   </p>
 
                   <h3 className="text-2xl font-black tracking-[-0.055em] sm:text-3xl">{item.title}</h3>
 
-                  <p className="mt-3 max-w-[260px] text-xs leading-5 text-[#211D20]/45 group-hover:text-white/55">{item.description}</p>
+                  <p className="mt-3 max-w-[260px] text-xs leading-5 text-black/45 group-hover:text-white/55">{item.description}</p>
                 </div>
               </motion.button>
             ))}
@@ -607,7 +605,7 @@ export default function Home() {
       {/* HORIZONTAL COLLECTIONS */}
       <section
         ref={collectionsRef}
-        className="relative z-10 h-[250vh] rounded-[48px] bg-[#FFFFFF] text-[#6D3A5C] shadow-[0_-20px_80px_rgba(0,0,0,.035)] md:rounded-[60px]"
+        className="relative z-10 h-[250vh] rounded-[48px] bg-[#f9f9f7] text-[#171716] shadow-[0_-20px_80px_rgba(0,0,0,.035)] md:rounded-[60px]"
       >
         <div className="sticky top-0 flex h-[calc(100svh-64px)] min-h-[560px] items-center overflow-hidden md:h-screen md:min-h-[680px]">
           <div className="pointer-events-none absolute inset-0">
@@ -623,12 +621,12 @@ export default function Home() {
             }}
             className="absolute top-[12%] left-5 z-20 md:left-10 lg:left-[6vw]"
           >
-            <p className="text-[8px] tracking-[0.35em] text-[#211D20]/30 uppercase">02 / Collections</p>
+            <p className="text-[8px] tracking-[0.35em] text-black/30 uppercase">02 / Collections</p>
 
-            <h2 className="mt-5 max-w-[650px] text-[clamp(2rem,7vw,2.5rem)] leading-[0.78] font-black tracking-[-0.08em]">
+            <h2 className="mt-5 max-w-[650px] text-[clamp(3.3rem,7vw,7rem)] leading-[0.78] font-black tracking-[-0.08em]">
               Find the
               <br />
-              <span className="[font-family:var(--font-windsong)] font-light tracking-normal text-[#211D20]/40">right expression.</span>
+              <span className="[font-family:var(--font-windsong)] font-light tracking-normal text-black/40">right expression.</span>
             </h2>
           </motion.div>
 
@@ -647,7 +645,7 @@ export default function Home() {
                   stiffness: 220,
                   damping: 22,
                 }}
-                className="group relative h-[58vh] min-h-[360px] w-[78vw] max-w-[560px] overflow-hidden rounded-[30px] bg-[#FBF8F9] text-left shadow-[0_25px_70px_rgba(0,0,0,.09)] sm:h-[62vh] sm:min-h-[430px] sm:w-[68vw] sm:rounded-[36px] md:h-[62vh] md:w-[52vw] md:max-w-[720px] md:rounded-[42px] lg:w-[44vw]"
+                className="group relative h-[58vh] min-h-[360px] w-[78vw] max-w-[560px] overflow-hidden rounded-[30px] bg-[#eeece6] text-left shadow-[0_25px_70px_rgba(0,0,0,.09)] sm:h-[62vh] sm:min-h-[430px] sm:w-[68vw] sm:rounded-[36px] md:h-[62vh] md:w-[52vw] md:max-w-[720px] md:rounded-[42px] lg:w-[44vw]"
               >
                 <Image
                   src={item.image}
@@ -674,21 +672,21 @@ export default function Home() {
                     <h3 className="mt-3 max-w-[430px] text-3xl leading-[0.9] font-black tracking-[-0.06em] md:text-5xl">{item.title}</h3>
                   </div>
 
-                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white text-[#211D20] transition-transform duration-500 group-hover:rotate-45">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white text-black transition-transform duration-500 group-hover:rotate-45">
                     <ArrowUpRight className="h-4 w-4" />
                   </span>
                 </div>
               </motion.button>
             ))}
 
-            <div className="flex h-[58vh] min-h-[360px] w-[78vw] max-w-[560px] items-center justify-center rounded-[30px] border border-[#6D3A5C]/[0.08] bg-white px-6 sm:h-[62vh] sm:min-h-[430px] sm:w-[68vw] sm:rounded-[36px] sm:px-10 md:h-[62vh] md:w-[42vw] md:rounded-[42px]">
+            <div className="flex h-[58vh] min-h-[360px] w-[78vw] max-w-[560px] items-center justify-center rounded-[30px] border border-black/[0.08] bg-white px-6 sm:h-[62vh] sm:min-h-[430px] sm:w-[68vw] sm:rounded-[36px] sm:px-10 md:h-[62vh] md:w-[42vw] md:rounded-[42px]">
               <div className="max-w-[360px]">
-                <p className="text-[8px] tracking-[0.3em] text-[#211D20]/30 uppercase">Complete the experience</p>
+                <p className="text-[8px] tracking-[0.3em] text-black/30 uppercase">Complete the experience</p>
 
                 <h3 className="mt-5 text-5xl leading-[0.8] font-black tracking-[-0.08em]">
                   Your event.
                   <br />
-                  <span className="[font-family:var(--font-windsong)] font-light text-[#211D20]/40">Your language.</span>
+                  <span className="[font-family:var(--font-windsong)] font-light text-black/40">Your language.</span>
                 </h3>
 
                 <div className="mt-8">
@@ -699,13 +697,13 @@ export default function Home() {
           </motion.div>
 
           <div className="absolute right-4 bottom-5 left-4 z-20 flex items-center justify-between sm:right-5 sm:bottom-6 md:right-10 md:bottom-8 md:left-10">
-            <span className="hidden text-[8px] tracking-[0.28em] text-[#211D20]/30 uppercase sm:block">Move through the collection</span>
+            <span className="hidden text-[8px] tracking-[0.28em] text-black/30 uppercase sm:block">Move through the collection</span>
 
             <div className="h-px w-[24vw] max-w-[420px] overflow-hidden bg-black/10 sm:w-[30vw] md:w-[35vw]">
-              <motion.div style={{ scaleX: collectionsProgress }} className="h-full w-full origin-left bg-[#D8B878]" />
+              <motion.div style={{ scaleX: collectionsProgress }} className="h-full w-full origin-left bg-black/50" />
             </div>
 
-            <span className="text-[8px] tracking-[0.2em] text-[#211D20]/30">04 / 04</span>
+            <span className="text-[8px] tracking-[0.2em] text-black/30">04 / 04</span>
           </div>
         </div>
       </section>
@@ -713,7 +711,7 @@ export default function Home() {
       {/* EVENT EXPERIENCE */}
       <section
         ref={experienceRef}
-        className="relative z-10 mx-2 h-[150vh] overflow-hidden rounded-[36px] bg-white text-[#6D3A5C] shadow-[0_20px_80px_rgba(0,0,0,.035)] sm:mx-3 sm:rounded-[44px] md:mx-4 md:h-[170vh] md:rounded-[60px]"
+        className="relative z-10 mx-2 h-[150vh] overflow-hidden rounded-[36px] bg-white text-[#171716] shadow-[0_20px_80px_rgba(0,0,0,.035)] sm:mx-3 sm:rounded-[44px] md:mx-4 md:h-[170vh] md:rounded-[60px]"
       >
         <div className="sticky top-0 h-[calc(100svh-64px)] min-h-[560px] overflow-hidden rounded-[36px] sm:rounded-[44px] md:h-[calc(100svh-72px)] md:min-h-[650px] md:rounded-[60px]">
           <div className="pointer-events-none absolute inset-0">
@@ -727,15 +725,15 @@ export default function Home() {
             style={{ y: experienceIntroY }}
             className="absolute top-[7%] right-5 left-5 z-20 max-w-[500px] sm:top-[8%] md:top-[10%] md:right-auto md:left-10 lg:left-[7vw]"
           >
-            <p className="text-[8px] tracking-[0.35em] text-[#211D20]/30 uppercase">03 / Event experience</p>
+            <p className="text-[8px] tracking-[0.35em] text-black/30 uppercase">03 / Event experience</p>
 
             <h2 className="mt-5 text-[clamp(3rem,14vw,5rem)] leading-[0.8] font-black tracking-[-0.08em] sm:text-[clamp(3.5rem,9vw,6rem)] md:text-[clamp(3.35rem,6.2vw,6.6rem)]">
               Built around
               <br />
-              <span className="[font-family:var(--font-windsong)] font-light tracking-normal text-[#211D20]/40">the occasion.</span>
+              <span className="[font-family:var(--font-windsong)] font-light tracking-normal text-black/40">the occasion.</span>
             </h2>
 
-            <p className="mt-5 max-w-[390px] text-[13px] leading-5 text-[#211D20]/45 sm:text-sm sm:leading-6 md:mt-7">
+            <p className="mt-5 max-w-[390px] text-[13px] leading-5 text-black/45 sm:text-sm sm:leading-6 md:mt-7">
               Choose only the details your celebration needs — from music and memories to schedules, countdowns, wishes and private
               information.
             </p>
@@ -753,10 +751,10 @@ export default function Home() {
             <PortalButton onClick={() => router.push("/invites")}>Build your invite</PortalButton>
 
             <div className="hidden items-center gap-3 md:flex">
-              <span className="text-[8px] tracking-[0.25em] text-[#211D20]/25 uppercase">Scroll depth</span>
+              <span className="text-[8px] tracking-[0.25em] text-black/25 uppercase">Scroll depth</span>
 
               <div className="h-px w-32 overflow-hidden rounded-full bg-black/10">
-                <motion.div style={{ scaleX: experienceProgress }} className="h-full w-full origin-left bg-[#D8B878]" />
+                <motion.div style={{ scaleX: experienceProgress }} className="h-full w-full origin-left bg-black/50" />
               </div>
             </div>
           </div>
@@ -764,41 +762,41 @@ export default function Home() {
       </section>
 
       {/* EDITOR */}
-      <section className="relative z-10 mx-2 overflow-hidden rounded-[36px] border border-[#6D3A5C]/[0.05] bg-[#FBF8F9] px-4 py-24 text-[#6D3A5C] shadow-[0_20px_80px_rgba(0,0,0,.035)] sm:mx-3 sm:rounded-[44px] sm:px-6 sm:py-28 md:mx-4 md:rounded-[60px] md:px-10 md:py-36">
+      <section className="relative z-10 mx-2 overflow-hidden rounded-[36px] border border-black/[0.05] bg-[#f3f2ee] px-4 py-24 text-[#171716] shadow-[0_20px_80px_rgba(0,0,0,.035)] sm:mx-3 sm:rounded-[44px] sm:px-6 sm:py-28 md:mx-4 md:rounded-[60px] md:px-10 md:py-36">
         <div className="mx-auto max-w-[1500px]">
           <div className="mb-12 max-w-[700px]">
-            <p className="text-[8px] tracking-[0.35em] text-[#211D20]/30 uppercase">04 / Create</p>
+            <p className="text-[8px] tracking-[0.35em] text-black/30 uppercase">04 / Create</p>
 
-            <h2 className="mt-6 text-[clamp(2rem,7vw,2.5rem)] leading-[0.78] font-black tracking-[-0.08em]">
+            <h2 className="mt-6 text-[clamp(3.5rem,7vw,7rem)] leading-[0.78] font-black tracking-[-0.08em]">
               Shape every
               <br />
-              <span className="[font-family:var(--font-windsong)] font-light text-[#211D20]/45">detail.</span>
+              <span className="[font-family:var(--font-windsong)] font-light text-black/45">detail.</span>
             </h2>
 
-            <p className="mt-7 max-w-[560px] text-sm leading-6 text-[#211D20]/45 md:text-base">
+            <p className="mt-7 max-w-[560px] text-sm leading-6 text-black/45 md:text-base">
               Start with a collection, personalise the content, arrange the experience and preview the invitation before sharing it with
               your guests.
             </p>
           </div>
 
-          <div className="relative overflow-hidden rounded-[30px] border border-[#6D3A5C]/[0.08] bg-white p-2 shadow-[0_40px_110px_rgba(0,0,0,.10)] md:p-3">
-            <div className="flex h-10 items-center justify-between border-b border-[#6D3A5C]/[0.07] px-4 text-[#211D20]/30">
+          <div className="relative overflow-hidden rounded-[30px] border border-black/[0.08] bg-white p-2 shadow-[0_40px_110px_rgba(0,0,0,.10)] md:p-3">
+            <div className="flex h-10 items-center justify-between border-b border-black/[0.07] px-4 text-black/30">
               <div className="flex gap-1.5">
-                <span className="h-2 w-2 rounded-full border border-[#6D3A5C]/10" />
-                <span className="h-2 w-2 rounded-full border border-[#6D3A5C]/10" />
-                <span className="h-2 w-2 rounded-full border border-[#6D3A5C]/10" />
+                <span className="h-2 w-2 rounded-full border border-black/10" />
+                <span className="h-2 w-2 rounded-full border border-black/10" />
+                <span className="h-2 w-2 rounded-full border border-black/10" />
               </div>
 
               <span className="text-[8px] tracking-[0.3em] uppercase">MomentsEra Editor</span>
 
               <span className="flex items-center gap-2 text-[8px]">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#B86B83]" />
+                <span className="h-1.5 w-1.5 rounded-full bg-[#8eb9a6]" />
                 Live preview
               </span>
             </div>
 
             <div className="grid min-h-[420px] grid-cols-[52px_1fr] sm:min-h-[500px] sm:grid-cols-[58px_1fr] md:grid-cols-[72px_1fr_260px]">
-              <aside className="border-r border-[#6D3A5C]/[0.07] py-5">
+              <aside className="border-r border-black/[0.07] py-5">
                 {["⌂", "✦", "◫", "◌", "♪", "⚙"].map((item, index) => (
                   <button
                     key={item}
@@ -806,8 +804,8 @@ export default function Home() {
                     aria-label={`Editor tool ${index + 1}`}
                     className={`mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-2xl border text-sm transition-all ${
                       index === 1
-                        ? "border-[#6D3A5C]/20 bg-[#6D3A5C] text-white"
-                        : "border-transparent text-[#211D20]/30 hover:border-[#6D3A5C]/10 hover:text-[#211D20]"
+                        ? "border-black/[0.08] bg-[#171716] text-white"
+                        : "border-transparent text-black/30 hover:border-black/10 hover:text-black"
                     }`}
                   >
                     {item}
@@ -815,7 +813,7 @@ export default function Home() {
                 ))}
               </aside>
 
-              <div className="relative flex items-center justify-center overflow-hidden bg-[#FBF8F9] p-7 md:p-12">
+              <div className="relative flex items-center justify-center overflow-hidden bg-[#eeece7] p-7 md:p-12">
                 <div className="absolute inset-0 [background-image:linear-gradient(rgba(255,255,255,.25)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.25)_1px,transparent_1px)] [background-size:32px_32px] opacity-[0.18]" />
 
                 <motion.div
@@ -825,39 +823,39 @@ export default function Home() {
                     stiffness: 180,
                     damping: 20,
                   }}
-                  className="relative h-[390px] w-[245px] overflow-hidden rounded-[34px] border-[7px] border-[#6D3A5C]/10 bg-white p-1 shadow-[0_40px_80px_rgba(0,0,0,.20)]"
+                  className="relative h-[390px] w-[245px] overflow-hidden rounded-[34px] border-[7px] border-black/10 bg-white p-1 shadow-[0_40px_80px_rgba(0,0,0,.20)]"
                 >
-                  <div className="relative h-full w-full overflow-hidden rounded-[27px] bg-[#FBF8F9]">
+                  <div className="relative h-full w-full overflow-hidden rounded-[27px] bg-[#eee8dc]">
                     <Image src={mockup} alt="Invitation editor preview" fill sizes="245px" className="object-contain" />
                   </div>
                 </motion.div>
               </div>
 
-              <aside className="hidden border-l border-[#6D3A5C]/[0.07] p-5 md:block">
+              <aside className="hidden border-l border-black/[0.07] p-5 md:block">
                 <div className="mb-5 flex items-center justify-between">
-                  <p className="text-[8px] tracking-[0.25em] text-[#211D20]/35 uppercase">Customize</p>
-                  <span className="text-[8px] text-[#211D20]/20">05</span>
+                  <p className="text-[8px] tracking-[0.25em] text-black/35 uppercase">Customize</p>
+                  <span className="text-[8px] text-black/20">05</span>
                 </div>
 
                 {["Typography", "Colors", "Background", "Music", "Sections"].map((item, index) => (
                   <button
                     key={item}
                     type="button"
-                    className="mb-2 flex w-full items-center justify-between rounded-2xl border border-[#6D3A5C]/[0.07] bg-[#FBF8F9] p-3 text-left transition-all hover:bg-white"
+                    className="mb-2 flex w-full items-center justify-between rounded-2xl border border-black/[0.07] bg-[#fafaf9] p-3 text-left transition-all hover:bg-white"
                   >
-                    <span className="text-[10px] text-[#211D20]/60">{item}</span>
-                    <span className="text-[9px] text-[#211D20]/25">{index === 0 ? "Aa" : "+"}</span>
+                    <span className="text-[10px] text-black/60">{item}</span>
+                    <span className="text-[9px] text-black/25">{index === 0 ? "Aa" : "+"}</span>
                   </button>
                 ))}
 
                 <button
                   type="button"
                   onClick={() => router.push("/invites")}
-                  className="group mt-4 flex w-full items-center justify-between rounded-full border border-[#6D3A5C]/20 bg-[#6D3A5C] px-3 py-2 text-[8px] tracking-[0.2em] text-white uppercase"
+                  className="group mt-4 flex w-full items-center justify-between rounded-full border border-black/[0.08] bg-[#171716] px-3 py-2 text-[8px] tracking-[0.2em] text-white uppercase"
                 >
                   <span className="pl-2">Start designing</span>
 
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-[#211D20] transition-transform group-hover:rotate-45">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-black transition-transform group-hover:rotate-45">
                     <ArrowUpRight className="h-3.5 w-3.5" />
                   </span>
                 </button>
@@ -869,7 +867,7 @@ export default function Home() {
       {/* ================================================================
           RESPONSIVE / LAYERED PARALLAX
       ================================================================= */}
-      <section className="relative z-10 mx-2 overflow-hidden rounded-[36px] bg-white px-4 py-24 text-[#6D3A5C] shadow-[0_20px_80px_rgba(0,0,0,.04)] sm:mx-3 sm:rounded-[44px] sm:px-6 sm:py-28 md:mx-4 md:rounded-[60px] md:px-10 md:py-40">
+      <section className="relative z-10 mx-2 overflow-hidden rounded-[36px] bg-white px-4 py-24 text-[#171716] shadow-[0_20px_80px_rgba(0,0,0,.04)] sm:mx-3 sm:rounded-[44px] sm:px-6 sm:py-28 md:mx-4 md:rounded-[60px] md:px-10 md:py-40">
         <div className="mx-auto grid max-w-[1500px] items-center gap-16 lg:grid-cols-[0.75fr_1.25fr]">
           <div>
             <p className="text-[9px] tracking-[0.35em] uppercase opacity-35">05 / Responsive</p>
@@ -890,12 +888,12 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="relative min-h-[560px] overflow-hidden rounded-[38px] bg-[#FBF8F9]">
+          <div className="relative min-h-[560px] overflow-hidden rounded-[38px] bg-[#f2f0ea]">
             <motion.div
               whileInView={{ y: [20, 0], opacity: [0, 1] }}
               viewport={{ once: true }}
               transition={{ duration: 0.9, ease }}
-              className="absolute top-16 left-[7%] hidden h-[330px] w-[610px] overflow-hidden rounded-[32px] border-[6px] border-[#6D3A5C]/10 bg-white p-2 shadow-[0_35px_80px_rgba(0,0,0,.18)] sm:block"
+              className="absolute top-16 left-[7%] hidden h-[330px] w-[610px] overflow-hidden rounded-[32px] border-[6px] border-black/10 bg-white p-2 shadow-[0_35px_80px_rgba(0,0,0,.18)] sm:block"
             >
               <div className="relative h-full w-full overflow-hidden bg-white">
                 <Image src={mockup2} alt="Desktop invitation" fill sizes="610px" className="object-contain" />
@@ -906,7 +904,7 @@ export default function Home() {
               whileInView={{ y: [30, 0], rotate: [3, 1.5] }}
               viewport={{ once: true }}
               transition={{ duration: 0.9, delay: 0.12, ease }}
-              className="absolute right-[9%] bottom-8 z-20 h-[410px] w-[205px] overflow-hidden rounded-[34px] border-[7px] border-[#6D3A5C]/10 bg-white p-2 shadow-[0_35px_80px_rgba(0,0,0,.22)]"
+              className="absolute right-[9%] bottom-8 z-20 h-[410px] w-[205px] overflow-hidden rounded-[34px] border-[7px] border-black/10 bg-white p-2 shadow-[0_35px_80px_rgba(0,0,0,.22)]"
             >
               <div className="absolute top-0 left-1/2 z-10 h-5 w-16 -translate-x-1/2 rounded-b-full bg-[#202020]" />
               <div className="relative h-full w-full overflow-hidden bg-white">
@@ -914,11 +912,11 @@ export default function Home() {
               </div>
             </motion.div>
 
-            <div className="absolute top-8 right-8 rounded-full border border-[#6D3A5C]/10 bg-white px-4 py-2 text-[7px] tracking-[0.22em] uppercase shadow-sm">
+            <div className="absolute top-8 right-8 rounded-full border border-black/10 bg-white px-4 py-2 text-[7px] tracking-[0.22em] uppercase shadow-sm">
               Adaptive / 01
             </div>
 
-            <div className="absolute bottom-8 left-8 hidden rounded-r-2xl border-l border-[#6D3A5C]/20 bg-white/50 py-2 pr-4 pl-4 md:block">
+            <div className="absolute bottom-8 left-8 hidden rounded-r-2xl border-l border-black/20 bg-white/50 py-2 pr-4 pl-4 md:block">
               <p className="text-[7px] tracking-[0.25em] uppercase opacity-35">Same story</p>
               <p className="mt-1 text-xs opacity-60">Reframed for every screen.</p>
             </div>
@@ -926,19 +924,19 @@ export default function Home() {
         </div>
       </section>
       {/* FINAL CTA */}
-      <section className="relative z-10 mx-2 overflow-hidden rounded-[40px] border border-[#6D3A5C]/[0.05] bg-white px-4 py-28 text-center text-[#6D3A5C] shadow-[0_20px_80px_rgba(0,0,0,.035)] sm:mx-3 sm:rounded-[48px] sm:px-6 sm:py-32 md:mx-4 md:rounded-[60px] md:px-10 md:py-44">
+      <section className="relative z-10 mx-2 overflow-hidden rounded-[40px] border border-black/[0.05] bg-white px-4 py-28 text-center text-[#171716] shadow-[0_20px_80px_rgba(0,0,0,.035)] sm:mx-3 sm:rounded-[48px] sm:px-6 sm:py-32 md:mx-4 md:rounded-[60px] md:px-10 md:py-44">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(181,204,194,.25),transparent_36%)]" />
 
         <div className="relative mx-auto max-w-[1000px]">
-          <p className="text-[8px] tracking-[0.4em] text-[#211D20]/30 uppercase">05 / Begin</p>
+          <p className="text-[8px] tracking-[0.4em] text-black/30 uppercase">05 / Begin</p>
 
           <h2 className="mt-8 text-[clamp(4rem,10vw,10rem)] leading-[0.72] font-black tracking-[-0.085em]">
             Make it
             <br />
-            <span className="[font-family:var(--font-windsong)] font-light text-[#211D20]/55">yours.</span>
+            <span className="[font-family:var(--font-windsong)] font-light text-black/55">yours.</span>
           </h2>
 
-          <p className="mx-auto mt-9 max-w-[460px] text-sm leading-6 text-[#211D20]/40">
+          <p className="mx-auto mt-9 max-w-[460px] text-sm leading-6 text-black/40">
             Choose an invitation, make it personal, and create an experience your guests will remember.
           </p>
 

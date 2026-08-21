@@ -60,46 +60,46 @@ export default async function EventPage({ params }: PageProps) {
   }
 
   const {
-    announcement,
     invite,
+    template,
+    announcement,
     schedule,
+    ourStory,
+    timeline,
     gallery,
     dressCode,
-    rsvp,
-    timeline,
-    ourStory,
-    settings,
     wishes,
+    rsvp,
     music,
-    theme,
-    print,
-    sharing,
+    color,
+    font,
+    shape,
     motion,
     privacy,
+    sharing,
+    print,
+    settings,
   } = data;
 
   return (
     <Catalog
       data={{
-        announcement,
         invite,
+        template,
+        announcement,
         schedule,
-        gallery,
-        wishes,
-        dressCode,
-        rsvp,
-        timeline,
         ourStory,
+        timeline,
+        gallery,
+        dressCode,
+        wishes,
+        rsvp,
+        music,
       }}
-      settings={settings}
-      music={music}
-      theme={theme}
+      design={{ color, font, shape, motion }}
+      settings={{ privacy, sharing, print, settings }}
       eventKey={event_key}
-      print={print}
       isLive
-      motion={motion}
-      sharing={sharing}
-      privacy={privacy}
     />
   );
 }

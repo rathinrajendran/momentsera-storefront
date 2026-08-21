@@ -6,21 +6,24 @@ import { fetchEventByKey } from "../../../lib/api";
 /* ---------------- TYPES ---------------- */
 type Draft = {
   invite: any;
-  settings: any;
-  theme: any;
-  music: any;
-  dressCode: any;
-  timeline: any;
-  ourStory: any;
-  rsvp: any;
-  print: any;
+  template: any;
   announcement: any;
-  gallery: any;
-  motion: any;
   schedule?: any;
+  ourStory: any;
+  timeline: any;
+  gallery: any;
+  dressCode: any;
+  wishes?: any;
+  rsvp: any;
+  music: any;
+  color: any;
+  font: any;
+  shape: any;
+  motion: any;
   privacy?: any;
   sharing?: any;
-  wishes?: any;
+  print: any;
+  settings: any;
   frontendUrl?: string;
 };
 

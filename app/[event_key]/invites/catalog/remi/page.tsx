@@ -168,9 +168,9 @@ function IndianCorner({ position }: { position: "top-left" | "top-right" | "bott
 export default function Remi({ data, eventKey, motionData, settings, music }: RemiProps) {
   const remiData = useInviteData(data);
 
-  const { getMotionProps } = useThemeAnimation(motionData);
+  const { getMotionProps } = useThemeAnimation(design?.motion);
 
-  const animationKey = useMemo(() => getAnimationKey(motionData), [motionData]);
+  const animationKey = useMemo(() => getAnimationKey(design?.motion), [design?.motion]);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [rsvp, setRsvp] = useState<"yes" | "no" | null>(null);
@@ -290,7 +290,7 @@ export default function Remi({ data, eventKey, motionData, settings, music }: Re
           color: COLORS.ink,
           fontFamily: sans,
 
-          "--animation-enabled": motionData?.animations === false ? "0" : "1",
+          "--animation-enabled": design?.motion?.animations === false ? "0" : "1",
         } as CSSProperties
       }
     >
@@ -948,15 +948,15 @@ export default function Remi({ data, eventKey, motionData, settings, music }: Re
 
           <div className="mx-auto mt-9 max-w-[600px]">
             <AudioPlayer
-              src={music?.background_audio ?? ""}
-              name={music?.background_audio_name ?? "Aparna & Evin — Wedding Soundtrack"}
+              src={data?.music?.background_audio ?? ""}
+              name={data?.music?.background_audio_name ?? "Aparna & Evin — Wedding Soundtrack"}
               cover={galleryUrls[1]}
-              variant={music?.audio_player_variant}
-              allowMute={music?.allow_mute ?? true}
-              loop={music?.loop_music ?? true}
-              fadeIn={music?.fade_in ?? false}
-              fadeOut={music?.fade_out ?? false}
-              volume={music?.volume_level ?? 60}
+              variant={data?.music?.audio_player_variant}
+              allowMute={data?.music?.allow_mute ?? true}
+              loop={data?.music?.loop_music ?? true}
+              fadeIn={data?.music?.fade_in ?? false}
+              fadeOut={data?.music?.fade_out ?? false}
+              volume={data?.music?.volume_level ?? 60}
             />
           </div>
         </div>

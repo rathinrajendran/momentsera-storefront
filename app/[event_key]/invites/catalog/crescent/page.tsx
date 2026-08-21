@@ -37,8 +37,8 @@ const DUMMY_GALLERY = [
 export default function Crescent({ data, eventKey, motionData, settings, music }: CrescentProps) {
   // Extract content dynamically from Luna Data without using Luna UI
   const crescentData = useInviteData(data);
-  const { getMotionProps } = useThemeAnimation(motionData);
-  const animationKey = useMemo(() => getAnimationKey(motionData), [motionData]);
+  const { getMotionProps } = useThemeAnimation(design?.motion);
+  const animationKey = useMemo(() => getAnimationKey(design?.motion), [design?.motion]);
 
   const [wishRefreshKey, setWishRefreshKey] = useState(0);
   const wishesContainerRef = useRef<HTMLElement | null>(null);
@@ -315,15 +315,15 @@ export default function Crescent({ data, eventKey, motionData, settings, music }
         <section className="border-y border-[#d4af37]/30 bg-[#580b1e] px-6 py-8">
           <div className="mx-auto max-w-md">
             <AudioPlayer
-              src={music?.background_audio ?? ""}
-              name={music?.background_audio_name ?? "Shenai & Festive Sangeet"}
+              src={data?.music?.background_audio ?? ""}
+              name={data?.music?.background_audio_name ?? "Shenai & Festive Sangeet"}
               cover={DUMMY_GALLERY[0]}
               variant={music.audio_player_variant}
-              allowMute={music?.allow_mute ?? true}
-              loop={music?.loop_music ?? true}
-              fadeIn={music?.fade_in ?? false}
-              fadeOut={music?.fade_out ?? false}
-              volume={music?.volume_level ?? 60}
+              allowMute={data?.music?.allow_mute ?? true}
+              loop={data?.music?.loop_music ?? true}
+              fadeIn={data?.music?.fade_in ?? false}
+              fadeOut={data?.music?.fade_out ?? false}
+              volume={data?.music?.volume_level ?? 60}
             />
           </div>
         </section>

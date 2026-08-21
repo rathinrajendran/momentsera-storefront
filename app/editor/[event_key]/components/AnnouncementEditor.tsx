@@ -4,7 +4,7 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import ReactCrop, { Crop, PixelCrop, centerCrop, makeAspectCrop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import { toast } from "sonner";
-import { Trash2, X, Upload, Camera, Save, Check } from "lucide-react";
+import { Trash2, X, Upload, Camera, Save, Check, ChevronRight, ChevronLeft } from "lucide-react";
 import { usePreviewDraft } from "../PreviewDraftContext";
 import { useSaveEventSection } from "../../../../hooks/useEvents";
 import { Input } from "../../../../components/ui/input";
@@ -645,23 +645,23 @@ export default function AnnouncementEditor({ onBack, eventKey }: { onBack: () =>
         </section>
 
         {/* Sticky Actions Footer */}
-        <div className="sticky bottom-0 z-[99] -mx-5 flex h-14 items-center justify-end gap-3 border-t border-slate-100 bg-white/90 px-5 backdrop-blur-md">
+        <div className="sticky bottom-0 z-[99] -mx-5 flex h-14 items-center justify-between gap-3 border-t border-slate-100 bg-white/90 px-5 backdrop-blur-md">
           <Button
             type="button"
             variant="ghost"
             onClick={handleCancel}
-            className="h-9 text-xs font-semibold text-slate-400 transition-colors hover:bg-slate-50 hover:text-slate-900"
+            className="h-9 rounded-lg bg-slate-900 px-8 text-xs font-semibold text-white shadow-md shadow-slate-100 transition-all hover:bg-slate-800 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
           >
-            <X strokeWidth={1.5} size={14} />
-            <span>Discard</span>
+            <ChevronLeft strokeWidth={1.5} size={14} />
+            <span>Previous</span>
           </Button>
           <Button
             type="submit"
             disabled={mutation.isPending}
             className="h-9 rounded-lg bg-slate-900 px-8 text-xs font-semibold text-white shadow-md shadow-slate-100 transition-all hover:bg-slate-800 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
           >
-            <Save strokeWidth={1.5} size={14} />
-            {mutation.isPending ? "Updating..." : "Save Configuration"}
+            {mutation.isPending ? "Updating..." : "Next"}
+            <ChevronRight strokeWidth={1.5} size={14} />
           </Button>
         </div>
       </form>

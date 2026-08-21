@@ -109,8 +109,8 @@ function SectionKicker({ number, label, light = false }: { number: string; label
 
 export default function Luna({ data, eventKey, motionData, settings, music }: LunaProps) {
   const LunaData = useInviteData(data);
-  const { getMotionProps } = useThemeAnimation(motionData);
-  const animationKey = useMemo(() => getAnimationKey(motionData), [motionData]);
+  const { getMotionProps } = useThemeAnimation(design?.motion);
+  const animationKey = useMemo(() => getAnimationKey(design?.motion), [design?.motion]);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [rsvp, setRsvp] = useState<"yes" | "no" | null>(null);
@@ -220,11 +220,11 @@ export default function Luna({ data, eventKey, motionData, settings, music }: Lu
       className="relative mx-auto min-h-screen w-full max-w-[440px] overflow-x-hidden md:max-w-[1180px]"
       style={
         {
-          "--animation-enabled": motionData?.animations === false ? "0" : "1",
-          "--animation-style": motionData?.animation_style ?? "smooth",
-          "--animation-scroll": motionData?.scroll_behavior ?? "on-scroll",
-          "--animation-duration": motionData?.animation_duration ?? "1s",
-          "--animation-delay": motionData?.animation_delay ?? "0ms",
+          "--animation-enabled": design?.motion?.animations === false ? "0" : "1",
+          "--animation-style": design?.motion?.animation_style ?? "smooth",
+          "--animation-scroll": design?.motion?.scroll_behavior ?? "on-scroll",
+          "--animation-duration": design?.motion?.animation_duration ?? "1s",
+          "--animation-delay": design?.motion?.animation_delay ?? "0ms",
           background: PALETTE.paper,
           color: PALETTE.ink,
           ...THEME_TYPOGRAPHY.body,
@@ -677,15 +677,15 @@ export default function Luna({ data, eventKey, motionData, settings, music }: Lu
               </h2>
               <div className="mt-7">
                 <AudioPlayer
-                  src={music?.background_audio ?? ""}
-                  name={music?.background_audio_name ?? "Our Wedding Soundtrack"}
+                  src={data?.music?.background_audio ?? ""}
+                  name={data?.music?.background_audio_name ?? "Our Wedding Soundtrack"}
                   cover={DUMMY_GALLERY[2]}
-                  variant={music?.audio_player_variant}
-                  allowMute={music?.allow_mute ?? true}
-                  loop={music?.loop_music ?? true}
-                  fadeIn={music?.fade_in ?? false}
-                  fadeOut={music?.fade_out ?? false}
-                  volume={music?.volume_level ?? 60}
+                  variant={data?.music?.audio_player_variant}
+                  allowMute={data?.music?.allow_mute ?? true}
+                  loop={data?.music?.loop_music ?? true}
+                  fadeIn={data?.music?.fade_in ?? false}
+                  fadeOut={data?.music?.fade_out ?? false}
+                  volume={data?.music?.volume_level ?? 60}
                 />
               </div>
             </div>

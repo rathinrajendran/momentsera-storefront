@@ -73,17 +73,17 @@ export default function ShapeEditor({ eventKey, onBack }: { eventKey: string; on
 
   const form = useForm<DesignForm>({
     defaultValues: {
-      ...draft.theme,
+      ...draft.shape,
 
-      border_radius: draft.theme.border_radius ?? "rounded",
+      border_radius: draft.shape.border_radius ?? "rounded",
 
-      border_width: draft.theme.border_width ?? "none",
+      border_width: draft.shape.border_width ?? "none",
 
-      border_style: draft.theme.border_style ?? "solid",
+      border_style: draft.shape.border_style ?? "solid",
 
-      shadow: draft.theme.shadow ?? "none",
+      shadow: draft.shape.shadow ?? "none",
 
-      image_shape: draft.theme.image_shape ?? "rounded",
+      image_shape: draft.shape.image_shape ?? "rounded",
 
     },
   });
@@ -100,7 +100,7 @@ export default function ShapeEditor({ eventKey, onBack }: { eventKey: string; on
       [key]: value,
     };
 
-    replaceSection("theme", nextSettings);
+    replaceSection("shape", nextSettings);
   }
 
   /* ------------------------------------------------------------------------ */
@@ -128,8 +128,8 @@ export default function ShapeEditor({ eventKey, onBack }: { eventKey: string; on
   function onSubmit(values: DesignForm) {
     mutation.mutate(
       {
-        path: "theme",
-        stage: "theme",
+        path: "shape",
+        stage: "shape",
         data: values,
       },
       {

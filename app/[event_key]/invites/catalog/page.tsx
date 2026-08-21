@@ -53,13 +53,8 @@ function getContrastColor(hex: string): string {
 
 interface CatalogProps {
   data: any;
+  design: any;
   settings: any;
-  music: any;
-  theme: any;
-  motion: any;
-  sharing: any;
-  privacy: any;
-  print: any;
   eventKey: string;
   isLive?: boolean;
 }
@@ -68,7 +63,7 @@ interface CatalogProps {
     COMPONENT
   ───────────────────────────────────────────── */
 
-export default function Catalog({ data, theme, music, motion, sharing, privacy, print, settings, eventKey, isLive = false }: CatalogProps) {
+export default function Catalog({ data, design, settings, eventKey, isLive = false }: CatalogProps) {
   /* ─────────────────────────────────────────────
       STATE
     ───────────────────────────────────────────── */
@@ -86,17 +81,17 @@ console.log("motion data", data);
   /* ─────────────────────────────────────────────
       THEME & COLORS
     ───────────────────────────────────────────── */
-  const primaryColor = normalizeHex(theme?.primary, "#FFFDF9");
-  const secondaryColor = normalizeHex(theme?.secondary, "#F8E8EC");
-  const accentColor = normalizeHex(theme?.accent, "#E7A1B0");
+  const primaryColor = normalizeHex(design?.color?.primary, "#FFFDF9");
+  const secondaryColor = normalizeHex(design?.color?.secondary, "#F8E8EC");
+  const accentColor = normalizeHex(design?.color?.accent, "#E7A1B0");
 
   // Prefer custom text colors from the theme editor, falling back to auto contrast
-  const textPrimary = theme?.text_primary
-    ? normalizeHex(theme.text_primary, getContrastColor(primaryColor))
+  const textPrimary = design?.color?.text_primary
+    ? normalizeHex(design?.color.text_primary, getContrastColor(primaryColor))
     : getContrastColor(primaryColor);
 
-  const textSecondary = theme?.text_secondary
-    ? normalizeHex(theme.text_secondary, getContrastColor(secondaryColor))
+  const textSecondary = design?.color?.text_secondary
+    ? normalizeHex(design?.color.text_secondary, getContrastColor(secondaryColor))
     : getContrastColor(secondaryColor);
 
   const textAccent = getContrastColor(accentColor);
@@ -118,29 +113,29 @@ console.log("motion data", data);
     ───────────────────────────────────────────── */
 
   const typography = {
-    headingFont: theme?.heading_font ?? "Bodoni Moda",
-    accentFont: theme?.accent_font ?? "Parisienne",
-    bodyFont: theme?.body_font ?? "DM Sans",
+    headingFont: design?.font?.heading_font ?? "Bodoni Moda",
+    accentFont: design?.font?.accent_font ?? "Parisienne",
+    bodyFont: design?.font?.body_font ?? "DM Sans",
 
-    headingSize: theme?.heading_font_size ?? 28,
-    accentSize: theme?.accent_font_size ?? 35,
-    bodySize: theme?.body_font_size ?? 16,
+    headingSize: design?.font?.heading_font_size ?? 28,
+    accentSize: design?.font?.accent_font_size ?? 35,
+    bodySize: design?.font?.body_font_size ?? 16,
 
-    headingWeight: theme?.heading_font_weight ?? "400",
-    accentWeight: theme?.accent_font_weight ?? "400",
-    bodyWeight: theme?.body_font_weight ?? "400",
+    headingWeight: design?.font?.heading_font_weight ?? "400",
+    accentWeight: design?.font?.accent_font_weight ?? "400",
+    bodyWeight: design?.font?.body_font_weight ?? "400",
 
-    headingSpacing: theme?.heading_letter_spacing ?? "0em",
-    accentSpacing: theme?.accent_letter_spacing ?? "0em",
-    bodySpacing: theme?.body_letter_spacing ?? "0em",
+    headingSpacing: design?.font?.heading_letter_spacing ?? "0em",
+    accentSpacing: design?.font?.accent_letter_spacing ?? "0em",
+    bodySpacing: design?.font?.body_letter_spacing ?? "0em",
 
-    headingLineHeight: theme?.heading_line_height ?? "1.2",
-    accentLineHeight: theme?.accent_line_height ?? "1.2",
-    bodyLineHeight: theme?.body_line_height ?? "1.5",
+    headingLineHeight: design?.font?.heading_line_height ?? "1.2",
+    accentLineHeight: design?.font?.accent_line_height ?? "1.2",
+    bodyLineHeight: design?.font?.body_line_height ?? "1.5",
 
-    headingTransform: theme?.heading_text_transform ?? "none",
-    accentTransform: theme?.accent_text_transform ?? "none",
-    bodyTransform: theme?.body_text_transform ?? "none",
+    headingTransform: design?.font?.heading_text_transform ?? "none",
+    accentTransform: design?.font?.accent_text_transform ?? "none",
+    bodyTransform: design?.font?.body_text_transform ?? "none",
   };
 
   /* ─────────────────────────────────────────────
@@ -148,12 +143,12 @@ console.log("motion data", data);
     ───────────────────────────────────────────── */
 
   const backgroundSettings = {
-    type: theme?.background_type ?? "solid",
-    image: theme?.background_image ?? "",
-    overlayOpacity: theme?.background_type === "solid" ? 0 : (theme?.background_overlay_opacity ?? 45),
-    position: theme?.background_position ?? "center",
-    size: theme?.background_size ?? "cover",
-    repeat: theme?.background_repeat ?? "repeat",
+    type: design?.color?.background_type ?? "solid",
+    image: design?.color?.background_image ?? "",
+    overlayOpacity: design?.color?.background_type === "solid" ? 0 : (design?.color?.background_overlay_opacity ?? 45),
+    position: design?.color?.background_position ?? "center",
+    size: design?.color?.background_size ?? "cover",
+    repeat: design?.color?.background_repeat ?? "repeat",
   };
 
   const inviteKey = data?.invite?.invite_key;
@@ -322,64 +317,64 @@ console.log("motion data", data);
           /* ================================================================
            * SHAPE SYSTEM
            * ================================================================ */
-          "--radius-theme": getThemeRadius(theme?.border_radius ?? "soft"),
+          "--radius-theme": getThemeRadius(design?.shape?.border_radius ?? "soft"),
 
           "--shape-border-width":
-            theme?.border_width === "thin"
+            design?.shape?.border_width === "thin"
               ? "1px"
-              : theme?.border_width === "medium"
+              : design?.shape?.border_width === "medium"
                 ? "2px"
-                : theme?.border_width === "thick"
+                : design?.shape?.border_width === "thick"
                   ? "3px"
                   : "0px",
 
           "--shape-border-style":
-            theme?.border_style === "dashed"
+            design?.shape?.border_style === "dashed"
               ? "dashed"
-              : theme?.border_style === "dotted"
+              : design?.shape?.border_style === "dotted"
                 ? "dotted"
-                : theme?.border_style === "double"
+                : design?.shape?.border_style === "double"
                   ? "double"
                   : "solid",
 
           "--shape-shadow":
-            theme?.shadow === "soft"
+            design?.shape?.shadow === "soft"
               ? "0 4px 14px rgba(20, 20, 20, 0.08)"
-              : theme?.shadow === "medium"
+              : design?.shape?.shadow === "medium"
                 ? "0 10px 28px rgba(20, 20, 20, 0.12)"
-                : theme?.shadow === "floating"
+                : design?.shape?.shadow === "floating"
                   ? "0 18px 42px rgba(20, 20, 20, 0.16)"
                   : "none",
 
           "--shape-image-radius":
-            theme?.image_shape === "rectangle"
+            design?.shape?.image_shape === "rectangle"
               ? "0px"
-              : theme?.image_shape === "rounded"
+              : design?.shape?.image_shape === "rounded"
                 ? "12px"
-                : theme?.image_shape === "circle"
+                : design?.shape?.image_shape === "circle"
                   ? "9999px"
-                  : theme?.image_shape === "arch"
+                  : design?.shape?.image_shape === "arch"
                     ? "9999px 9999px 0 0"
                     : "var(--radius-theme)",
 
           /* ================================================================
            * ANIMATION SETTINGS
            * ================================================================ */
-          "--animation-enabled": motion?.animations === false ? "0" : "1",
-          "--animation-style": motion?.animation_style ?? "smooth",
-          "--animation-entry": motion?.animation_entry ?? "fade-up",
-          "--animation-scroll": motion?.scroll_behavior ?? "on-scroll",
-          "--animation-duration": motion?.animation_duration ?? "1s",
-          "--animation-delay": motion?.animation_delay ?? "0ms",
-          "--animation-speed": `${motion?.animation_speed ?? 50}`,
-          "--animation-loop": motion?.animation_loop ? "1" : "0",
+          "--animation-enabled": design?.motion?.animations === false ? "0" : "1",
+          "--animation-style": design?.motion?.animation_style ?? "smooth",
+          "--animation-entry": design?.motion?.animation_entry ?? "fade-up",
+          "--animation-scroll": design?.motion?.scroll_behavior ?? "on-scroll",
+          "--animation-duration": design?.motion?.animation_duration ?? "1s",
+          "--animation-delay": design?.motion?.animation_delay ?? "0ms",
+          "--animation-speed": `${design?.motion?.animation_speed ?? 50}`,
+          "--animation-loop": design?.motion?.animation_loop ? "1" : "0",
         } as React.CSSProperties
       }
     >
-      {print?.enable ? (
+      {settings?.print?.enable ? (
         <>testttt</>
       ) : (
-        <ThemeComponent data={data} theme={theme} motionData={motion} music={music} settings={settings} eventKey={eventKey} />
+        <ThemeComponent data={data} design={design} settings={settings} eventKey={eventKey} />
       )}
 
       {/* CALENDAR */}
@@ -389,7 +384,7 @@ console.log("motion data", data);
           startDate={primaryFunction?.startTime}
           location={primaryFunction?.locationName}
           isLive={isLive}
-          audio={music?.music}
+          audio={data?.music?.music}
         />
       )}
 

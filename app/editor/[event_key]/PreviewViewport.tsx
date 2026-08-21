@@ -29,22 +29,29 @@ export default function PreviewViewport({ device, splitScreen }: { device: Devic
           <Catalog
             data={{
               invite: draft.invite,
+              template: draft.template,
               announcement: draft.announcement,
               schedule: draft.schedule,
-              gallery: draft.gallery,
-              wishes: draft.wishes,
-              dressCode: draft.dressCode,
-              timeline: draft.timeline,
               ourStory: draft.ourStory,
+              timeline: draft.timeline,
+              gallery: draft.gallery,
+              dressCode: draft.dressCode,
+              wishes: draft.wishes,
               rsvp: draft.rsvp,
+              music: draft.music,
             }}
-            settings={draft.settings}
-            theme={draft.theme}
-            motion={draft.motion}
-            music={draft.music}
-            print={draft.print}
-            sharing={draft.sharing}
-            privacy={draft.privacy}
+            design={{
+              color: draft.color,
+              font: draft.font,
+              shape: draft.shape,
+              motion: draft.motion,
+            }}
+            settings={{
+              privacy: draft.privacy,
+              sharing: draft.sharing,
+              print: draft.print,
+              settings: draft.settings,
+            }}
             eventKey={draft.invite.event_key}
           />
         </div>

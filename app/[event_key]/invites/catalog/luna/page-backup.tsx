@@ -28,8 +28,8 @@ export default function Luna({ data, eventKey, motionData, settings }: LunaProps
   const [wishRefreshKey, setWishRefreshKey] = useState(0);
   const wishesContainerRef = useRef<HTMLElement | null>(null);
   const Luna = useInviteData(data);
-  const { getMotionProps } = useThemeAnimation(motionData);
-  const animationKey = useMemo(() => getAnimationKey(motionData), [motionData]);
+  const { getMotionProps } = useThemeAnimation(design?.motion);
+  const animationKey = useMemo(() => getAnimationKey(design?.motion), [design?.motion]);
   const { key: _scheduleKey, ...scheduleProps } = getMotionProps(0);
   const gallery = getSectionConfig(settings.section_visibility, "gallery");
   const wishes = getSectionConfig(settings.section_visibility, "wishes");

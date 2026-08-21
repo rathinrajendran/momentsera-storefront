@@ -12,9 +12,7 @@ export default function PreviewClient({ initialData, eventKey }: PreviewClientPr
   const [data, setData] = useState(initialData);
   const previousDataRef = useRef(initialData);
 
-
   console.log("initialData", initialData);
-  
 
   // 1. Hard refresh state alignment
   useEffect(() => {
@@ -53,22 +51,29 @@ export default function PreviewClient({ initialData, eventKey }: PreviewClientPr
     return {
       data: {
         invite: data.invite,
+        template: data.template,
         announcement: data.announcement,
         schedule: data.schedule,
-        gallery: data.gallery,
-        wishes: data.wishes,
-        dressCode: data.dressCode,
+        ourStory: data.ourStory,
         timeline: data.timeline,
-        OurStory: data.OurStory,
+        gallery: data.gallery,
+        dressCode: data.dressCode,
+        wishes: data.wishes,
         rsvp: data.rsvp,
+        music: data.music,
       },
-      theme: data.theme,
-      music: data.music,
-      motion: data.motion,
-      sharing: data.sharing,
-      privacy: data.privacy,
-      print: data.print,
-      settings: data.settings,
+      design: {
+        color: data.color,
+        font: data.font,
+        shape: data.shape,
+        motion: data.motion,
+      },
+      settings: {
+        privacy: data.privacy,
+        sharing: data.sharing,
+        print: data.print,
+        settings: data.settings,
+      },
     };
   }, [data]);
 

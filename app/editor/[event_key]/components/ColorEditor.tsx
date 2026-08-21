@@ -356,26 +356,26 @@ export default function ColorEditor({ eventKey, onBack }: { eventKey: string; on
   const eventId = draft.invite.id;
   const mutation = useSaveEventSection(eventKey, eventId);
   /* ---------------- FORM ---------------- */
-  const initialThemeKey = (draft.theme.theme_mode ?? "Rose & Cream") as ThemeKey;
+  const initialThemeKey = (draft.color.theme_mode ?? "Rose & Cream") as ThemeKey;
   const initialThemeColors = getThemeColors(initialThemeKey);
 
   const form = useForm<DesignForm>({
     defaultValues: {
-      ...draft.theme,
+      ...draft.color,
       theme_mode: initialThemeKey,
-      primary: draft.theme.primary ?? initialThemeColors.primary,
-      secondary: draft.theme.secondary ?? initialThemeColors.secondary,
-      text_primary: draft.theme.text_primary ?? initialThemeColors.text_primary,
-      text_secondary: draft.theme.text_secondary ?? initialThemeColors.text_secondary,
-      accent: draft.theme.accent ?? initialThemeColors.accent,
-      background_type: draft.theme.background_type ?? "solid",
-      background_image: draft.theme.background_image ?? "",
+      primary: draft.color.primary ?? initialThemeColors.primary,
+      secondary: draft.color.secondary ?? initialThemeColors.secondary,
+      text_primary: draft.color.text_primary ?? initialThemeColors.text_primary,
+      text_secondary: draft.color.text_secondary ?? initialThemeColors.text_secondary,
+      accent: draft.color.accent ?? initialThemeColors.accent,
+      background_type: draft.color.background_type ?? "solid",
+      background_image: draft.color.background_image ?? "",
       background_overlay_opacity:
-        typeof draft.theme.background_overlay_opacity === "number" && draft.theme.background_overlay_opacity >= 0
-          ? Math.min(100, draft.theme.background_overlay_opacity)
+        typeof draft.color.background_overlay_opacity === "number" && draft.color.background_overlay_opacity >= 0
+          ? Math.min(100, draft.color.background_overlay_opacity)
           : 45,
-      background_position: draft.theme.background_position ?? "center",
-      background_size: draft.theme.background_size ?? "cover",
+      background_position: draft.color.background_position ?? "center",
+      background_size: draft.color.background_size ?? "cover",
     },
   });
 
@@ -405,7 +405,7 @@ export default function ColorEditor({ eventKey, onBack }: { eventKey: string; on
   function handleLiveChange(key: keyof DesignForm, value: DesignForm[keyof DesignForm]) {
     const latest = form.getValues();
 
-    replaceSection("theme", {
+    replaceSection("color", {
       ...latest,
       [key]: value,
     } as DesignForm);
@@ -438,8 +438,8 @@ export default function ColorEditor({ eventKey, onBack }: { eventKey: string; on
 
     form.reset(nextTheme);
 
-    replaceSection("theme", {
-      ...draft.theme,
+    replaceSection("color", {
+      ...draft.color,
       ...nextTheme,
     } as DesignForm);
   }
@@ -471,8 +471,8 @@ export default function ColorEditor({ eventKey, onBack }: { eventKey: string; on
   function onSubmit(values: DesignForm) {
     mutation.mutate(
       {
-        path: "theme",
-        stage: "theme",
+        path: "color",
+        stage: "color",
         data: values,
       },
       {

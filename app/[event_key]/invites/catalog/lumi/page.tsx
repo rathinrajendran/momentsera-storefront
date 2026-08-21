@@ -214,8 +214,8 @@ function SectionIntro({ number, eyebrow, title, description }: { number: string;
 
 export default function Lumi({ data, eventKey, motionData, settings, theme, music }: LumiProps) {
   const LunaData = useInviteData(data);
-  const { getMotionProps } = useThemeAnimation(motionData);
-  const animationKey = useMemo(() => getAnimationKey(motionData), [motionData]);
+  const { getMotionProps } = useThemeAnimation(design?.motion);
+  const animationKey = useMemo(() => getAnimationKey(design?.motion), [design?.motion]);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [rsvp, setRsvp] = useState<"yes" | "no" | null>(null);
@@ -1229,15 +1229,15 @@ export default function Lumi({ data, eventKey, motionData, settings, theme, musi
 
                 <div className="mt-8">
                   <AudioPlayer
-                    src={music?.background_audio ?? ""}
-                    name={music?.background_audio_name || "Our Wedding Soundtrack"}
+                    src={data?.music?.background_audio ?? ""}
+                    name={data?.music?.background_audio_name || "Our Wedding Soundtrack"}
                     cover={heroImage}
-                    variant={music?.audio_player_variant}
-                    allowMute={music?.allow_mute ?? true}
-                    loop={music?.loop_music ?? true}
-                    fadeIn={music?.fade_in ?? false}
-                    fadeOut={music?.fade_out ?? false}
-                    volume={music?.volume_level ?? 60}
+                    variant={data?.music?.audio_player_variant}
+                    allowMute={data?.music?.allow_mute ?? true}
+                    loop={data?.music?.loop_music ?? true}
+                    fadeIn={data?.music?.fade_in ?? false}
+                    fadeOut={data?.music?.fade_out ?? false}
+                    volume={data?.music?.volume_level ?? 60}
                   />
                 </div>
               </div>

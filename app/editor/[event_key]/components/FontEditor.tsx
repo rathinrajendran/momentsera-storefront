@@ -300,7 +300,7 @@ export default function FontEditor({ eventKey, onBack }: { eventKey: string; onB
   /* ------------------------------------------------------------------------ */
 
   const defaultValues: DesignForm = {
-    ...draft.theme,
+    ...draft.font,
   };
 
   const defaults: Record<
@@ -400,7 +400,7 @@ export default function FontEditor({ eventKey, onBack }: { eventKey: string; onB
   function handleLiveChange<K extends keyof DesignForm>(key: K, value: DesignForm[K]) {
     const latest = form.getValues();
 
-    replaceSection("theme", {
+    replaceSection("font", {
       ...latest,
       [key]: value,
     });
@@ -423,8 +423,8 @@ export default function FontEditor({ eventKey, onBack }: { eventKey: string; onB
   function onSubmit(values: DesignForm) {
     mutation.mutate(
       {
-        path: "theme",
-        stage: "theme",
+        path: "font",
+        stage: "font",
         data: values,
       },
       {
