@@ -551,7 +551,6 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent, 
     [handlePreview, handleShare, handleInviteLink],
   );
 
-
   return (
     <HomeWrapper
       className="relative overflow-hidden"
@@ -589,7 +588,7 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent, 
         </div>
       </motion.div>
 
-      <div className="max-w-8xl mx-auto bg-[#f3f4f6]">
+      <div className="max-w-8xl mx-auto bg-[#f3f4f6] md:mt-[64px]">
         <PreviewToolbar
           inviteUrl={eventKey}
           onInviteUrlChange={handleInviteUrlChange}
@@ -603,7 +602,7 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent, 
         />
         <div
           className={`${
-            showMenuLayer && isMobile ? "mt-0 h-[100dvh]" : "h-[calc(100dvh-0px)] md:h-[calc(100dvh-150px)]"
+            showMenuLayer && isMobile ? "mt-0 h-[100dvh]" : "h-[calc(100dvh-0px)] md:h-[calc(100dvh-115px)]"
           } justify-between overflow-hidden md:flex`}
         >
           <div className="flex">
@@ -794,7 +793,7 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent, 
                   showMenuLayer ? "block" : "hidden md:block"
                 } ${menuHeight} ${
                   splitScreen ? "w-full" : "w-[calc(100%-130px)] sm:w-[calc(100%-180px)]"
-                } menu-layer flex flex-col overflow-auto bg-white md:relative md:h-full md:w-full`}
+                } menu-layer flex flex-col overflow-auto bg-white md:relative md:w-full`}
               >
                 <div className="h-auto w-full overflow-y-auto md:h-[calc(100dvh-115px)] md:bg-white [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]">
                   <EditorPanel

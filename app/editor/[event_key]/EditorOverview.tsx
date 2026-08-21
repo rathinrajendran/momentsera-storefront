@@ -113,14 +113,14 @@ export default function EditorOverview({ activeTab, currentSections = [], onSele
   }, [scrollTop]);
 
   return (
-    <div className="flex h-auto flex-col overflow-x-auto p-5 px-4 md:h-full md:bg-white md:px-6 [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]">
+    <div className="flex h-auto flex-col overflow-x-auto p-5 px-4 md:h-full md:bg-white md:pl-6 md:pr-0 md:pb-0 [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]">
       <div className="mb-5 hidden md:block">
         <h2 className="text-lg font-bold tracking-tight text-zinc-900 capitalize">{activeTab}</h2>
         <p className="text-xs leading-relaxed tracking-wide">
           Everything you need to build, customize, and maintain a beautiful digital invitation.
         </p>
       </div>
-      <div ref={scrollRef} className="h-auto space-y-1 overflow-y-auto md:space-y-1 md:pb-24">
+      <div ref={scrollRef} className="h-auto space-y-1 overflow-y-auto md:space-y-1 md:pb-5">
         {activeTab === "preview" ? (
           <div className="flex h-40 flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-200 p-6 text-center text-sm text-zinc-400">
             <p>Opening live interactive preview overlay...</p>
@@ -206,7 +206,7 @@ function EditorCard({
   return (
     <div
       onClick={onClick}
-      className="cursor-pointer items-center justify-between rounded-lg border border-gray-100 bg-white p-2 transition-all duration-200 hover:border-[#84a59d]/40 md:rounded-xl md:p-3"
+      className="flex cursor-pointer items-center justify-between rounded-lg border border-gray-100 bg-white p-2 transition-all duration-200 hover:border-[#84a59d]/40 md:rounded-xl md:p-3"
     >
       <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-4">
         <div
