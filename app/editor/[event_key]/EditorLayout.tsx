@@ -24,7 +24,6 @@ import {
   Minimize2,
   Maximize2,
   X,
-  Image,
   Droplets,
   Type,
   Shapes,
@@ -42,6 +41,8 @@ import MobileMenu from "./MobileMenu";
 import { ShareDialog } from "./components/publish/ShareDialog";
 import { CustomizeDialog } from "./components/publish/CustomizeDialog";
 import { usePreviewDraft } from "./PreviewDraftContext";
+import logoIcon from "@/assets/images/logo/era.svg";
+import Image from "next/image";
 
 export type EditorSection =
   | "overview"
@@ -64,6 +65,7 @@ export type EditorSection =
   | "settings";
 
 export type DeviceType = "desktop" | "mobile";
+
 export type SectionVisibility = "visible" | "hidden" | "protected";
 
 export type SectionPasswordMode = "inherit" | "custom";
@@ -80,22 +82,18 @@ export type DynamicSection = {
   id: EditorSection;
   title: string;
   desc: string;
-
   icon: React.ReactNode;
   iconBg: string;
   iconColor: string;
-
   visibilityCheck: boolean;
-
   visibilityLabel: "Visible" | "Hidden" | "Protected";
-
   visibilityIcon: React.ReactNode;
-
   visibility: SectionVisibility;
   passwordMode: SectionPasswordMode;
   password: string;
   hint: string;
 };
+
 export type EditorLayoutProps = {
   eventKey: string;
   eventId: number;
@@ -113,7 +111,7 @@ export const sectionTabMetadata = {
       id: "announcement",
       title: "Announcement",
       desc: "Names & greeting",
-      icon: <ScrollText className="h-4 w-4" strokeWidth={1.5} />,
+      icon: <ScrollText className="h-[30px] w-20" strokeWidth={0.5} />,
       iconBg: "bg-rose-50",
       iconColor: "text-rose-500",
     },
@@ -121,7 +119,7 @@ export const sectionTabMetadata = {
       id: "schedule",
       title: "Schedule",
       desc: "Events, venues & timings",
-      icon: <Calendar className="h-4 w-4" strokeWidth={1.5} />,
+      icon: <Calendar className="h-[30px] w-20" strokeWidth={0.5} />,
       iconBg: "bg-sky-50",
       iconColor: "text-sky-500",
     },
@@ -130,7 +128,7 @@ export const sectionTabMetadata = {
       id: "ourStory",
       title: "Our Story",
       desc: "Our journey together",
-      icon: <Heart className="h-4 w-4" strokeWidth={1.5} />,
+      icon: <Heart className="h-[30px] w-20" strokeWidth={0.5} />,
       iconBg: "bg-pink-50",
       iconColor: "text-pink-500",
     },
@@ -138,7 +136,7 @@ export const sectionTabMetadata = {
       id: "timeline",
       title: "Timeline",
       desc: "Sequential itinerary breakdown",
-      icon: <Clock className="h-4 w-4" strokeWidth={1.5} />,
+      icon: <Clock className="h-[30px] w-20" strokeWidth={0.5} />,
       iconBg: "bg-amber-50",
       iconColor: "text-amber-500",
     },
@@ -146,7 +144,7 @@ export const sectionTabMetadata = {
       id: "gallery",
       title: "Gallery",
       desc: "Photos & videos",
-      icon: <Images className="h-4 w-4" strokeWidth={1.5} />,
+      icon: <Images className="h-[30px] w-20" strokeWidth={0.5} />,
       iconBg: "bg-violet-50",
       iconColor: "text-violet-500",
     },
@@ -154,7 +152,7 @@ export const sectionTabMetadata = {
       id: "dressCode",
       title: "Dress Code",
       desc: "Attire rules & color palette",
-      icon: <Shirt className="h-4 w-4" strokeWidth={1.5} />,
+      icon: <Shirt className="h-[30px] w-20" strokeWidth={0.5} />,
       iconBg: "bg-orange-50",
       iconColor: "text-orange-500",
     },
@@ -163,7 +161,7 @@ export const sectionTabMetadata = {
       id: "wishes",
       title: "Wishes",
       desc: "Guest messages & congratulations",
-      icon: <MessagesSquare className="h-4 w-4" strokeWidth={1.5} />,
+      icon: <MessagesSquare className="h-[30px] w-20" strokeWidth={0.5} />,
       iconBg: "bg-indigo-50",
       iconColor: "text-indigo-500",
     },
@@ -171,7 +169,7 @@ export const sectionTabMetadata = {
       id: "rsvp",
       title: "RSVP",
       desc: "Attendance tracking",
-      icon: <CheckCircle className="h-4 w-4" strokeWidth={1.5} />,
+      icon: <CheckCircle className="h-[30px] w-20" strokeWidth={0.5} />,
       iconBg: "bg-emerald-50",
       iconColor: "text-emerald-500",
     },
@@ -180,7 +178,7 @@ export const sectionTabMetadata = {
       id: "music",
       title: "Music",
       desc: "Background audio track",
-      icon: <Music4 className="h-4 w-4" strokeWidth={1.5} />,
+      icon: <Music4 className="h-[30px] w-20" strokeWidth={0.5} />,
       iconBg: "bg-fuchsia-50",
       iconColor: "text-fuchsia-500",
     },
@@ -191,7 +189,7 @@ export const sectionTabMetadata = {
       id: "color",
       title: "Color",
       desc: "Primary & accent colors",
-      icon: <Droplets className="h-4 w-4" strokeWidth={1.5} />,
+      icon: <Droplets className="h-[30px] w-20" strokeWidth={0.5} />,
       iconBg: "bg-cyan-50",
       iconColor: "text-cyan-500",
     },
@@ -199,7 +197,7 @@ export const sectionTabMetadata = {
       id: "font",
       title: "Font",
       desc: "Typography selection",
-      icon: <Type className="h-4 w-4" strokeWidth={1.5} />,
+      icon: <Type className="h-[30px] w-20" strokeWidth={0.5} />,
       iconBg: "bg-indigo-50",
       iconColor: "text-indigo-500",
     },
@@ -207,7 +205,7 @@ export const sectionTabMetadata = {
       id: "shape",
       title: "Shape",
       desc: "Corners & decorative elements",
-      icon: <Shapes className="h-4 w-4" strokeWidth={1.5} />,
+      icon: <Shapes className="h-[30px] w-20" strokeWidth={0.5} />,
       iconBg: "bg-purple-50",
       iconColor: "text-purple-500",
     },
@@ -215,7 +213,7 @@ export const sectionTabMetadata = {
       id: "motionSection",
       title: "Motion",
       desc: "Animations & transitions",
-      icon: <Sparkles className="h-4 w-4" strokeWidth={1.5} />,
+      icon: <Sparkles className="h-[30px] w-20" strokeWidth={0.5} />,
       iconBg: "bg-yellow-50",
       iconColor: "text-yellow-500",
     },
@@ -226,7 +224,7 @@ export const sectionTabMetadata = {
       id: "sharing",
       title: "Sharing",
       desc: "Invite link & QR code",
-      icon: <Share2 className="h-4 w-4" strokeWidth={1.5} />,
+      icon: <Share2 className="h-[30px] w-20" strokeWidth={0.5} />,
       iconBg: "bg-blue-50",
       iconColor: "text-blue-500",
     },
@@ -234,7 +232,7 @@ export const sectionTabMetadata = {
       id: "privacy",
       title: "Privacy",
       desc: "Password & visibility controls",
-      icon: <Lock className="h-4 w-4" strokeWidth={1.5} />,
+      icon: <Lock className="h-[30px] w-20" strokeWidth={0.5} />,
       iconBg: "bg-slate-100",
       iconColor: "text-slate-600",
     },
@@ -242,7 +240,7 @@ export const sectionTabMetadata = {
       id: "print",
       title: "Print",
       desc: "Printable invitation layout",
-      icon: <Printer className="h-4 w-4" strokeWidth={1.5} />,
+      icon: <Printer className="h-[30px] w-20" strokeWidth={0.5} />,
       iconBg: "bg-teal-50",
       iconColor: "text-teal-500",
     },
@@ -250,7 +248,7 @@ export const sectionTabMetadata = {
       id: "settings",
       title: "Settings",
       desc: "Preferences, locale & analytics",
-      icon: <Settings className="h-4 w-4" strokeWidth={1.5} />,
+      icon: <Settings className="h-[30px] w-20" strokeWidth={0.5} />,
       iconBg: "bg-zinc-100",
       iconColor: "text-zinc-600",
     },
@@ -288,18 +286,18 @@ const sideMenuItems = [
   {
     id: "invitation",
     label: "Invitation",
-    icon: <SquareLibrary className="h-5 w-5" strokeWidth={1.75} />,
+    icon: <SquareLibrary className="w-[17px]" strokeWidth={0.6} />,
   },
 
   {
     id: "design",
     label: "Design",
-    icon: <Palette className="h-5 w-5" strokeWidth={1.75} />,
+    icon: <Palette className="w-[17px]" strokeWidth={0.9} />,
   },
   {
     id: "settings",
     label: "Settings",
-    icon: <Settings className="h-5 w-5" strokeWidth={1.75} />,
+    icon: <Settings className="w-[17px]" strokeWidth={0.9} />,
   },
 ] as const;
 
@@ -480,32 +478,31 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent, 
 
       const visibilityIcon: React.ReactNode =
         visibility === "visible" ? (
-          <Eye className="h-3.5 w-3.5 text-emerald-500" strokeWidth={1.75} />
+          <>
+            <Eye className="h-3.5 w-3.5 text-emerald-500" strokeWidth={0.8} /> Visible
+          </>
         ) : visibility === "hidden" ? (
-          <EyeOff className="h-3.5 w-3.5 text-slate-400" strokeWidth={1.75} />
+          <>
+            <EyeOff className="h-3.5 w-3.5 text-slate-400" strokeWidth={0.8} /> Hidden
+          </>
         ) : (
-          <Lock className="h-3.5 w-3.5 text-amber-500" strokeWidth={1.75} />
+          <>
+            <Lock className="h-3.5 w-3.5 text-amber-500" strokeWidth={0.8} /> Locked
+          </>
         );
 
       result.push({
         ...sectionMetadata,
-
         id: sectionId,
-
         // Dynamic visibility state.
         visibility,
-
         // Dynamic password configuration.
         passwordMode: privacySection.passwordMode ?? "inherit",
-
         password: privacySection.password ?? "",
-
         hint: privacySection.hint ?? "",
-
         // Controls whether the visibility button is rendered.
         // It is based on field availability, not visibility state.
         visibilityCheck: hasPasswordConfiguration,
-
         visibilityLabel,
         visibilityIcon,
       });
@@ -532,24 +529,26 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent, 
       {
         id: "preview",
         label: "Preview",
-        icon: <Eye className="h-5 w-5" strokeWidth={1.75} />,
+        icon: <Eye className="w-[17px]" strokeWidth={0.8} />,
         onClick: handlePreview,
       },
       {
         id: "share",
         label: "Share",
-        icon: <Share2 className="h-5 w-5" strokeWidth={1.75} />,
+        icon: <Share2 className="w-[17px]" strokeWidth={0.8} />,
         onClick: handleShare,
       },
       {
         id: "link",
         label: "Invite Link",
-        icon: <Link2 className="h-5 w-5" strokeWidth={1.75} />,
+        icon: <Link2 className="w-[17px]" strokeWidth={0.8} />,
         onClick: handleInviteLink,
       },
     ],
     [handlePreview, handleShare, handleInviteLink],
   );
+
+  console.log(!showMenuLayer, "showMenuLayer");
 
   return (
     <HomeWrapper
@@ -561,7 +560,7 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent, 
         backgroundAttachment: "fixed",
       }}
     >
-      <motion.div
+      {/* <motion.div
         animate={{
           y: showMenuLayer && isMobile ? -70 : 0,
           opacity: showMenuLayer && isMobile ? 0 : 1,
@@ -586,10 +585,13 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent, 
             </div>
           </div>
         </div>
-      </motion.div>
-
-      <div className="max-w-8xl mx-auto bg-[#f3f4f6] md:mt-[64px]">
-        <PreviewToolbar
+      </motion.div> */}
+      {/* edebf6 */}
+      <div className="max-w-8xl mx-auto bg-[#F5F7FA]">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="sdfsdfsdf absolute inset-0 [background-image:linear-gradient(rgba(0,0,0,.7)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,.7)_1px,transparent_1px)] [background-size:80px_80px] opacity-[0.035]" />
+        </div>
+        {/* <PreviewToolbar
           inviteUrl={eventKey}
           onInviteUrlChange={handleInviteUrlChange}
           device={device}
@@ -599,212 +601,237 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent, 
           customizeDialogOpen={customizeDialogOpen}
           onCustomizeDialogOpenChange={setCustomizeDialogOpen}
           className="hidden md:flex"
-        />
+        /> */}
         <div
-          className={`${
-            showMenuLayer && isMobile ? "mt-0 h-[100dvh]" : "h-[calc(100dvh-0px)] md:h-[calc(100dvh-115px)]"
+          className={`showMenuLayer ${
+            showMenuLayer && isMobile ? "mt-0 h-[100dvh]" : "h-[calc(100dvh-0px)] md:h-[calc(100dvh)]"
           } justify-between overflow-hidden md:flex`}
         >
-          <div className="flex">
-            <div className="hidden flex-col overflow-auto bg-white p-4 text-zinc-400 md:flex md:h-full md:w-[80px] lg:w-[80px] [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]">
-              <div className="flex w-full md:justify-center lg:justify-start">
-                <h3 className="text-center text-[0.6rem] font-bold tracking-wide text-black uppercase lg:text-left">Editor</h3>
+          <div className="flex p-3">
+            <div className="hidden flex-col overflow-auto rounded-2xl bg-white text-zinc-400 md:flex md:h-full md:w-[60px] md:p-3 lg:w-[70px] lg:p-4 [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]">
+              <div className="flex justify-center">
+                <Image src={logoIcon} className="w-8" alt="" />
               </div>
+              <div className="flex h-[calc(100%-32px)] flex-col items-center justify-center gap-5">
+                {/* <div className="flex w-full justify-center md:justify-start">
+                  <h3 className="text-center text-[0.6rem] font-bold tracking-wide text-black uppercase lg:text-left">Editor</h3>
+                </div> */}
 
-              <nav className="flex w-full flex-col items-center justify-around">
-                {sideMenuItems.map((item) => {
-                  const isActive = activeTab === item.id;
-
-                  return (
-                    <button
-                      key={item.id}
-                      type="button"
-                      onClick={() => {
-                        setActiveTab(item.id as keyof typeof sectionTabMetadata);
-
-                        setActiveSection("overview");
-
-                        setShowMenuLayer(true);
-                      }}
-                      className={`my-3 flex cursor-pointer items-center gap-1 rounded-md text-[10px] font-medium text-black capitalize transition-all md:w-11 md:justify-center lg:w-full lg:justify-start ${
-                        isActive ? "text-green bg-[#ebf2ef]" : "text-black"
-                      }`}
-                    >
-                      {item.icon}
-
-                      <span className="hidden max-w-full truncate">{item.label}</span>
-                    </button>
-                  );
-                })}
-              </nav>
-
-              <div className="flex w-full pt-4 pb-3 md:justify-center lg:justify-start">
-                <h3 className="text-center text-xs font-bold tracking-wide text-black uppercase lg:text-left">Tools</h3>
-              </div>
-
-              <nav className="flex w-full flex-col items-center justify-around">
-                {ToolsMenuItems.map((item) => {
-                  const isActive = activeTab === item.id;
-
-                  return (
-                    <button
-                      key={item.id}
-                      type="button"
-                      onClick={() => {
-                        setActiveSection("overview");
-                        item.onClick();
-                      }}
-                      className={`flex w-full cursor-pointer items-center gap-1 rounded-md px-3 py-2.5 text-[10px] font-medium text-black capitalize transition-all md:justify-center md:text-[10px] lg:justify-start ${
-                        isActive ? "text-green bg-[#ebf2ef]" : "text-black"
-                      }`}
-                    >
-                      {item.icon}
-
-                      <span className="hidden max-w-full truncate">{item.label}</span>
-                    </button>
-                  );
-                })}
-              </nav>
-            </div>
-          </div>
-          {/* LEFT – LIVE VIEW PREVIEW */}
-          <div
-            className={`w-full ${
-              showMenuLayer ? "h-[45dvh] md:h-[calc(100dvh-115px)]" : "h-[calc(100dvh-0px)] py-0 md:h-[calc(100dvh-115px)] md:py-0"
-            } overflow-hidden`}
-          >
-            <PreviewPanel device={device} splitScreen={showMenuLayer && isMobile} eventKey={eventKey} />
-          </div>
-          <div
-            className={`${isFullscreen ? "fixed top-0 h-full" : ""} mob-view flex w-full flex-col md:w-[320px] md:min-w-[320px] lg:w-[380px] lg:min-w-[380px]`}
-          >
-            {isMobile && !splitScreen ? (
-              <div className="flex h-[50px] items-center justify-between rounded-t-3xl border border-slate-100 bg-white px-4 md:hidden">
-                <div className="flex items-center gap-4">
-                  <h6 className="font-bold">Invite Studio</h6>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-slate-100"
-                    onClick={toggleFullscreen}
-                  >
-                    {isFullscreen ? (
-                      <Minimize2 className="h-5 w-5" strokeWidth={1.5} />
-                    ) : (
-                      <Maximize2 className="h-5 w-5" strokeWidth={1.5} />
-                    )}
-                  </button>
-                  <button
-                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-slate-100"
-                    onClick={() => setShowMenuLayer(false)}
-                  >
-                    <X strokeWidth={1.5} className="h-5 w-5" />
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <></>
-            )}
-            {isMobile && splitScreen ? (
-              <div className="flex h-[50px] items-center justify-between rounded-t-3xl border-b bg-white px-4 md:hidden">
-                <div className="flex items-center gap-4">
-                  <h6 className="font-bold capitalize">{activeSection}</h6>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-slate-100"
-                    onClick={toggleFullscreen}
-                  >
-                    {isFullscreen ? (
-                      <Minimize2 className="h-5 w-5" strokeWidth={1.5} />
-                    ) : (
-                      <Maximize2 className="h-5 w-5" strokeWidth={1.5} />
-                    )}
-                  </button>
-                  <button
-                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-slate-100"
-                    onClick={() => setActiveSection("overview")}
-                  >
-                    <ChevronLeftIcon strokeWidth={1.5} className="h-5 w-5" />
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <></>
-            )}
-            <div className="flex h-full w-full">
-              <div
-                className={`${isFullscreen ? "h-[calc(100dvh-50px)]" : "h-[calc(55dvh-50px)] md:h-auto"} ${
-                  showMenuLayer && !splitScreen ? "block w-[130px] sm:w-[180px]" : "hidden md:block"
-                } mob-160px z-10 flex flex-col overflow-auto border-r border-slate-100 bg-white p-4 text-zinc-400 md:hidden md:h-full [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]`}
-              >
-                <div className="flex w-full justify-start pb-3">
-                  <h3 className="text-left text-xs font-bold tracking-wide text-black uppercase">Editor</h3>
-                </div>
-                <nav className="flex w-full flex-col items-center justify-around">
+                <nav className="flex w-full flex-col items-start justify-start gap-2">
                   {sideMenuItems.map((item) => {
                     const isActive = activeTab === item.id;
+
                     return (
                       <button
                         key={item.id}
+                        type="button"
                         onClick={() => {
                           setActiveTab(item.id as keyof typeof sectionTabMetadata);
                           setActiveSection("overview");
                           setShowMenuLayer(true);
                         }}
-                        className={`flex w-full cursor-pointer items-center gap-1 rounded-md px-3 py-2.5 text-[10px] font-medium text-black capitalize transition-all md:justify-start md:text-[10px] ${
+                        className={`flex cursor-pointer items-center justify-center gap-1 rounded-md p-2 text-[10px] font-medium text-black capitalize transition-all md:w-full ${
                           isActive ? "text-green bg-[#ebf2ef]" : "text-black"
                         }`}
                       >
                         {item.icon}
-                        <span className="max-w-full truncate">{item.label}</span>
+                        <span className="hidden">{item.label}</span>
                       </button>
                     );
                   })}
                 </nav>
-                <div className="flex w-full justify-start pt-4 pb-3">
-                  <h3 className="text-left text-xs font-bold tracking-wide text-black uppercase">Tools</h3>
-                </div>
+                {/* <div className="mt-4 flex w-full justify-center">
+                  <h3 className="text-center text-[0.6rem] font-bold tracking-wide text-black uppercase lg:text-left">Tools</h3>
+                </div> */}
+                <div className="relative h-1.5 w-1.5 rounded-full border border-slate-400 bg-white"></div>
                 <nav className="flex w-full flex-col items-center justify-around">
                   {ToolsMenuItems.map((item) => {
                     const isActive = activeTab === item.id;
+
                     return (
                       <button
                         key={item.id}
+                        type="button"
                         onClick={() => {
                           setActiveSection("overview");
                           item.onClick();
                         }}
-                        className={`flex w-full cursor-pointer items-center gap-1 rounded-md px-3 py-2.5 text-[10px] font-medium text-black capitalize transition-all md:justify-start md:text-[10px] ${
+                        className={`flex cursor-pointer items-center justify-center gap-1 rounded-md p-2 text-[10px] font-medium text-black capitalize transition-all md:w-full ${
                           isActive ? "text-green bg-[#ebf2ef]" : "text-black"
                         }`}
                       >
                         {item.icon}
-                        <span className="max-w-full truncate">{item.label}</span>
+
+                        <span className="hidden">{item.label}</span>
                       </button>
                     );
                   })}
                 </nav>
               </div>
+            </div>
+          </div>
+          {/* LEFT – LIVE VIEW PREVIEW */}
+          <div
+            className={`relative w-full ${
+              showMenuLayer ? "h-[45dvh] md:h-[calc(100dvh)]" : "h-[calc(100dvh-0px)] py-0 pb-[72px] md:h-[calc(100dvh)] md:py-0 md:pb-0"
+            } overflow-hidden`}
+          >
+            <PreviewPanel device={device} splitScreen={showMenuLayer && isMobile} eventKey={eventKey} />
 
-              {/* RIGHT Persistent Workspace Panel Wrapper Container */}
-              <div
-                className={`${isFullscreen ? "h-[calc(100dvh-50px)]" : "h-[calc(55dvh-50px)] md:h-auto"} ${
-                  showMenuLayer ? "block" : "hidden md:block"
-                } ${menuHeight} ${
-                  splitScreen ? "w-full" : "w-[calc(100%-130px)] sm:w-[calc(100%-180px)]"
-                } menu-layer flex flex-col overflow-auto bg-white md:relative md:w-full`}
-              >
-                <div className="h-auto w-full overflow-y-auto md:h-[calc(100dvh-115px)] md:bg-white [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]">
-                  <EditorPanel
-                    activeSection={activeSection}
-                    onSectionChange={setActiveSection}
-                    eventKey={eventKey}
-                    overviewScrollTop={overviewScrollTop}
-                    onOverviewScrollChange={setOverviewScrollTop}
-                    activeTab={activeTab}
-                    currentSections={currentSections}
-                  />
+            <PreviewToolbar
+              inviteUrl={eventKey}
+              onInviteUrlChange={handleInviteUrlChange}
+              device={device}
+              onDeviceChange={setDevice}
+              shareDialogOpen={shareDialogOpen}
+              onShareDialogOpenChange={setShareDialogOpen}
+              customizeDialogOpen={customizeDialogOpen}
+              onCustomizeDialogOpenChange={setCustomizeDialogOpen}
+              className="hidden md:flex"
+            />
+          </div>
+          <div
+            className={`${isFullscreen ? "fixed top-0 left-0 h-full rounded-none" : ""} mob-view flex w-full flex-col justify-center overflow-hidden p-3 md:w-[350px] md:max-w-[350px] md:min-w-[350px] md:p-0 lg:w-[380px] lg:max-w-[380px] lg:min-w-[380px]`}
+          >
+            <div className="rounded-2xl bg-white md:rounded-none md:bg-transparent">
+              {isMobile && showMenuLayer && !splitScreen ? (
+                <div className="flex h-[45px] items-center justify-between rounded-none border-b border-slate-100 px-4 md:hidden md:rounded-t-3xl md:border">
+                  <div className="flex items-center gap-4">
+                    <h6 className="font-bold">Invite Studio</h6>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-slate-100"
+                      onClick={toggleFullscreen}
+                    >
+                      {isFullscreen ? (
+                        <Minimize2 className="h-5 w-5" strokeWidth={1.5} />
+                      ) : (
+                        <Maximize2 className="h-5 w-5" strokeWidth={1.5} />
+                      )}
+                    </button>
+                    <button
+                      className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-slate-100"
+                      onClick={() => {
+                        setShowMenuLayer(false);
+                        setIsFullscreen(false);
+                      }}
+                    >
+                      <X strokeWidth={1.5} className="h-5 w-5" />
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <></>
+              )}
+              {isMobile && splitScreen ? (
+                <div className="flex h-[45px] items-center justify-between rounded-t-3xl border-b px-4 md:hidden">
+                  <div className="flex items-center gap-4">
+                    <h6 className="font-bold capitalize">{activeSection}</h6>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-slate-100"
+                      onClick={toggleFullscreen}
+                    >
+                      {isFullscreen ? (
+                        <Minimize2 className="h-5 w-5" strokeWidth={1.5} />
+                      ) : (
+                        <Maximize2 className="h-5 w-5" strokeWidth={1.5} />
+                      )}
+                    </button>
+                    <button
+                      className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border border-slate-100"
+                      onClick={() => setActiveSection("overview")}
+                    >
+                      <ChevronLeftIcon strokeWidth={1.5} className="h-5 w-5" />
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <></>
+              )}
+              <div className="flex h-full w-full p-0 md:pr-3">
+                <div
+                  className={`${isFullscreen ? "h-[calc(100dvh-50px)]" : "h-[calc(55dvh-62px)] md:h-auto"} ${
+                    showMenuLayer && !splitScreen ? "block w-[60px] sm:w-[70px]" : "hidden md:block"
+                  } mob-160px z-10 flex flex-col overflow-auto border-r border-slate-100 p-2 text-zinc-400 md:hidden md:h-full md:p-4 [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]`}
+                >
+                  <div className="flex justify-center">
+                    <Image src={logoIcon} width={25} alt="" />
+                  </div>
+                  <div className="flex h-[calc(100%-25px)] flex-col items-center justify-center gap-2">
+                    {/* <div className="flex w-full justify-start pb-3">
+                    <h3 className="text-left text-[10px] font-bold tracking-wide text-black uppercase md:text-xs">Editor</h3>
+                  </div> */}
+                    <nav className="flex w-full flex-col items-center justify-around">
+                      {sideMenuItems.map((item) => {
+                        const isActive = activeTab === item.id;
+                        return (
+                          <button
+                            key={item.id}
+                            onClick={() => {
+                              setActiveTab(item.id as keyof typeof sectionTabMetadata);
+                              setActiveSection("overview");
+                              setShowMenuLayer(true);
+                            }}
+                            className={`flex w-full cursor-pointer items-center gap-1 rounded-md px-2 py-2.5 text-[10px] font-medium text-black capitalize transition-all md:justify-start md:px-3 md:text-[10px] ${
+                              isActive ? "text-green bg-[#ebf2ef]" : "text-black"
+                            }`}
+                          >
+                            {item.icon}
+                            <span className="hidden">{item.label}</span>
+                          </button>
+                        );
+                      })}
+                    </nav>
+                    {/* <div className="flex w-full justify-start pt-4 pb-3">
+                    <h3 className="text-left text-[10px] font-bold tracking-wide text-black uppercase md:text-xs">Tools</h3>
+                  </div> */}
+                    <div className="relative h-1.5 w-1.5 rounded-full border border-slate-400 bg-white"></div>
+                    <nav className="flex w-full flex-col items-center justify-around">
+                      {ToolsMenuItems.map((item) => {
+                        const isActive = activeTab === item.id;
+                        return (
+                          <button
+                            key={item.id}
+                            onClick={() => {
+                              setActiveSection("overview");
+                              item.onClick();
+                            }}
+                            className={`flex w-full cursor-pointer items-center gap-1 rounded-md px-2 py-2.5 text-[10px] font-medium text-black capitalize transition-all md:justify-start md:px-3 md:text-[10px] ${
+                              isActive ? "text-green bg-[#ebf2ef]" : "text-black"
+                            }`}
+                          >
+                            {item.icon}
+                            <span className="hidden max-w-full truncate sm:block">{item.label}</span>
+                          </button>
+                        );
+                      })}
+                    </nav>
+                  </div>
+                </div>
+
+                {/* RIGHT Persistent Workspace Panel Wrapper Container */}
+                <div
+                  className={`${isFullscreen ? "h-[calc(100dvh-50px)]" : "h-[calc(55dvh-62px)] md:h-auto"} ${
+                    showMenuLayer ? "block" : "hidden md:block"
+                  } ${menuHeight} ${
+                    splitScreen ? "w-full" : "w-full"
+                  } menu-layer flex flex-col overflow-hidden rounded-2xl bg-[#ffffff] md:relative md:w-full`}
+                >
+                  <div className="h-auto w-full overflow-y-auto md:h-[calc(100dvh-25px)] [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]">
+                    <EditorPanel
+                      activeSection={activeSection}
+                      onSectionChange={setActiveSection}
+                      eventKey={eventKey}
+                      onHandleChangeBack={setActiveSection}
+                      overviewScrollTop={overviewScrollTop}
+                      onOverviewScrollChange={setOverviewScrollTop}
+                      activeTab={activeTab}
+                      currentSections={currentSections}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -821,7 +848,7 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent, 
           duration: 0.25,
           ease: "easeInOut",
         }}
-        className="fixed inset-x-0 bottom-0 z-50 md:hidden"
+        className="fixed inset-x-0 right-0 bottom-0 left-0 z-50 md:hidden"
       >
         <MobileMenu
           showMenuLayer={showMenuLayer}
@@ -835,7 +862,6 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent, 
           className=""
         />
       </motion.div>
-
       {/* Single Dialog Instances Controlled by layout-level state */}
       <CustomizeDialog
         open={customizeDialogOpen}

@@ -360,14 +360,14 @@ export default function Home() {
 
                 <p className="mt-5 text-[8px] tracking-[0.28em] text-[#211D20]/25 uppercase">Collection / {activeSlide.number}</p>
 
-                <h1 className="mt-3 text-[clamp(3.25rem,15vw,5.8rem)] leading-[0.76] font-black tracking-[-0.085em] sm:text-[clamp(4rem,10vw,7rem)] md:text-[clamp(4rem,9vw,9rem)]">
+                <h1 className="mt-3 text-[clamp(3rem,5vw,4rem)] leading-[0.76] font-black tracking-[-0.085em] sm:text-[clamp(4rem,10vw,7rem)] md:text-[clamp(4rem,5vw,10rem)]">
                   <span className="block">{activeSlide.title}</span>
                   <span className="mt-1 block [font-family:var(--font-windsong)] text-[0.66em] font-light tracking-[-0.025em] text-[#211D20]/60">
                     {activeSlide.accent}
                   </span>
                 </h1>
 
-                <p className="mt-5 max-w-[350px] text-[13px] leading-5 text-[#211D20]/45 sm:mt-7 sm:text-sm sm:leading-6">
+                <p className="mt-5 max-w-[350px] text-[13px] leading-5 text-[#000000]/45 sm:mt-7 sm:text-sm sm:leading-6">
                   {activeSlide.description}
                 </p>
 
@@ -515,7 +515,7 @@ export default function Home() {
               </h2>
             </div>
 
-            <p className="max-w-[720px] text-lg leading-8 text-[#211D20]/50 sm:text-xl md:text-2xl md:leading-9">
+            <p className="max-w-[720px] text-[1rem]">
               Every invitation is shaped around your event — the people, places, timings, memories and moments your guests should
               experience.
             </p>
@@ -596,7 +596,7 @@ export default function Home() {
 
                   <h3 className="text-2xl font-black tracking-[-0.055em] sm:text-3xl">{item.title}</h3>
 
-                  <p className="mt-3 max-w-[260px] text-xs leading-5 text-[#211D20]/45 group-hover:text-white/55">{item.description}</p>
+                  <p className="mt-3 max-w-[260px] text-[1rem]">{item.description}</p>
                 </div>
               </motion.button>
             ))}
@@ -735,7 +735,7 @@ export default function Home() {
               <span className="[font-family:var(--font-windsong)] font-light tracking-normal text-[#211D20]/40">the occasion.</span>
             </h2>
 
-            <p className="mt-5 max-w-[390px] text-[13px] leading-5 text-[#211D20]/45 sm:text-sm sm:leading-6 md:mt-7">
+            <p className="mt-5 max-w-[390px] text-[1rem]">
               Choose only the details your celebration needs — from music and memories to schedules, countdowns, wishes and private
               information.
             </p>

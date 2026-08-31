@@ -58,7 +58,7 @@ function AuthCallbackContent() {
 
           sessionStorage.removeItem("pending_event");
 
-          const expired = Date.now() - invite.created_at > 30 * 60 * 1000;
+          const expired = Date.now() - invite.created_at > 60 * 60 * 1000;
 
           if (!expired && invite.invite_key && invite.event_type) {
             router.replace(`/invites/${invite.event_type}/${invite.invite_key}/onboarding`);

@@ -480,3 +480,36 @@ textarea:focus {
 .command-block .command-input {
   padding: 0 0 0 40px !important;
 }
+
+.theme-bg-gray {
+  background-color: #F7F7FA;
+}
+
+.theme-bg-soft {
+  background-color: #F0EBFF;
+  border: 1px solid #D8CCFF;
+}
+
+.theme-text-accent {
+  color: #6847E8;
+}
+
+.theme-border {
+  border-color: #E6E7EC;
+}
+
+.theme-border-hover {
+  border-color: #C9CDD6;
+}
+
+.theme-text-primary {
+  color: #171A24;
+}
+
+.theme-text-secondary {
+  color: #697386;
+}
+
+.theme-text-muted {
+  color: #98A1B2;
+}

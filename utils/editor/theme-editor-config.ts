@@ -105,7 +105,7 @@ export const THEME_EDITOR_CONFIG: ThemeEditorRegistry = {
           media: [
             media("main", {
               type: "image",
-              label: "Couple Image 00000",
+              label: "Couple Image",
               description: "Upload a portrait photograph of the couple for the Nuvo announcement.",
               descriptionKey: "media.main.description",
               descriptionLabel: "Image Description",
@@ -189,7 +189,7 @@ export const THEME_EDITOR_CONFIG: ThemeEditorRegistry = {
           media: [
             media("main", {
               type: "image",
-              label: "Couple Image 00000",
+              label: "Couple Image",
               description: "Upload a portrait photograph of the couple for the Nuvo announcement.",
               descriptionKey: "media.main.description",
               descriptionLabel: "Image Description",

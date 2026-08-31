@@ -6,7 +6,7 @@ interface Props {
 export function LabelForm({ children, className }: Props) {
   return (
     <label
-      className={`text-[0.7rem] capitalize font-normal tracking-normal text-slate-900 data-[error=true]:text-destructive ${className}`}
+      className={`text-[0.65rem] capitalize font-medium tracking-normal text-slate-700 data-[error=true]:text-destructive ${className}`}
     >
       {children}
     </label>

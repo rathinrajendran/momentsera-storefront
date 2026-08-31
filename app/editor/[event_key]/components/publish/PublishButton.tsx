@@ -7,22 +7,19 @@ import { Rocket } from "lucide-react";
 
 type Props = {
   className?: string;
+  label?: boolean;
   type?: "mobile" | "web";
   onClick?: () => void;
 };
 
-export function PublishButton({ className, type, onClick }: Props) {
+export function PublishButton({ className, type, onClick, label }: Props) {
   const router = useRouter();
 
   const { draft } = usePreviewDraft();
   const { invite } = draft;
 
   const buttonLabel =
-    invite.payment_status !== PaymentStatus.PAID
-      ? "Publish"
-      : invite.status === InviteStatus.DRAFT
-        ? "Publish"
-        : "Update";
+    invite.payment_status !== PaymentStatus.PAID ? "Publish" : invite.status === InviteStatus.DRAFT ? "Publish" : "Update";
 
   const handleClick = () => {
     if (invite.payment_status !== PaymentStatus.PAID) {
@@ -54,19 +51,9 @@ export function PublishButton({ className, type, onClick }: Props) {
   }
 
   return (
-    <button
-      type="button"
-      onClick={clickHandler}
-      className={`flex h-auto w-auto cursor-pointer items-center gap-2 rounded-md bg-black px-3 py-2 text-[0.6rem] font-bold tracking-widest text-white uppercase transition-all hover:bg-slate-800 md:h-9 md:w-auto ${className}`}
-    >
-      <Rocket
-        className="h-5 w-5"
-        width={15}
-        strokeWidth={1.5}
-        fill="#000000"
-        stroke="#ffffff"
-      />
-      {buttonLabel}
+    <button type="button" onClick={clickHandler} className={`flex h-9 items-center justify-center gap-2 ${className}`}>
+      {label ? buttonLabel : ""}
+      <Rocket className="w-[15px]" strokeWidth={1.3} stroke="#ffffff" />
     </button>
   );
 }

@@ -13,7 +13,7 @@ type Props = {
 export default function PreviewPanel({ device, splitScreen, eventKey }: Props) {
   const previewUrl = useMemo(() => `/preview/${eventKey}`, [eventKey]);
   return (
-    <div className="flex h-full flex-col rounded-[1rem]">       
+    <div className="flex h-full flex-col rounded-[1rem] pb-[45px]">       
       <PreviewFrame previewUrl={previewUrl} device={device} splitScreen={splitScreen} />
     </div>
   );

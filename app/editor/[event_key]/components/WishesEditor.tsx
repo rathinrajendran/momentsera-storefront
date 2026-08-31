@@ -1,14 +1,13 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { Type, Mic, Video, X, Save } from "lucide-react";
+import { Type, Mic, Video, ChevronLeft, ChevronRight } from "lucide-react";
 import { usePreviewDraft } from "../PreviewDraftContext";
 import { useSaveEventSection } from "../../../../hooks/useEvents";
 import { cn } from "../../../../utils/utils";
 import { Checkbox } from "../../../../components/ui/checkbox";
 import { Input } from "../../../../components/ui/input";
 import { Slider } from "../../../../components/ui/Slider";
-import { Button } from "../../../../components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../../../../components/ui/form";
 import { HorizontalScroll } from "../../../../components/ui/HorizontalScroll";
 import { LabelForm, SubLabelForm } from "../../../../components/ui/LabelForm";
@@ -58,7 +57,7 @@ const WISH_OPTIONS = [
 
 /* ---------------- COMPONENT ---------------- */
 
-export default function WishesEditor({ onBack, eventKey }: { onBack: () => void; eventKey: string }) {
+export default function WishesEditor({ onBack, handleBack, eventKey }: { onBack: () => void; handleBack: () => void; eventKey: string }) {
   // Hooks
   const { draft, updateSection, resetDraft, refreshEvent } = usePreviewDraft();
   const wishes = draft.wishes ?? {};
@@ -131,126 +130,122 @@ export default function WishesEditor({ onBack, eventKey }: { onBack: () => void;
 
   return (
     <div className="animate-in fade-in flex h-full flex-col rounded-lg duration-500 md:rounded-none">
-      <EditorHeader title="Wishes" handleCancel={handleCancel} />
+      <EditorHeader title="Wishes" handleBack={handleBack} />
 
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-1 flex-col justify-between space-y-5 p-5 pb-0 md:min-h-[calc(100dvh-115px)] md:rounded-none [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-[2px] [&::-webkit-scrollbar-thumb]:rounded-[10px] [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-[#78909C]"
-        >
-          <section className="space-y-6 [&>*:last-child]:mb-6">
-            {/* Title Input */}
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem className="transition-all duration-300">
-                  <FormLabel>Title</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="Send Your Wishes"
-                      onChange={(e) => {
-                        field.onChange(e);
-                        handleLiveChange({ title: e.target.value });
-                      }}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-
-            {/* Type Selection Grid */}
-            <FormItem className="transition-all duration-300">
-              <FormLabel>Wishes Types</FormLabel>
-              <HorizontalScroll>
-                {WISH_OPTIONS.map((option) => {
-                  const isChecked = selectedTypes.includes(option.id);
-                  const Icon = option.icon;
-                  return (
-                    <FormLabel
-                      key={option.id}
-                      className={cn(
-                        "relative shrink-0 cursor-pointer rounded-md border px-3 py-3 capitalize transition-all duration-300 md:h-24",
-                        isChecked ? "border-slate-900 bg-slate-900 text-white shadow-lg shadow-slate-200" : "border-slate-200 bg-white",
-                      )}
-                    >
-                      <div className="flex h-full flex-col justify-between">
-                        <div>
-                          <Icon className="h-5 md:h-5" strokeWidth={1} />
-                          <Checkbox checked={isChecked} onCheckedChange={() => toggleType(option.id)} className="hidden" />
-                        </div>
-                        <div className="flex flex-col space-y-1">
-                          <LabelForm className={cn("text-sm font-medium", isChecked ? "text-white" : "")}>{option.label}</LabelForm>
-                          <SubLabelForm>{option.description}</SubLabelForm>
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          toggleType(option.id);
-                        }}
-                        className="absolute inset-0 cursor-pointer"
-                      />
-                    </FormLabel>
-                  );
-                })}
-              </HorizontalScroll>
-            </FormItem>
-
-            {/* Limits Sliders */}
-            {selectedTypes.map((type) => (
-              <div key={type} className="grid gap-2 rounded-md border border-slate-200 p-4">
-                <div className="flex items-center justify-between">
-                  <LabelForm className="capitalize">{type} Wishes Limit</LabelForm>
-                  <LabelForm>{limits[type]}</LabelForm>
-                </div>
-
-                <Slider
-                  min={1}
-                  max={100}
-                  step={1}
-                  value={[limits[type]]}
-                  onValueChange={([value]) => {
-                    const next = {
-                      ...limits,
-                      [type]: value,
-                    };
-
-                    form.setValue("limits", next, {
-                      shouldDirty: true,
-                      shouldValidate: true,
-                    });
-
-                    handleLiveChange({
-                      limits: next,
-                    });
-                  }}
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="overflow-auto p-5 md:h-[calc(100dvh-125px)] md:min-h-[calc(100dvh-125px)] md:rounded-none [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-[2px] [&::-webkit-scrollbar-thumb]:rounded-[10px] [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-slate-100">
+            <section>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-1">
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col gap-1">
+                      <FormLabel>Title</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder="Send Your Wishes"
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleLiveChange({ title: e.target.value });
+                          }}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
                 />
-              </div>
-            ))}
-          </section>
+                <FormItem className="flex flex-col gap-1">
+                  <FormLabel>Wishes Types</FormLabel>
+                  <HorizontalScroll>
+                    {WISH_OPTIONS.map((option) => {
+                      const isChecked = selectedTypes.includes(option.id);
+                      const Icon = option.icon;
+                      return (
+                        <FormLabel
+                          key={option.id}
+                          className={cn(
+                            "relative shrink-0 cursor-pointer rounded-md border px-3 py-3 capitalize transition-all duration-300 md:h-24",
+                            isChecked ? "border-slate-900 bg-slate-900 text-white shadow-lg shadow-slate-200" : "border-slate-200 bg-white",
+                          )}
+                        >
+                          <div className="flex h-full flex-col justify-between">
+                            <div>
+                              <Icon className="h-5 md:h-5" strokeWidth={1} />
+                              <Checkbox checked={isChecked} onCheckedChange={() => toggleType(option.id)} className="hidden" />
+                            </div>
+                            <div className="flex flex-col space-y-1">
+                              <LabelForm className={cn("text-sm font-medium", isChecked ? "text-white" : "")}>{option.label}</LabelForm>
+                              <SubLabelForm>{option.description}</SubLabelForm>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              toggleType(option.id);
+                            }}
+                            className="absolute inset-0 cursor-pointer"
+                          />
+                        </FormLabel>
+                      );
+                    })}
+                  </HorizontalScroll>
+                </FormItem>
+                {selectedTypes.map((type) => (
+                  <div key={type} className="flex flex-col gap-1">
+                    <div className="flex items-center justify-between">
+                      <LabelForm className="capitalize">{type} Wishes Limit</LabelForm>
+                      <LabelForm>{limits[type]}</LabelForm>
+                    </div>
 
-          {/* Sticky Actions Footer */}
-          <div className="sticky bottom-0 z-[99] -m-5 flex h-14 items-center justify-end gap-3 border-slate-100 bg-white/90 px-5 md:border-t md:backdrop-blur-md">
-            <Button
+                    <div className="h-[40px] flex items-center">
+                      <Slider
+                        min={1}
+                        max={100}
+                        step={1}
+                        value={[limits[type]]}
+                        onValueChange={([value]) => {
+                          const next = {
+                            ...limits,
+                            [type]: value,
+                          };
+
+                          form.setValue("limits", next, {
+                            shouldDirty: true,
+                            shouldValidate: true,
+                          });
+
+                          handleLiveChange({
+                            limits: next,
+                          });
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </div>
+
+          <div className="relative flex h-[50px] items-center justify-between gap-3 border-t border-slate-100 bg-white px-5 py-2">
+            <button
               type="button"
-              variant="ghost"
               onClick={handleCancel}
-              className="text-xs font-semibold text-slate-400 transition-colors hover:text-slate-900"
+              className="font-regular inline-flex h-full min-h-[34px] w-auto cursor-pointer items-center justify-between gap-3 rounded-md bg-gray-100 pr-4 pl-3 text-xs text-black/70 transition-all hover:bg-gray-200"
             >
-              <X strokeWidth={1} size={14} />
-              <span>Discard</span>
-            </Button>
-            <Button
+              <ChevronLeft strokeWidth={1.5} size={14} />
+              <span>Previous</span>
+            </button>
+            <button
               type="submit"
               disabled={mutation.isPending}
-              className="h-8 rounded-md bg-slate-900 px-10 py-2 text-xs text-white shadow-slate-200 transition-all hover:bg-slate-800 active:scale-95 disabled:opacity-50"
+              className="font-regular inline-flex h-full min-h-[34px] w-auto cursor-pointer items-center justify-between gap-3 rounded-md bg-slate-800 pr-3 pl-4 text-xs text-white/90 transition-all hover:bg-slate-900"
             >
-              <Save strokeWidth={1} />
-              <span>{mutation.isPending ? "Updating..." : "Save"}</span>
-            </Button>
+              {mutation.isPending ? "Updating..." : "Next"}
+              <ChevronRight strokeWidth={1.5} size={14} />
+            </button>
           </div>
         </form>
       </Form>

@@ -54,8 +54,8 @@ export default function MobileMenu({
   ];
 
   return (
-    <div className={`${className} fixed right-0 bottom-0 left-0 z-20 flex px-3 pb-3`}>
-      <nav className="flex h-[60px] w-full items-center justify-around rounded-t-3xl rounded-b-2xl bg-white px-2">
+    <div className={`${className} flex px-3 pb-3`}>
+      <nav className="flex h-[60px] w-full items-center justify-around rounded-xl bg-white px-2">
         {ToolsMenuItems.map((item) => {
           if (item.id === "publish") {
             return (

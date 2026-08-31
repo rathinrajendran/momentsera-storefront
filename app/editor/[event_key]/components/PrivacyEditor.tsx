@@ -59,7 +59,7 @@ const PROTECTED_SECTIONS: ProtectedSection[] = [
   { id: "rsvp", label: "RSVP", allowPassword: true },
 ];
 
-export default function PrivacyEditor({ onBack, eventKey }: { onBack: () => void; eventKey: string }) {
+export default function PrivacyEditor({ onBack, handleBack, eventKey }: { onBack: () => void; handleBack: () => void; eventKey: string }) {
   const { draft, updateSection, resetDraft, refreshEvent } = usePreviewDraft();
   const settings = draft.settings ?? {};
   const eventId = draft.invite.id;
@@ -193,150 +193,150 @@ export default function PrivacyEditor({ onBack, eventKey }: { onBack: () => void
 
   return (
     <div className="animate-in fade-in flex h-full flex-col rounded-lg duration-500 md:rounded-none">
-      <EditorHeader title="Privacy" handleCancel={handleCancel} />
+      <EditorHeader title="Privacy" handleBack={handleBack} />
 
       <FormProvider {...methods}>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-1 flex-col justify-between space-y-6 p-5 pb-0 md:min-h-[calc(100dvh-115px)] md:rounded-none [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-[2px] [&::-webkit-scrollbar-thumb]:rounded-[10px] [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-[#78909C]"
         >
-          <section className="space-y-6 [&>*:last-child]:mb-6">
-            {/* Access Scope Options */}
-            <div className="space-y-2">
-              {/* <SectionHeader icon={Globe} label="Invitation Access Scope" /> */}
-              <HorizontalScroll>
-                <div className="-mx-1 flex gap-3 px-1 pb-2">
-                  {[
-                    { id: "public", label: "Public Link", description: "Anyone with the link can access", icon: Globe },
-                    { id: "protected", label: "Password Gated", description: "Guests must enter a pass code", icon: LockKeyhole },
-                  ].map((opt) => {
-                    const Icon = opt.icon;
-                    const isSelected = globalPrivacy === opt.id;
-                    return (
-                      <button
-                        key={opt.id}
-                        type="button"
-                        onClick={() => {
-                          setValue("privacy", opt.id as "public" | "protected");
-                          handleLiveChange({ privacy: opt.id as "public" | "protected" });
-                        }}
-                        className={cn(
-                          "flex h-24 w-40 shrink-0 touch-manipulation flex-col justify-between rounded-xl border p-4 text-left transition-all active:scale-98 sm:w-44",
-                          isSelected
-                            ? "border-slate-900 bg-slate-900 text-white shadow-md shadow-slate-200"
-                            : "border-slate-200 bg-slate-50/50 text-slate-700 hover:border-slate-300 hover:bg-white",
-                        )}
-                      >
-                        <Icon size={16} strokeWidth={1.5} className={isSelected ? "text-white" : "text-slate-500"} />
-                        <div className="space-y-0.5">
-                          <p className="truncate text-xs font-semibold">{opt.label}</p>
-                          <p className={cn("line-clamp-2 text-[10px] leading-normal", isSelected ? "text-slate-300" : "text-slate-400")}>
-                            {opt.description}
-                          </p>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              </HorizontalScroll>
-            </div>
+          <section>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-1">
+              {/* Access Scope Options */}
+              <div className="flex flex-col gap-1">
+                {/* <SectionHeader icon={Globe} label="Invitation Access Scope" /> */}
+                <FormLabel>Privacy Type</FormLabel>
+                <HorizontalScroll>
+                  <div className="-mx-1 flex gap-3 px-1 pb-2">
+                    {[
+                      { id: "public", label: "Public Link", description: "Anyone with the link can access", icon: Globe },
+                      { id: "protected", label: "Password Gated", description: "Guests must enter a pass code", icon: LockKeyhole },
+                    ].map((opt) => {
+                      const Icon = opt.icon;
+                      const isSelected = globalPrivacy === opt.id;
+                      return (
+                        <button
+                          key={opt.id}
+                          type="button"
+                          onClick={() => {
+                            setValue("privacy", opt.id as "public" | "protected");
+                            handleLiveChange({ privacy: opt.id as "public" | "protected" });
+                          }}
+                          className={cn(
+                            "flex h-24 w-40 shrink-0 touch-manipulation flex-col justify-between rounded-xl border p-4 text-left transition-all active:scale-98 sm:w-44",
+                            isSelected
+                              ? "border-slate-900 bg-slate-900 text-white shadow-md shadow-slate-200"
+                              : "border-slate-200 bg-slate-50/50 text-slate-700 hover:border-slate-300 hover:bg-white",
+                          )}
+                        >
+                          <Icon size={16} strokeWidth={1.5} className={isSelected ? "text-white" : "text-slate-500"} />
+                          <div className="space-y-0.5">
+                            <p className="truncate text-xs font-semibold">{opt.label}</p>
+                            <p className={cn("line-clamp-2 text-[10px] leading-normal", isSelected ? "text-slate-300" : "text-slate-400")}>
+                              {opt.description}
+                            </p>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </HorizontalScroll>
+              </div>
 
-            {/* Passcode Input Field */}
-            {globalPrivacy === "protected" && (
-              <div className="animate-in slide-in-from-top-2 space-y-2 rounded-xl border border-slate-100 bg-slate-50/30 p-4 duration-200">
-                <div className="flex items-center justify-between gap-2">
-                  <FormLabel className="truncate text-[11px] font-medium text-slate-700">Invitation Passcode</FormLabel>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const pass = generatePassword();
-                      setValue("password", pass);
-                      handleLiveChange({ password: pass });
+              {/* Passcode Input Field */}
+              {globalPrivacy === "protected" && (
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <FormLabel>Invitation Passcode</FormLabel>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const pass = generatePassword();
+                        setValue("password", pass);
+                        handleLiveChange({ password: pass });
+                      }}
+                      className="font-regular inline-flex shrink-0 touch-manipulation items-center gap-1 text-[0.7rem] tracking-normal text-slate-700 capitalize hover:text-slate-900"
+                    >
+                      <RefreshCw size={10} /> Generate
+                    </button>
+                  </div>
+                  <Input
+                    type="text"
+                    maxLength={6}
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    placeholder="6 digit numeric key"
+                    className="h-9 font-mono text-base tracking-widest focus:border-slate-400 focus:ring-0 sm:text-sm"
+                    value={globalPassword}
+                    onChange={(e) => {
+                      const clean = sanitizePassword(e.target.value);
+                      setValue("password", clean);
+                      handleLiveChange({ password: clean });
                     }}
-                    className="inline-flex shrink-0 touch-manipulation items-center gap-1 text-[11px] font-medium text-slate-500 hover:text-slate-900"
-                  >
-                    <RefreshCw size={10} /> Generate
-                  </button>
+                  />
+                  {globalPassword.length > 0 && !globalPasswordValid && (
+                    <p className="text-[10px] font-medium text-red-500">Passcode must equal exactly 6 numeric characters.</p>
+                  )}
                 </div>
-                <Input
-                  type="text"
-                  maxLength={6}
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  placeholder="6 digit numeric key"
-                  className="h-9 font-mono text-base tracking-widest focus:border-slate-400 focus:ring-0 sm:text-sm"
-                  value={globalPassword}
-                  onChange={(e) => {
-                    const clean = sanitizePassword(e.target.value);
-                    setValue("password", clean);
-                    handleLiveChange({ password: clean });
+              )}
+              {/* Advanced Permission Rules Switch */}
+              <div className="flex items-center justify-between space-x-4">
+                <div className="max-w-[calc(100%-60px)] space-y-0.5">
+                  <FormLabel className="text-[12px] font-medium text-slate-800">Advanced Section Controls</FormLabel>
+                  <p className="text-[11px] leading-normal text-slate-400">
+                    Configure independent access parameters for distinct layout modules.
+                  </p>
+                </div>
+                <Switch
+                  className="origin-right scale-75"
+                  checked={allowSectionProtection}
+                  onCheckedChange={(checked) => {
+                    setValue("allowSectionProtection", checked);
+                    handleLiveChange({ allowSectionProtection: checked });
                   }}
                 />
-                {globalPassword.length > 0 && !globalPasswordValid && (
-                  <p className="text-[10px] font-medium text-red-500">Passcode must equal exactly 6 numeric characters.</p>
-                )}
               </div>
-            )}
 
-            <Separator className="bg-slate-100" />
-
-            {/* Advanced Permission Rules Switch */}
-            <div className="flex items-center justify-between space-x-4">
-              <div className="max-w-[calc(100%-60px)] space-y-0.5">
-                <FormLabel className="text-[12px] font-medium text-slate-800">Advanced Section Controls</FormLabel>
-                <p className="text-[11px] leading-normal text-slate-400">
-                  Configure independent access parameters for distinct layout modules.
-                </p>
-              </div>
-              <Switch
-                className="origin-right scale-75"
-                checked={allowSectionProtection}
-                onCheckedChange={(checked) => {
-                  setValue("allowSectionProtection", checked);
-                  handleLiveChange({ allowSectionProtection: checked });
-                }}
-              />
-            </div>
-
-            {/* Section Buttons Matrix */}
-            {allowSectionProtection && (
-              <div className="animate-in fade-in space-y-2 pt-2 duration-300">
-                {/* <SectionHeader icon={LockKeyhole} label="Module Authorization Registry" /> */}
-                <div className="grid grid-cols-1 gap-1.5">
-                  {PROTECTED_SECTIONS.map((sec) => {
-                    const badge = getVisibilityBadge(sec.id);
-                    const BadgeIcon = badge.icon;
-                    return (
-                      <button
-                        key={sec.id}
-                        type="button"
-                        onClick={() => {
-                          setSelectedSection(sec);
-                          setDialogOpen(true);
-                        }}
-                        className="flex w-full touch-manipulation items-center justify-between rounded-lg border border-slate-100 bg-white p-3 transition-all hover:border-slate-200 hover:bg-slate-50/50 active:scale-[0.99] cursor-pointer"
-                      >
-                        <div className="flex min-w-0 items-center gap-3">
-                          <div className={cn("shrink-0 rounded-lg p-2", badge.color)}>
-                            <BadgeIcon size={14} />
+              {/* Section Buttons Matrix */}
+              {allowSectionProtection && (
+                <div className="animate-in fade-in space-y-2 pt-2 duration-300">
+                  {/* <SectionHeader icon={LockKeyhole} label="Module Authorization Registry" /> */}
+                  <div className="grid grid-cols-1 gap-1.5">
+                    {PROTECTED_SECTIONS.map((sec) => {
+                      const badge = getVisibilityBadge(sec.id);
+                      const BadgeIcon = badge.icon;
+                      return (
+                        <button
+                          key={sec.id}
+                          type="button"
+                          onClick={() => {
+                            setSelectedSection(sec);
+                            setDialogOpen(true);
+                          }}
+                          className="flex w-full cursor-pointer touch-manipulation items-center justify-between rounded-lg border border-slate-100 bg-white p-3 transition-all hover:border-slate-200 hover:bg-slate-50/50 active:scale-[0.99]"
+                        >
+                          <div className="flex min-w-0 items-center gap-3">
+                            <div className={cn("shrink-0 rounded-lg p-2", badge.color)}>
+                              <BadgeIcon size={14} />
+                            </div>
+                            <div className="min-w-0 text-left">
+                              <p className="truncate text-xs font-semibold text-slate-800">{sec.label}</p>
+                              <p className="truncate text-[10px] font-medium text-slate-400">Manage rules & gating</p>
+                            </div>
                           </div>
-                          <div className="min-w-0 text-left">
-                            <p className="truncate text-xs font-semibold text-slate-800">{sec.label}</p>
-                            <p className="truncate text-[10px] font-medium text-slate-400">Manage rules & gating</p>
+                          <div className="flex shrink-0 items-center gap-2">
+                            <span className={cn("rounded-full px-2 py-0.5 text-[9px] font-bold tracking-wider uppercase", badge.color)}>
+                              {badge.label}
+                            </span>
+                            <ChevronRight size={14} className="text-slate-400" />
                           </div>
-                        </div>
-                        <div className="flex shrink-0 items-center gap-2">
-                          <span className={cn("rounded-full px-2 py-0.5 text-[9px] font-bold tracking-wider uppercase", badge.color)}>
-                            {badge.label}
-                          </span>
-                          <ChevronRight size={14} className="text-slate-400" />
-                        </div>
-                      </button>
-                    );
-                  })}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </section>
 
           {/* Sticky Actions Bar */}

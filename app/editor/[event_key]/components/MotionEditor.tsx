@@ -4,12 +4,12 @@ import { useForm, FormProvider } from "react-hook-form";
 import { usePreviewDraft } from "../PreviewDraftContext";
 import { useSaveEventSection } from "../../../../hooks/useEvents";
 import { Button } from "../../../../components/ui/button";
-import { FormField, FormItem, FormControl, FormMessage } from "../../../../components/ui/form";
+import { FormField, FormItem, FormControl, FormMessage, FormLabel } from "../../../../components/ui/form";
 import { Slider } from "../../../../components/ui/Slider";
 import { cn } from "../../../../utils/utils";
 import { Switch } from "../../../../components/ui/switch";
 import { RadioGroup, RadioGroupItem } from "../../../../components/ui/radio-group";
-import {  Save, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Save, X } from "lucide-react";
 import { HorizontalScroll } from "../../../../components/ui/HorizontalScroll";
 import {
   Sparkles,
@@ -95,19 +95,16 @@ function ToggleRow({ label, checked, onCheckedChange }: { label: string; checked
 
 /* ---------------- COMPONENT ---------------- */
 
-export default function MotionEditor({ eventKey, onBack }: { eventKey: string; onBack: () => void }) {
+export default function MotionEditor({ onBack, handleBack, eventKey }: { onBack: () => void; handleBack: () => void; eventKey: string }) {
   /* ---------------- HOOKS ---------------- */
 
   const { draft, replaceSection, resetDraft, refreshEvent } = usePreviewDraft();
   const eventId = draft.invite.id;
   const mutation = useSaveEventSection(eventKey, eventId);
 
-
   /* ---------------- FORM ---------------- */
 
-
-
-console.log("draft.motion.animation_style", draft.motion.animation_style);
+  console.log("draft.motion.animation_style", draft.motion.animation_style);
 
   const form = useForm<DesignForm>({
     defaultValues: {
@@ -164,408 +161,397 @@ console.log("draft.motion.animation_style", draft.motion.animation_style);
 
   return (
     <div className="animate-in fade-in flex h-full flex-col rounded-lg duration-500 md:rounded-none">
-      <EditorHeader title="Animations" handleCancel={handleCancel} />
+      <EditorHeader title="Animations" handleBack={handleBack} />
 
       <FormProvider {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-1 flex-col justify-between space-y-5 p-5 pb-0 md:min-h-[calc(100dvh-115px)] md:rounded-none [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-[2px] [&::-webkit-scrollbar-thumb]:rounded-[10px] [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-[#78909C]"
-        >
-          <section className="space-y-6 [&>*:last-child]:mb-6">
-            {/* Animation Controls */}
-            <div className="space-y-3 rounded-xl border border-slate-100 bg-slate-50/70 p-3">
-              <FormField
-                control={form.control}
-                name="animations"
-                render={({ field }) => (
-                  <FormItem>
-                    <ToggleRow
-                      label="Enable animations"
-                      checked={field.value}
-                      onCheckedChange={(value) => {
-                        field.onChange(value);
-                        handleLiveChange("animations", value);
-                      }}
-                    />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="animation_loop"
-                render={({ field }) => (
-                  <FormItem>
-                    <ToggleRow
-                      label="Loop animation"
-                      checked={field.value}
-                      onCheckedChange={(value) => {
-                        field.onChange(value);
-                        handleLiveChange("animation_loop", value);
-                      }}
-                    />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            {/* Animation Preset */}
-            <FormField
-              control={form.control}
-              name="animation_style"
-              render={({ field }) => (
-                <FormItem className={cn("transition-all duration-300")}>
-                  <span className="mb-0 text-[0.7rem] font-medium tracking-normal text-[#424242] capitalize">Animation Preset</span>
-                  <FormControl>
-                    <RadioGroup
-                      value={field.value}
-                      onValueChange={(value) => {
-                        field.onChange(value);
-                        handleLiveChange("animation_style", value);
-                      }}
-                      className="grid grid-cols-1"
-                    >
-                      <HorizontalScroll>
-                        {ANIMATION_PRESETS.map((preset) => {
-                          const Icon = preset.icon;
-                          const isSelected = field.value === preset.id;
-
-                          return (
-                            <label
-                              key={preset.id}
-                              htmlFor={`preset-${preset.id}`}
-                              className={cn(
-                                "relative min-w-28 rounded-lg border transition-all duration-300",
-                                isSelected
-                                  ? "border-slate-900 text-black shadow-xl shadow-slate-200"
-                                  : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50",
-                              )}
-                            >
-                              <RadioGroupItem value={preset.id} id={`preset-${preset.id}`} className="hidden" />
-                              <div className="flex h-[48px] items-center gap-2 px-3">
-                                <div className="flex items-center justify-between">
-                                  <div className={cn("flex items-center justify-center", isSelected ? "text-black" : "text-slate-600")}>
-                                    <Icon className="w-4" strokeWidth={1} />
-                                  </div>
-                                </div>
-                                <div>
-                                  <p
-                                    className={cn(
-                                      "truncate text-[11px] font-bold capitalize",
-                                      isSelected ? "text-black" : "text-slate-700",
-                                    )}
-                                  >
-                                    {preset.name}
-                                  </p>
-                                  <p className="text-[10px] text-slate-400">{preset.description}</p>
-                                </div>
-                              </div>
-                            </label>
-                          );
-                        })}
-                      </HorizontalScroll>
-                    </RadioGroup>
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* Entrance Effect */}
-            <FormField
-              control={form.control}
-              name="animation_entry"
-              render={({ field }) => (
-                <FormItem className={cn("transition-all duration-300")}>
-                  <span className="mb-0 text-[0.7rem] font-medium tracking-normal text-[#424242] capitalize">Entrance Effect</span>
-                  <FormControl>
-                    <RadioGroup
-                      value={field.value}
-                      onValueChange={(value) => {
-                        field.onChange(value);
-                        handleLiveChange("animation_entry", value);
-                      }}
-                      className="grid grid-cols-1"
-                    >
-                      <HorizontalScroll>
-                        {[
-                          {
-                            id: "fade-up",
-                            title: "Fade Up",
-                            label: "upward",
-                            icon: ArrowUp,
-                          },
-                          {
-                            id: "fade-down",
-                            title: "Fade Down",
-                            label: "downward",
-                            icon: ArrowDown,
-                          },
-                          {
-                            id: "zoom-in",
-                            title: "Zoom In",
-                            label: "scale entrance",
-                            icon: ZoomIn,
-                          },
-                          {
-                            id: "slide-left",
-                            title: "Slide Left",
-                            label: "from left",
-                            icon: MoveLeft,
-                          },
-                          {
-                            id: "slide-right",
-                            title: "Slide Right",
-                            label: "from right",
-                            icon: MoveRight,
-                          },
-                          {
-                            id: "flip",
-                            title: "Flip",
-                            label: "3D flip",
-                            icon: FlipHorizontal,
-                          },
-                        ].map((effect) => {
-                          const Icon = effect.icon;
-                          const isSelected = field.value === effect.id;
-
-                          return (
-                            <label
-                              key={effect.id}
-                              htmlFor={`entry-${effect.id}`}
-                              className={cn(
-                                "relative rounded-lg border transition-all duration-300",
-                                isSelected
-                                  ? "border-slate-900 bg-slate-900 text-white shadow-xl shadow-slate-200"
-                                  : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50",
-                              )}
-                            >
-                              <RadioGroupItem value={effect.id} id={`entry-${effect.id}`} className="hidden" />
-                              <div className="flex h-[48px] items-center gap-2 p-3">
-                                <div className="flex items-center justify-between">
-                                  <div className={cn("flex items-center justify-center", isSelected ? "text-white" : "text-slate-600")}>
-                                    <Icon size={18} strokeWidth={1.5} />
-                                  </div>
-                                </div>
-
-                                <div>
-                                  <p
-                                    className={cn(
-                                      "text-[11px] leading-none font-bold capitalize",
-                                      isSelected ? "text-white" : "text-slate-700",
-                                    )}
-                                  >
-                                    {effect.title}
-                                  </p>
-
-                                  <p className={cn("text-[9px] leading-tight", isSelected ? "text-white/60" : "text-slate-400")}>
-                                    {effect.label}
-                                  </p>
-                                </div>
-                              </div>
-                            </label>
-                          );
-                        })}
-                      </HorizontalScroll>
-                    </RadioGroup>
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* Scroll Behavior */}
-            <FormField
-              control={form.control}
-              name="scroll_behavior"
-              render={({ field }) => (
-                <FormItem className={cn("transition-all duration-300")}>
-                  <span className="mb-0 text-[0.7rem] font-medium tracking-normal text-[#424242] capitalize">Scroll Behavior</span>
-                  <FormControl>
-                    <RadioGroup
-                      value={field.value}
-                      onValueChange={(value) => {
-                        field.onChange(value);
-                        handleLiveChange("scroll_behavior", value);
-                      }}
-                      className="grid grid-cols-1"
-                    >
-                      <HorizontalScroll>
-                        {[
-                          {
-                            id: "on-load",
-                            title: "On Load",
-                            label: "immediately",
-                            icon: PlayCircle,
-                          },
-                          {
-                            id: "on-scroll",
-                            title: "On Scroll",
-                            label: "during scroll",
-                            icon: MousePointerClick,
-                          },
-                          {
-                            id: "continuous",
-                            title: "Continuous",
-                            label: "always moving",
-                            icon: Repeat,
-                          },
-                          {
-                            id: "parallax",
-                            title: "Parallax",
-                            label: "depth scroll",
-                            icon: Layers3,
-                          },
-                        ].map((behavior) => {
-                          const Icon = behavior.icon;
-                          const isSelected = field.value === behavior.id;
-
-                          return (
-                            <label
-                              key={behavior.id}
-                              htmlFor={`scroll-${behavior.id}`}
-                              className={cn(
-                                "relative min-w-28 rounded-lg border transition-all duration-300",
-                                isSelected
-                                  ? "border-slate-900 bg-slate-900 text-white shadow-xl shadow-slate-200"
-                                  : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50",
-                              )}
-                            >
-                              <RadioGroupItem value={behavior.id} id={`scroll-${behavior.id}`} className="hidden" />
-                              <div className="flex h-[48px] items-center gap-2 p-3">
-                                <div className="flex items-center justify-between">
-                                  <div className={cn("flex items-center justify-center", isSelected ? "text-white" : "text-slate-600")}>
-                                    <Icon size={18} strokeWidth={1.5} />
-                                  </div>
-                                </div>
-
-                                <div>
-                                  <p
-                                    className={cn(
-                                      "text-[11px] leading-none font-bold capitalize",
-                                      isSelected ? "text-white" : "text-slate-700",
-                                    )}
-                                  >
-                                    {behavior.title}
-                                  </p>
-
-                                  <p className={cn("text-[9px] leading-tight", isSelected ? "text-white/60" : "text-slate-400")}>
-                                    {behavior.label}
-                                  </p>
-                                </div>
-                              </div>
-                            </label>
-                          );
-                        })}
-                      </HorizontalScroll>
-                    </RadioGroup>
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* Duration */}
-            <FormField
-              control={form.control}
-              name="animation_duration"
-              render={({ field }) => (
-                <FormItem className={cn("transition-all duration-300")}>
-                  <span className="mb-0 text-[0.7rem] font-medium tracking-normal text-[#424242] capitalize">Duration</span>
-                  <div className="flex gap-1 rounded-xl border border-slate-100 bg-slate-50 p-1">
-                    {["0.5s", "1s", "1.5s", "2s"].map((t) => (
-                      <button
-                        key={t}
-                        type="button"
-                        onClick={() => {
-                          field.onChange(t);
-                          handleLiveChange("animation_duration", t);
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="overflow-auto p-5 md:h-[calc(100dvh-125px)] md:min-h-[calc(100dvh-125px)] md:rounded-none [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-[2px] [&::-webkit-scrollbar-thumb]:rounded-[10px] [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-slate-100">
+            <section>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-1">
+                <FormField
+                  control={form.control}
+                  name="animations"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col gap-1">
+                      <ToggleRow
+                        label="Enable animations"
+                        checked={field.value}
+                        onCheckedChange={(value) => {
+                          field.onChange(value);
+                          handleLiveChange("animations", value);
                         }}
-                        className={cn(
-                          "flex-1 rounded-lg py-2 text-[10px] font-bold transition-all",
-                          field.value === t ? "bg-slate-900 text-white shadow-sm" : "text-slate-500 hover:text-slate-900",
-                        )}
-                      >
-                        {t}
-                      </button>
-                    ))}
-                  </div>
-                </FormItem>
-              )}
-            />
-            {/* Delay */}
-            <FormField
-              control={form.control}
-              name="animation_delay"
-              render={({ field }) => (
-                <FormItem className={cn("transition-all duration-300")}>
-                  <span className="mb-0 text-[0.7rem] font-medium tracking-normal text-[#424242] capitalize">Delay</span>
-                  <div className="flex gap-1 rounded-xl border border-slate-100 bg-slate-50 p-1">
-                    {["0ms", "100ms", "300ms", "500ms"].map((d) => (
-                      <button
-                        key={d}
-                        type="button"
-                        onClick={() => {
-                          field.onChange(d);
-                          handleLiveChange("animation_delay", d);
+                      />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="animation_loop"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col gap-1">
+                      <ToggleRow
+                        label="Loop animation"
+                        checked={field.value}
+                        onCheckedChange={(value) => {
+                          field.onChange(value);
+                          handleLiveChange("animation_loop", value);
                         }}
-                        className={cn(
-                          "flex-1 rounded-lg py-2 text-[10px] font-bold transition-all",
-                          field.value === d ? "bg-slate-900 text-white shadow-sm" : "text-slate-500 hover:text-slate-900",
-                        )}
-                      >
-                        {d}
-                      </button>
-                    ))}
-                  </div>
-                </FormItem>
-              )}
-            />
-            {/* Speed */}
-            <FormField
-              control={form.control}
-              name="animation_speed"
-              render={({ field }) => (
-                <FormItem className={cn("transition-all duration-300")}>
-                  <div className="mb-2 flex items-center justify-between">
-                    <span className="mb-0 text-[0.7rem] font-medium tracking-normal text-[#424242] capitalize">Speed</span>
-                    <span className="mb-0 text-[0.7rem] font-medium tracking-normal text-[#424242] capitalize">{field.value ?? 50}%</span>
-                  </div>
-                  <FormControl>
-                    <Slider
-                      value={[field.value ?? 50]}
-                      max={100}
-                      step={5}
-                      onValueChange={(val) => {
-                        field.onChange(val[0]);
-                        handleLiveChange("animation_speed", val[0]);
-                      }}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </section>
+                      />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="animation_style"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col gap-1">
+                      <FormLabel>Animation Preset</FormLabel>
+                      <FormControl>
+                        <RadioGroup
+                          value={field.value}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            handleLiveChange("animation_style", value);
+                          }}
+                          className="grid grid-cols-1"
+                        >
+                          <HorizontalScroll>
+                            {ANIMATION_PRESETS.map((preset) => {
+                              const Icon = preset.icon;
+                              const isSelected = field.value === preset.id;
 
-          {/* Sticky Footer */}
-          <div className="sticky bottom-0 z-[99] -m-5 flex h-16 h-[60px] items-center justify-end gap-3 border-slate-100 bg-white/90 px-5 md:border-t md:backdrop-blur-md">
-            <Button
+                              return (
+                                <label
+                                  key={preset.id}
+                                  htmlFor={`preset-${preset.id}`}
+                                  className={cn(
+                                    "relative min-w-28 rounded-lg border transition-all duration-300",
+                                    isSelected
+                                      ? "border-slate-900 text-black shadow-xl shadow-slate-200"
+                                      : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50",
+                                  )}
+                                >
+                                  <RadioGroupItem value={preset.id} id={`preset-${preset.id}`} className="hidden" />
+                                  <div className="flex h-[48px] items-center gap-2 px-3">
+                                    <div className="flex items-center justify-between">
+                                      <div className={cn("flex items-center justify-center", isSelected ? "text-black" : "text-slate-600")}>
+                                        <Icon className="w-4" strokeWidth={1} />
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <p
+                                        className={cn(
+                                          "truncate text-[11px] font-bold capitalize",
+                                          isSelected ? "text-black" : "text-slate-700",
+                                        )}
+                                      >
+                                        {preset.name}
+                                      </p>
+                                      <p className="text-[10px] text-slate-400">{preset.description}</p>
+                                    </div>
+                                  </div>
+                                </label>
+                              );
+                            })}
+                          </HorizontalScroll>
+                        </RadioGroup>
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="animation_entry"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col gap-1">
+                      <span className="mb-0 text-[0.7rem] font-medium tracking-normal text-[#424242] capitalize">Entrance Effect</span>
+                      <FormControl>
+                        <RadioGroup
+                          value={field.value}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            handleLiveChange("animation_entry", value);
+                          }}
+                          className="grid grid-cols-1"
+                        >
+                          <HorizontalScroll>
+                            {[
+                              {
+                                id: "fade-up",
+                                title: "Fade Up",
+                                label: "upward",
+                                icon: ArrowUp,
+                              },
+                              {
+                                id: "fade-down",
+                                title: "Fade Down",
+                                label: "downward",
+                                icon: ArrowDown,
+                              },
+                              {
+                                id: "zoom-in",
+                                title: "Zoom In",
+                                label: "scale entrance",
+                                icon: ZoomIn,
+                              },
+                              {
+                                id: "slide-left",
+                                title: "Slide Left",
+                                label: "from left",
+                                icon: MoveLeft,
+                              },
+                              {
+                                id: "slide-right",
+                                title: "Slide Right",
+                                label: "from right",
+                                icon: MoveRight,
+                              },
+                              {
+                                id: "flip",
+                                title: "Flip",
+                                label: "3D flip",
+                                icon: FlipHorizontal,
+                              },
+                            ].map((effect) => {
+                              const Icon = effect.icon;
+                              const isSelected = field.value === effect.id;
+
+                              return (
+                                <label
+                                  key={effect.id}
+                                  htmlFor={`entry-${effect.id}`}
+                                  className={cn(
+                                    "relative rounded-lg border transition-all duration-300",
+                                    isSelected
+                                      ? "border-slate-900 bg-slate-900 text-white shadow-xl shadow-slate-200"
+                                      : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50",
+                                  )}
+                                >
+                                  <RadioGroupItem value={effect.id} id={`entry-${effect.id}`} className="hidden" />
+                                  <div className="flex h-[48px] items-center gap-2 p-3">
+                                    <div className="flex items-center justify-between">
+                                      <div className={cn("flex items-center justify-center", isSelected ? "text-white" : "text-slate-600")}>
+                                        <Icon size={18} strokeWidth={1.5} />
+                                      </div>
+                                    </div>
+
+                                    <div>
+                                      <p
+                                        className={cn(
+                                          "text-[11px] leading-none font-bold capitalize",
+                                          isSelected ? "text-white" : "text-slate-700",
+                                        )}
+                                      >
+                                        {effect.title}
+                                      </p>
+
+                                      <p className={cn("text-[9px] leading-tight", isSelected ? "text-white/60" : "text-slate-400")}>
+                                        {effect.label}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </label>
+                              );
+                            })}
+                          </HorizontalScroll>
+                        </RadioGroup>
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="scroll_behavior"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col gap-1">
+                      <FormLabel>Scroll Behavior</FormLabel>
+                      <FormControl>
+                        <RadioGroup
+                          value={field.value}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            handleLiveChange("scroll_behavior", value);
+                          }}
+                          className="grid grid-cols-1"
+                        >
+                          <HorizontalScroll>
+                            {[
+                              {
+                                id: "on-load",
+                                title: "On Load",
+                                label: "immediately",
+                                icon: PlayCircle,
+                              },
+                              {
+                                id: "on-scroll",
+                                title: "On Scroll",
+                                label: "during scroll",
+                                icon: MousePointerClick,
+                              },
+                              {
+                                id: "continuous",
+                                title: "Continuous",
+                                label: "always moving",
+                                icon: Repeat,
+                              },
+                              {
+                                id: "parallax",
+                                title: "Parallax",
+                                label: "depth scroll",
+                                icon: Layers3,
+                              },
+                            ].map((behavior) => {
+                              const Icon = behavior.icon;
+                              const isSelected = field.value === behavior.id;
+
+                              return (
+                                <label
+                                  key={behavior.id}
+                                  htmlFor={`scroll-${behavior.id}`}
+                                  className={cn(
+                                    "relative min-w-28 rounded-lg border transition-all duration-300",
+                                    isSelected
+                                      ? "border-slate-900 bg-slate-900 text-white shadow-xl shadow-slate-200"
+                                      : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50",
+                                  )}
+                                >
+                                  <RadioGroupItem value={behavior.id} id={`scroll-${behavior.id}`} className="hidden" />
+                                  <div className="flex h-[48px] items-center gap-2 p-3">
+                                    <div className="flex items-center justify-between">
+                                      <div className={cn("flex items-center justify-center", isSelected ? "text-white" : "text-slate-600")}>
+                                        <Icon size={18} strokeWidth={1.5} />
+                                      </div>
+                                    </div>
+
+                                    <div>
+                                      <p
+                                        className={cn(
+                                          "text-[11px] leading-none font-bold capitalize",
+                                          isSelected ? "text-white" : "text-slate-700",
+                                        )}
+                                      >
+                                        {behavior.title}
+                                      </p>
+
+                                      <p className={cn("text-[9px] leading-tight", isSelected ? "text-white/60" : "text-slate-400")}>
+                                        {behavior.label}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </label>
+                              );
+                            })}
+                          </HorizontalScroll>
+                        </RadioGroup>
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="animation_duration"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col gap-1">
+                      <FormLabel>Duration</FormLabel>
+                      <div className="flex gap-1 rounded-xl border border-slate-100 bg-slate-50 p-1">
+                        {["0.5s", "1s", "1.5s", "2s"].map((t) => (
+                          <button
+                            key={t}
+                            type="button"
+                            onClick={() => {
+                              field.onChange(t);
+                              handleLiveChange("animation_duration", t);
+                            }}
+                            className={cn(
+                              "flex-1 rounded-lg py-2 text-[10px] font-bold transition-all",
+                              field.value === t ? "bg-slate-900 text-white shadow-sm" : "text-slate-500 hover:text-slate-900",
+                            )}
+                          >
+                            {t}
+                          </button>
+                        ))}
+                      </div>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="animation_delay"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col gap-1">
+                      <FormLabel>Delay</FormLabel>
+                      <div className="flex gap-1 rounded-xl border border-slate-100 bg-slate-50 p-1">
+                        {["0ms", "100ms", "300ms", "500ms"].map((d) => (
+                          <button
+                            key={d}
+                            type="button"
+                            onClick={() => {
+                              field.onChange(d);
+                              handleLiveChange("animation_delay", d);
+                            }}
+                            className={cn(
+                              "flex-1 rounded-lg py-2 text-[10px] font-bold transition-all",
+                              field.value === d ? "bg-slate-900 text-white shadow-sm" : "text-slate-500 hover:text-slate-900",
+                            )}
+                          >
+                            {d}
+                          </button>
+                        ))}
+                      </div>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="animation_speed"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col gap-1">
+                      <div className="flex items-center justify-between">
+                        <FormLabel>Speed</FormLabel>
+                        <FormLabel>{field.value ?? 50}%</FormLabel>
+                      </div>
+                      <FormControl>
+                        <div className="flex h-[40px] items-center">
+                          <Slider
+                            value={[field.value ?? 50]}
+                            max={100}
+                            step={5}
+                            onValueChange={(val) => {
+                              field.onChange(val[0]);
+                              handleLiveChange("animation_speed", val[0]);
+                            }}
+                          />
+                        </div>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </section>
+          </div>
+          <div className="relative flex h-[50px] items-center justify-between gap-3 border-t border-slate-100 bg-white px-5 py-2">
+            <button
               type="button"
-              variant="ghost"
               onClick={handleCancel}
-              className="text-xs font-semibold text-slate-400 transition-colors hover:text-slate-900"
+              className="font-regular inline-flex h-full min-h-[34px] w-auto cursor-pointer items-center justify-between gap-3 rounded-md bg-gray-100 pr-4 pl-3 text-xs text-black/70 transition-all hover:bg-gray-200"
             >
-              <X strokeWidth={1} size={14} />
-              <span>Discard</span>
-            </Button>
-            <Button
+              <ChevronLeft strokeWidth={1.5} size={14} />
+              <span>Previous</span>
+            </button>
+            <button
               type="submit"
               disabled={mutation.isPending}
-              className="hadow-slate-200 h-8 rounded-md bg-slate-900 px-10 py-2 text-xs text-white transition-all hover:bg-slate-800 active:scale-95 disabled:opacity-600"
+              className="font-regular inline-flex h-full min-h-[34px] w-auto cursor-pointer items-center justify-between gap-3 rounded-md bg-slate-800 pr-3 pl-4 text-xs text-white/90 transition-all hover:bg-slate-900"
             >
-              <Save strokeWidth={1} />
-              {mutation.isPending ? <span className="font-regular">Updating...</span> : <span className="font-regular">Save</span>}
-            </Button>
+              {mutation.isPending ? "Updating..." : "Next"}
+              <ChevronRight strokeWidth={1.5} size={14} />
+            </button>
           </div>
         </form>
       </FormProvider>

@@ -10,7 +10,7 @@ const VIEWPORTS = {
 export function usePreviewScale(device: "mobile" | "desktop", splitScreen: boolean) {
   const scale = useMemo(() => {
     if (device === "desktop") return 1;
-    return splitScreen ? 0.5 : 0.9;
+    return splitScreen ? 0.45 : 0.9;
   }, [device, splitScreen]);
 
   const currentViewport = useMemo(() => {

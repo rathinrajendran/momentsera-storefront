@@ -2,29 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { EditorSection } from "./EditorLayout";
-import {
-  Calendar,
-  CheckCircle,
-  ChevronRight,
-  Clock,
-  Eye,
-  EyeOff,
-  Heading,
-  ImageIcon,
-  Images,
-  Lock,
-  MessageSquare,
-  Music,
-  Palette,
-  Printer,
-  Settings,
-  Share2,
-  Shirt,
-  Sparkles,
-} from "lucide-react";
+import { ArrowRightIcon, Eye, EyeOff, Lock } from "lucide-react";
 import { SectionVisibilityDialog, VisibilityType } from "./SectionVisibilityDialog";
 import { usePreviewDraft } from "./PreviewDraftContext";
 import { useSaveEventSection } from "../../../hooks/useEvents";
+import { CircularPercentage } from "../../../components/ui/CircularPercentage";
 
 type SectionItem = {
   id: string;
@@ -113,20 +95,23 @@ export default function EditorOverview({ activeTab, currentSections = [], onSele
   }, [scrollTop]);
 
   return (
-    <div className="flex h-auto flex-col overflow-x-auto p-5 px-4 md:h-full md:bg-white md:pl-6 md:pr-0 md:pb-0 [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]">
-      <div className="mb-5 hidden md:block">
-        <h2 className="text-lg font-bold tracking-tight text-zinc-900 capitalize">{activeTab}</h2>
-        <p className="text-xs leading-relaxed tracking-wide">
+    <div className="flex h-auto flex-col overflow-x-auto p-5 px-4 md:h-full md:pr-0 md:pb-0 md:pl-6 [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]">
+      <div className="mb-5 hidden pr-6 md:block">
+        <h2 className="text-[0.95rem] font-bold tracking-tight text-zinc-900 capitalize">{activeTab}</h2>
+        <p className="text-[0.7rem] leading-relaxed tracking-wide">
           Everything you need to build, customize, and maintain a beautiful digital invitation.
         </p>
       </div>
-      <div ref={scrollRef} className="h-auto space-y-1 overflow-y-auto md:space-y-1 md:pb-5">
+      <div
+        ref={scrollRef}
+        className="h-auto space-y-1 overflow-y-auto md:space-y-1 md:pr-6 md:pb-5 [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]"
+      >
         {activeTab === "preview" ? (
           <div className="flex h-40 flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-200 p-6 text-center text-sm text-zinc-400">
             <p>Opening live interactive preview overlay...</p>
           </div>
         ) : (
-          <div className="flex flex-col gap-2">
+          <div className="grid grid-cols-2 gap-3">
             {currentSections.map((section) => (
               <EditorCard
                 key={section.id}
@@ -163,11 +148,8 @@ export default function EditorOverview({ activeTab, currentSections = [], onSele
 
 function EditorCard({
   title,
-  desc,
   icon,
   onClick,
-  iconBg,
-  iconColor,
   visibility,
   visibilityLabel,
   visibilityIcon,
@@ -186,57 +168,61 @@ function EditorCard({
   visibilityCheck: boolean;
   onVisibilityClick?: () => void;
 }) {
-    const showVisibility = visibilityCheck;
+  const showVisibility = visibilityCheck;
 
-    const fallbackVisibilityIcon =
-      visibility === "hidden" ? (
-        <EyeOff size={14} strokeWidth={1.8} />
-      ) : visibility === "protected" ? (
-        <Lock size={14} strokeWidth={1.8} />
-      ) : (
-        <Eye size={14} strokeWidth={1.8} />
-      );
+  const fallbackVisibilityIcon =
+    visibility === "hidden" ? (
+      <>
+        {/* <EyeOff size={14} strokeWidth={0.8} /> */}
+        Hidden
+      </>
+    ) : visibility === "protected" ? (
+      <>
+        {/* <Lock size={14} strokeWidth={0.8} /> Protected */}
+      </>
+    ) : (
+      <>
+        {/* <Eye size={14} strokeWidth={0.8} /> Visible */}
+      </>
+    );
 
-    const visibilityButtonClass =
-      visibility === "hidden"
-        ? "bg-slate-100 text-slate-500 hover:bg-slate-200"
-        : visibility === "protected"
-          ? "bg-amber-50 text-amber-600 hover:bg-amber-100"
-          : "bg-emerald-50 text-emerald-600 hover:bg-emerald-100";
+  const visibilityButtonClass =
+    visibility === "hidden"
+      ? "bg-slate-100 text-slate-500 hover:bg-slate-200"
+      : visibility === "protected"
+        ? "bg-amber-50 text-amber-600 hover:bg-amber-100"
+        : "bg-emerald-50 text-emerald-600 hover:bg-emerald-100";
   return (
     <div
       onClick={onClick}
-      className="flex cursor-pointer items-center justify-between rounded-lg border border-gray-100 bg-white p-2 transition-all duration-200 hover:border-[#84a59d]/40 md:rounded-xl md:p-3"
+      className="flex cursor-pointer items-center justify-between rounded-lg border border-gray-100 bg-[#f5f7fa] p-2 transition-all duration-200 hover:border-[#000000]/10 md:rounded-xl md:p-3"
     >
       <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-4">
-        <div
-          className={`${iconBg} ${iconColor} flex h-7 w-7 shrink-0 items-center justify-center rounded-sm border border-zinc-100/50 text-zinc-500 sm:h-10 sm:w-10 sm:rounded-lg`}
-        >
-          {icon}
-        </div>
-
         <div className="min-w-0 flex-1">
-          <h3 className="truncate text-[0.8rem] font-semibold text-zinc-800 sm:text-[0.9rem]">{title}</h3>
-          <p className="truncate text-[0.7rem] text-zinc-400">{desc}</p>
+          <div className="flex items-center justify-between">
+            <h3 className="truncate text-[0.70rem] font-medium text-zinc-800">{title}</h3>
+            <ArrowRightIcon size={12} className="shrink-0 text-zinc-950" strokeWidth={1.5} />
+          </div>
+          <div className="flex shrink-0 items-center justify-center rounded-sm border border-zinc-100/50 py-3 text-zinc-500">{icon}</div>
+          {/* <p className="truncate text-[0.7rem] text-zinc-400">{desc}</p> */}
+          <div className="flex items-center justify-between gap-2">
+            <CircularPercentage percentage={15} />
+            {showVisibility && (
+              <button
+                type="button"
+                title={visibilityLabel ? `Visibility: ${visibilityLabel}` : "Visibility"}
+                aria-label={visibilityLabel ? `Visibility: ${visibilityLabel}` : "Visibility"}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onVisibilityClick?.();
+                }}
+                className={`hidden shrink-0 cursor-pointer items-center justify-center rounded-[4px] px-2 py-1 transition sm:flex ${visibilityButtonClass} gap-1 text-[10px]`}
+              >
+                {visibilityIcon ?? fallbackVisibilityIcon}
+              </button>
+            )}
+          </div>
         </div>
-      </div>
-
-      <div className="flex items-center gap-2">
-        {showVisibility && (
-          <button
-            type="button"
-            title={visibilityLabel ? `Visibility: ${visibilityLabel}` : "Visibility"}
-            aria-label={visibilityLabel ? `Visibility: ${visibilityLabel}` : "Visibility"}
-            onClick={(e) => {
-              e.stopPropagation();
-              onVisibilityClick?.();
-            }}
-            className={`hidden h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full transition sm:flex ${visibilityButtonClass}`}
-          >
-            {visibilityIcon ?? fallbackVisibilityIcon}
-          </button>
-        )}
-        <ChevronRight size={16} className="shrink-0 text-zinc-300" />
       </div>
     </div>
   );

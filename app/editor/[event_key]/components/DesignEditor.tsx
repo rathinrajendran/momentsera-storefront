@@ -264,7 +264,7 @@ function SectionHeader({ icon, title, description }: { icon: React.ReactNode; ti
 /* COMPONENT                                                                  */
 /* -------------------------------------------------------------------------- */
 
-function ColorsEditorPanel({ eventKey, onBack }: { eventKey: string; onBack: () => void }) {
+function ColorsEditorPanel({ onBack, handleBack, eventKey }: { onBack: () => void; handleBack: () => void; eventKey: string }) {
   const { draft, replaceSection, resetDraft, refreshEvent } = usePreviewDraft();
 
   const eventId = draft.invite.id;
@@ -359,7 +359,7 @@ function ColorsEditorPanel({ eventKey, onBack }: { eventKey: string; onBack: () 
 
   return (
     <div className="animate-in fade-in flex h-full flex-col rounded-lg duration-500 md:rounded-none">
-      <EditorHeader title="Colors" handleCancel={handleCancel} />
+      <EditorHeader title="Colors" handleBack={handleBack} />
 
       <FormProvider {...form}>
         <form
@@ -703,7 +703,7 @@ const EFFECT_OPTIONS: {
 /* COMPONENT                                                                  */
 /* -------------------------------------------------------------------------- */
 
-function BackgroundEditorPanel({ eventKey, onBack }: { eventKey: string; onBack: () => void }) {
+function BackgroundEditorPanel({ onBack, handleBack, eventKey }: { onBack: () => void; handleBack: () => void; eventKey: string }) {
   /* ---------------- HOOKS ---------------- */
 
   const { draft, replaceSection, resetDraft, refreshEvent } = usePreviewDraft();
@@ -801,7 +801,7 @@ function BackgroundEditorPanel({ eventKey, onBack }: { eventKey: string; onBack:
       {/* HEADER                                                             */}
       {/* ------------------------------------------------------------------ */}
 
-      <EditorHeader title="Background" handleCancel={handleCancel} />
+      <EditorHeader title="Background" handleBack={handleBack} />
 
       <FormProvider {...form}>
         <form

@@ -11,6 +11,9 @@ import { H6 } from "../../../../components/ui/H6";
 import { FullScreenMenu } from "./FullScreenMenu";
 import { useLogout } from "../../../../hooks/useLogout";
 import { useSession } from "../../../../hooks/useSession";
+import logo from "@/assets/images/logo/logo.svg";
+
+
 type headerProps = {
   className?: string;
 };
@@ -67,6 +70,7 @@ export function Header({ className }: headerProps) {
           ───────────────────── */}
             <div className="flex items-center gap-1">
               <Link href="/" className="tracking-[0.2rem]">
+               <Image src={logo} alt="Logo" width={160} />
                 {/* <LogoBy
               width={150}
               height={30}
@@ -74,7 +78,7 @@ export function Header({ className }: headerProps) {
               byColor="#94a397"
               dotColor="#e9a2a3"
             /> */}
-                <span className="font-bold uppercase">M</span>
+                {/* <span className="font-bold uppercase">M</span>
                 <span className="font-bold uppercase">o</span>
                 <span className="font-semibold uppercase">m</span>
                 <span className="font-semibold uppercase">e</span>
@@ -83,7 +87,7 @@ export function Header({ className }: headerProps) {
                 <span className="font-regular uppercase">s</span>
                 <span className="font-regular uppercase">e</span>
                 <span className="font-light uppercase">r</span>
-                <span className="font-light uppercase">a</span>
+                <span className="font-light uppercase">a</span> */}
               </Link>
               <button onClick={() => setMobileMenuOpen(true)} className="group flex cursor-pointer items-center p-4">
                 <div className="flex flex-col gap-[5px]">

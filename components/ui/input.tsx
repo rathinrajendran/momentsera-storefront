@@ -17,7 +17,7 @@ function Input({
       onChange={onChange}
       data-slot="input"
       className={cn(
-        "h-[38px] md:h-[42px] w-full rounded-md border bg-white px-3 py-2 outline-none transition-colors shadow-[inset_0_80px_0_0_#ffffff] text-xs font-medium tracking-normal",
+        "h-[38px] md:h-[42px] w-full rounded-md border bg-white px-3 py-2 outline-none transition-colors shadow-[inset_0_80px_0_0_#ffffff] text-[12px] font-medium tracking-normal",
         "placeholder:text-[#cccccc] text-[#171717]",
         "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
 

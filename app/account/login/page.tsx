@@ -180,7 +180,6 @@ export default function LoginPage() {
                       disabled={isLoading}
                     />
                   </div>
-
                   <div>
                     <div className="mb-1 flex items-center justify-between">
                       <label className="block text-sm font-medium text-gray-700">Password</label>
@@ -190,7 +189,6 @@ export default function LoginPage() {
                     </div>
                     <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading} />
                   </div>
-
                   <button
                     type="submit"
                     className="w-full rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700 disabled:opacity-50"

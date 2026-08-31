@@ -70,7 +70,7 @@ const THEME_TITLES: Record<ThemeKey, string> = {
 
 /* ---------------- COMPONENT ---------------- */
 
-export default function ThemeEditor({ eventKey, onBack }: { eventKey: string; onBack: () => void }) {
+export default function ThemeEditor({ onBack, handleBack, eventKey }: { onBack: () => void; handleBack: () => void; eventKey: string }) {
   /* ---------------- HOOKS ---------------- */
 
   const { draft, replaceSection, resetDraft, refreshEvent } = usePreviewDraft();
@@ -195,7 +195,7 @@ export default function ThemeEditor({ eventKey, onBack }: { eventKey: string; on
   }
   return (
     <div className="animate-in fade-in flex h-full flex-col rounded-lg duration-500 md:rounded-none">
-      <EditorHeader title="Theme Settings" handleCancel={handleCancel} />
+      <EditorHeader title="Theme Settings" handleBack={handleBack} />
 
       <FormProvider {...form}>
         <form

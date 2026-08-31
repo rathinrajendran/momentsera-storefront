@@ -25,6 +25,7 @@ type SectionItem = DynamicSection;
 type EditorPanelProps = {
   activeSection: EditorSection;
   onSectionChange: (section: EditorSection) => void;
+  onHandleChangeBack: (section: EditorSection) => void;
   eventKey: string;
   overviewScrollTop: number;
   onOverviewScrollChange: (value: number) => void;
@@ -37,6 +38,7 @@ export default function EditorPanel({
   eventKey,
   activeSection,
   onSectionChange,
+  onHandleChangeBack,
   overviewScrollTop,
   onOverviewScrollChange,
   activeTab,
@@ -74,6 +76,9 @@ export default function EditorPanel({
   const handleNextSection = (currentSection: EditorSection) => {
     onSectionChange(getNextSection(currentSection));
   };
+  const onHandleBack = (currentSection: EditorSection) => {
+    onHandleChangeBack(currentSection);
+  };
   return (
     <>
       {activeSection === "overview" && (
@@ -87,24 +92,24 @@ export default function EditorPanel({
         />
       )}
 
-      {activeSection === "announcement" && <AnnouncementEditor eventKey={eventKey} onBack={() => handleNextSection("announcement")} />}
+      {activeSection === "announcement" && <AnnouncementEditor eventKey={eventKey} handleBack={() => onHandleBack("overview")} onBack={() => handleNextSection("announcement")} />}
 
-      {activeSection === "schedule" && <ScheduleEditor eventKey={eventKey} onBack={() => handleNextSection("schedule")} />}
-      {activeSection === "ourStory" && <OurStoryEditor eventKey={eventKey} onBack={() => handleNextSection("ourStory")} />}
-      {activeSection === "timeline" && <TimelineEditor eventKey={eventKey} onBack={() => handleNextSection("timeline")} />}
-      {activeSection === "gallery" && <GalleryEditor eventKey={eventKey} onBack={() => handleNextSection("gallery")} />}
-      {activeSection === "dressCode" && <DressCodeEditor eventKey={eventKey} onBack={() => handleNextSection("dressCode")} />}
-      {activeSection === "wishes" && <WishesEditor eventKey={eventKey} onBack={() => handleNextSection("wishes")} />}
-      {activeSection === "rsvp" && <RSVPEditor eventKey={eventKey} onBack={() => handleNextSection("rsvp")} />}
-      {activeSection === "music" && <MusicEditor eventKey={eventKey} onBack={() => handleNextSection("music")} />}
-      {activeSection === "color" && <ColorEditor eventKey={eventKey} onBack={() => handleNextSection("color")} />}
-      {activeSection === "font" && <FontEditor eventKey={eventKey} onBack={() => handleNextSection("font")} />}
-      {activeSection === "shape" && <ShapeEditor eventKey={eventKey} onBack={() => handleNextSection("shape")} />}
-      {activeSection === "motionSection" && <MotionEditor eventKey={eventKey} onBack={() => handleNextSection("motionSection")} />}
-      {activeSection === "privacy" && <PrivacyEditor eventKey={eventKey} onBack={() => handleNextSection("privacy")} />}
-      {activeSection === "sharing" && <SharingEditor eventKey={eventKey} onBack={() => handleNextSection("sharing")} />}
-      {activeSection === "print" && <PrintEditor eventKey={eventKey} onBack={() => handleNextSection("print")} />}
-      {activeSection === "settings" && <SettingsEditor eventKey={eventKey} onBack={() => handleNextSection("settings")} />}
+      {activeSection === "schedule" && <ScheduleEditor eventKey={eventKey} handleBack={() => onHandleBack("overview")} onBack={() => handleNextSection("schedule")} />}
+      {activeSection === "ourStory" && <OurStoryEditor eventKey={eventKey} handleBack={() => onHandleBack("overview")} onBack={() => handleNextSection("ourStory")} />}
+      {activeSection === "timeline" && <TimelineEditor eventKey={eventKey} handleBack={() => onHandleBack("overview")} onBack={() => handleNextSection("timeline")} />}
+      {activeSection === "gallery" && <GalleryEditor eventKey={eventKey} handleBack={() => onHandleBack("overview")} onBack={() => handleNextSection("gallery")} />}
+      {activeSection === "dressCode" && <DressCodeEditor eventKey={eventKey} handleBack={() => onHandleBack("overview")} onBack={() => handleNextSection("dressCode")} />}
+      {activeSection === "wishes" && <WishesEditor eventKey={eventKey} handleBack={() => onHandleBack("overview")} onBack={() => handleNextSection("wishes")} />}
+      {activeSection === "rsvp" && <RSVPEditor eventKey={eventKey} handleBack={() => onHandleBack("overview")} onBack={() => handleNextSection("rsvp")} />}
+      {activeSection === "music" && <MusicEditor eventKey={eventKey} handleBack={() => onHandleBack("overview")} onBack={() => handleNextSection("music")} />}
+      {activeSection === "color" && <ColorEditor eventKey={eventKey} handleBack={() => onHandleBack("overview")} onBack={() => handleNextSection("color")} />}
+      {activeSection === "font" && <FontEditor eventKey={eventKey} handleBack={() => onHandleBack("overview")} onBack={() => handleNextSection("font")} />}
+      {activeSection === "shape" && <ShapeEditor eventKey={eventKey} handleBack={() => onHandleBack("overview")} onBack={() => handleNextSection("shape")} />}
+      {activeSection === "motionSection" && <MotionEditor eventKey={eventKey} handleBack={() => onHandleBack("overview")} onBack={() => handleNextSection("motionSection")} />}
+      {activeSection === "privacy" && <PrivacyEditor eventKey={eventKey} handleBack={() => onHandleBack("overview")} onBack={() => handleNextSection("privacy")} />}
+      {activeSection === "sharing" && <SharingEditor eventKey={eventKey} handleBack={() => onHandleBack("overview")} onBack={() => handleNextSection("sharing")} />}
+      {activeSection === "print" && <PrintEditor eventKey={eventKey} handleBack={() => onHandleBack("overview")} onBack={() => handleNextSection("print")} />}
+      {activeSection === "settings" && <SettingsEditor eventKey={eventKey} handleBack={() => onHandleBack("overview")} onBack={() => handleNextSection("settings")} />}
     </>
   );
 }

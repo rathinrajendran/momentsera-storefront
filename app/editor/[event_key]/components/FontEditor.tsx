@@ -11,7 +11,7 @@ import { RadioGroup, RadioGroupItem } from "../../../../components/ui/radio-grou
 import { cn } from "../../../../utils/utils";
 import { ACCENT_FONTS, AccentFontKey, TYPOGRAPHY_FONTS, TypographyFontKey } from "../../../[event_key]/invites/core/config/themeConfigs";
 
-import { Save, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Save, X } from "lucide-react";
 import { HorizontalScroll } from "../../../../components/ui/HorizontalScroll";
 import EditorHeader from "./EditorHeader";
 
@@ -289,7 +289,7 @@ function FontSizeSelector({ namePrefix, value, onChange }: FontSizeSelectorProps
 /* MAIN COMPONENT                                                             */
 /* -------------------------------------------------------------------------- */
 
-export default function FontEditor({ eventKey, onBack }: { eventKey: string; onBack: () => void }) {
+export default function FontEditor({ onBack, handleBack, eventKey }: { onBack: () => void; handleBack: () => void; eventKey: string }) {
   const { draft, replaceSection, resetDraft, refreshEvent } = usePreviewDraft();
 
   const eventId = draft.invite.id;
@@ -439,246 +439,226 @@ export default function FontEditor({ eventKey, onBack }: { eventKey: string; onB
 
   return (
     <div className="animate-in fade-in flex h-full flex-col rounded-lg duration-500 md:rounded-none">
-      <EditorHeader title="Typography" handleCancel={handleCancel} />
+      <EditorHeader title="Typography" handleBack={handleBack} />
 
       <FormProvider {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-1 flex-col justify-between space-y-5 overflow-auto p-5 pb-0 md:min-h-[calc(100dvh-115px)] md:rounded-none [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-[2px] [&::-webkit-scrollbar-thumb]:rounded-[10px] [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-[#78909C]"
-        >
-          <section className="space-y-6 [&>*:last-child]:mb-6">
-            {TYPOGRAPHY_ROLE_CONFIGS.map((cfg) => {
-              const fontFieldName = `${cfg.role}_font` as keyof DesignForm;
-              const sizeFieldName = `${cfg.role}_font_size` as keyof DesignForm;
-              const spacingFieldName = `${cfg.role}_letter_spacing` as keyof DesignForm;
-              const weightFieldName = `${cfg.role}_font_weight` as keyof DesignForm;
-              const lineHeightFieldName = `${cfg.role}_line_height` as keyof DesignForm;
-              const transformFieldName = `${cfg.role}_text_transform` as keyof DesignForm;
-              const isAccent = cfg.fontCategory === "accent";
-              const fontKeys = isAccent ? ACCENT_FONT_KEYS : TYPOGRAPHY_FONT_KEYS;
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="overflow-auto p-5 md:h-[calc(100dvh-125px)] md:min-h-[calc(100dvh-125px)] md:rounded-none [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-[2px] [&::-webkit-scrollbar-thumb]:rounded-[10px] [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-slate-100">
+            <section>
+              {TYPOGRAPHY_ROLE_CONFIGS.map((cfg) => {
+                const fontFieldName = `${cfg.role}_font` as keyof DesignForm;
+                const sizeFieldName = `${cfg.role}_font_size` as keyof DesignForm;
+                const spacingFieldName = `${cfg.role}_letter_spacing` as keyof DesignForm;
+                const weightFieldName = `${cfg.role}_font_weight` as keyof DesignForm;
+                const lineHeightFieldName = `${cfg.role}_line_height` as keyof DesignForm;
+                const transformFieldName = `${cfg.role}_text_transform` as keyof DesignForm;
+                const isAccent = cfg.fontCategory === "accent";
+                const fontKeys = isAccent ? ACCENT_FONT_KEYS : TYPOGRAPHY_FONT_KEYS;
 
-              return (
-                <div key={cfg.role} className="space-y-5 rounded-xl border border-slate-100 bg-slate-50/50 p-4 shadow-sm">
-                  <div className="border-b border-slate-200/60 pb-3">
-                    <h3 className="text-base font-semibold text-slate-900">{cfg.label}</h3>
+                return (
+                  <div key={cfg.role} className="grid grid-cols-1 gap-4 sm:grid-cols-1">
+                    <div>
+                      <h3 className="text-base font-semibold text-slate-900">{cfg.label}</h3>
+                      <p className="mt-0.5 text-xs text-slate-400">{cfg.description}</p>
+                    </div>
+                    <FormField
+                      control={form.control}
+                      name={fontFieldName as any}
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col gap-1">
+                          <FormLabel>Font</FormLabel>
+                          <FormControl>
+                            <RadioGroup
+                              value={(field.value as string) ?? ""}
+                              onValueChange={(val) => {
+                                field.onChange(val);
+                                handleLiveChange(fontFieldName, val);
+                              }}
+                              className="grid grid-cols-1"
+                            >
+                              <HorizontalScroll>
+                                {fontKeys.map((fontKey) => {
+                                  const fontObj = isAccent
+                                    ? ACCENT_FONTS[fontKey as AccentFontKey]
+                                    : TYPOGRAPHY_FONTS[fontKey as TypographyFontKey];
 
-                    <p className="mt-0.5 text-xs text-slate-400">{cfg.description}</p>
+                                  const previewFont = isAccent
+                                    ? (fontObj as (typeof ACCENT_FONTS)[AccentFontKey]).accent
+                                    : (fontObj as (typeof TYPOGRAPHY_FONTS)[TypographyFontKey]).primary;
+
+                                  return (
+                                    <FontSelectorCard
+                                      key={fontKey}
+                                      id={`${cfg.role}-font-${fontKey}`}
+                                      value={fontKey}
+                                      active={field.value === fontKey}
+                                      previewFont={previewFont}
+                                      label={fontKey}
+                                    />
+                                  );
+                                })}
+                              </HorizontalScroll>
+                            </RadioGroup>
+                          </FormControl>
+
+                          <FormMessage className="text-xs" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={sizeFieldName as any}
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col gap-1">
+                          <FormLabel>Font Size</FormLabel>
+                          <FormControl>
+                            <FontSizeSelector
+                              namePrefix={cfg.role}
+                              value={(field.value as number) ?? cfg.defaultSize}
+                              onChange={(size) => {
+                                field.onChange(size);
+                                handleLiveChange(sizeFieldName, size);
+                              }}
+                            />
+                          </FormControl>
+
+                          <FormMessage className="text-xs" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={weightFieldName as any}
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col gap-1">
+                          <FormLabel>Font Weight</FormLabel>
+                          <FormControl>
+                            <TypographyOptionSelector
+                              namePrefix={`${cfg.role}-font-weight`}
+                              value={(field.value as string) ?? "400"}
+                              options={FONT_WEIGHT_OPTIONS.map((option) => ({
+                                label: option.label,
+                                value: option.value,
+                                description: option.value,
+                              }))}
+                              ariaLabel={`${cfg.label} font weight`}
+                              onChange={(value) => {
+                                field.onChange(value);
+                                handleLiveChange(weightFieldName, value);
+                              }}
+                            />
+                          </FormControl>
+
+                          <FormMessage className="text-xs" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={spacingFieldName as any}
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col gap-1">
+                          <FormLabel>Letter Spacing</FormLabel>
+                          <FormControl>
+                            <TypographyOptionSelector
+                              namePrefix={`${cfg.role}-letter-spacing`}
+                              value={(field.value as string) ?? "0em"}
+                              options={LETTER_SPACING_OPTIONS.map((option) => ({
+                                label: option.label,
+                                value: option.value,
+                                description: option.value,
+                              }))}
+                              ariaLabel={`${cfg.label} letter spacing`}
+                              onChange={(value) => {
+                                field.onChange(value);
+                                handleLiveChange(spacingFieldName, value);
+                              }}
+                            />
+                          </FormControl>
+
+                          <FormMessage className="text-xs" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={lineHeightFieldName as any}
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col gap-1">
+                          <FormLabel>Line Height</FormLabel>
+                          <FormControl>
+                            <TypographyOptionSelector
+                              namePrefix={`${cfg.role}-line-height`}
+                              value={(field.value as string) ?? "1.5"}
+                              options={LINE_HEIGHT_OPTIONS.map((option) => ({
+                                label: option.label,
+                                value: option.value,
+                                description: option.value,
+                              }))}
+                              ariaLabel={`${cfg.label} line height`}
+                              onChange={(value) => {
+                                field.onChange(value);
+                                handleLiveChange(lineHeightFieldName, value);
+                              }}
+                            />
+                          </FormControl>
+
+                          <FormMessage className="text-xs" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={transformFieldName as any}
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col gap-1">
+                          <FormLabel>Text Transform</FormLabel>
+                          <FormControl>
+                            <TypographyOptionSelector
+                              namePrefix={`${cfg.role}-text-transform`}
+                              value={(field.value as TextTransformValue) ?? "none"}
+                              options={TEXT_TRANSFORM_OPTIONS.map((option) => ({
+                                label: option.label,
+                                value: option.value,
+                              }))}
+                              ariaLabel={`${cfg.label} text transform`}
+                              onChange={(value) => {
+                                const transform = value as TextTransformValue;
+
+                                field.onChange(transform);
+                                handleLiveChange(transformFieldName, transform);
+                              }}
+                            />
+                          </FormControl>
+
+                          <FormMessage className="text-xs" />
+                        </FormItem>
+                      )}
+                    />
+                    <hr className="mt-[20px] mr-[-20px] mb-[0] ml-[-20px] [&>*:last-child]:bg-white" />
                   </div>
-
-                  {/* FONT FAMILY */}
-                  <FormField
-                    control={form.control}
-                    name={fontFieldName as any}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-xs font-medium tracking-wider text-slate-500 uppercase">Font</FormLabel>
-
-                        <FormControl>
-                          <RadioGroup
-                            value={(field.value as string) ?? ""}
-                            onValueChange={(val) => {
-                              field.onChange(val);
-                              handleLiveChange(fontFieldName, val);
-                            }}
-                            className="grid grid-cols-1"
-                          >
-                            <HorizontalScroll>
-                              {fontKeys.map((fontKey) => {
-                                const fontObj = isAccent
-                                  ? ACCENT_FONTS[fontKey as AccentFontKey]
-                                  : TYPOGRAPHY_FONTS[fontKey as TypographyFontKey];
-
-                                const previewFont = isAccent
-                                  ? (fontObj as (typeof ACCENT_FONTS)[AccentFontKey]).accent
-                                  : (fontObj as (typeof TYPOGRAPHY_FONTS)[TypographyFontKey]).primary;
-
-                                return (
-                                  <FontSelectorCard
-                                    key={fontKey}
-                                    id={`${cfg.role}-font-${fontKey}`}
-                                    value={fontKey}
-                                    active={field.value === fontKey}
-                                    previewFont={previewFont}
-                                    label={fontKey}
-                                  />
-                                );
-                              })}
-                            </HorizontalScroll>
-                          </RadioGroup>
-                        </FormControl>
-
-                        <FormMessage className="text-xs" />
-                      </FormItem>
-                    )}
-                  />
-
-                  {/* FONT SIZE */}
-                  <FormField
-                    control={form.control}
-                    name={sizeFieldName as any}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-xs font-medium tracking-wider text-slate-500 uppercase">Font Size</FormLabel>
-
-                        <FormControl>
-                          <FontSizeSelector
-                            namePrefix={cfg.role}
-                            value={(field.value as number) ?? cfg.defaultSize}
-                            onChange={(size) => {
-                              field.onChange(size);
-                              handleLiveChange(sizeFieldName, size);
-                            }}
-                          />
-                        </FormControl>
-
-                        <FormMessage className="text-xs" />
-                      </FormItem>
-                    )}
-                  />
-
-                  {/* FONT WEIGHT */}
-                  <FormField
-                    control={form.control}
-                    name={weightFieldName as any}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-xs font-medium tracking-wider text-slate-500 uppercase">Font Weight</FormLabel>
-
-                        <FormControl>
-                          <TypographyOptionSelector
-                            namePrefix={`${cfg.role}-font-weight`}
-                            value={(field.value as string) ?? "400"}
-                            options={FONT_WEIGHT_OPTIONS.map((option) => ({
-                              label: option.label,
-                              value: option.value,
-                              description: option.value,
-                            }))}
-                            ariaLabel={`${cfg.label} font weight`}
-                            onChange={(value) => {
-                              field.onChange(value);
-                              handleLiveChange(weightFieldName, value);
-                            }}
-                          />
-                        </FormControl>
-
-                        <FormMessage className="text-xs" />
-                      </FormItem>
-                    )}
-                  />
-
-                  {/* LETTER SPACING */}
-                  <FormField
-                    control={form.control}
-                    name={spacingFieldName as any}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-xs font-medium tracking-wider text-slate-500 uppercase">Letter Spacing</FormLabel>
-
-                        <FormControl>
-                          <TypographyOptionSelector
-                            namePrefix={`${cfg.role}-letter-spacing`}
-                            value={(field.value as string) ?? "0em"}
-                            options={LETTER_SPACING_OPTIONS.map((option) => ({
-                              label: option.label,
-                              value: option.value,
-                              description: option.value,
-                            }))}
-                            ariaLabel={`${cfg.label} letter spacing`}
-                            onChange={(value) => {
-                              field.onChange(value);
-                              handleLiveChange(spacingFieldName, value);
-                            }}
-                          />
-                        </FormControl>
-
-                        <FormMessage className="text-xs" />
-                      </FormItem>
-                    )}
-                  />
-                  {/* LINE HEIGHT */}
-                  <FormField
-                    control={form.control}
-                    name={lineHeightFieldName as any}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-xs font-medium tracking-wider text-slate-500 uppercase">Line Height</FormLabel>
-
-                        <FormControl>
-                          <TypographyOptionSelector
-                            namePrefix={`${cfg.role}-line-height`}
-                            value={(field.value as string) ?? "1.5"}
-                            options={LINE_HEIGHT_OPTIONS.map((option) => ({
-                              label: option.label,
-                              value: option.value,
-                              description: option.value,
-                            }))}
-                            ariaLabel={`${cfg.label} line height`}
-                            onChange={(value) => {
-                              field.onChange(value);
-                              handleLiveChange(lineHeightFieldName, value);
-                            }}
-                          />
-                        </FormControl>
-
-                        <FormMessage className="text-xs" />
-                      </FormItem>
-                    )}
-                  />
-                  {/* TEXT TRANSFORM */}
-                  <FormField
-                    control={form.control}
-                    name={transformFieldName as any}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-xs font-medium tracking-wider text-slate-500 uppercase">Text Transform</FormLabel>
-
-                        <FormControl>
-                          <TypographyOptionSelector
-                            namePrefix={`${cfg.role}-text-transform`}
-                            value={(field.value as TextTransformValue) ?? "none"}
-                            options={TEXT_TRANSFORM_OPTIONS.map((option) => ({
-                              label: option.label,
-                              value: option.value,
-                            }))}
-                            ariaLabel={`${cfg.label} text transform`}
-                            onChange={(value) => {
-                              const transform = value as TextTransformValue;
-
-                              field.onChange(transform);
-                              handleLiveChange(transformFieldName, transform);
-                            }}
-                          />
-                        </FormControl>
-
-                        <FormMessage className="text-xs" />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              );
-            })}
-          </section>
-
-          {/* STICKY FOOTER */}
-          <div className="sticky bottom-0 z-[99] -m-5 flex h-[60px] items-center justify-end gap-3 border-slate-100 bg-white/90 px-5 md:border-t md:backdrop-blur-md">
-            <Button
+                );
+              })}
+            </section>
+          </div>
+          <div className="relative flex h-[50px] items-center justify-between gap-3 border-t border-slate-100 bg-white px-5 py-2">
+            <button
               type="button"
-              variant="ghost"
               onClick={handleCancel}
-              className="text-sm font-medium text-slate-400 transition-colors hover:text-slate-900"
+              className="font-regular inline-flex h-full min-h-[34px] w-auto cursor-pointer items-center justify-between gap-3 rounded-md bg-gray-100 pr-4 pl-3 text-xs text-black/70 transition-all hover:bg-gray-200"
             >
-              <X strokeWidth={1.5} size={16} />
-              <span>Discard</span>
-            </Button>
+              <ChevronLeft strokeWidth={1.5} size={14} />
+              <span>Previous</span>
+            </button>
 
-            <Button
+            <button
               type="submit"
               disabled={mutation.isPending}
-              className="h-9 rounded-md bg-slate-900 px-8 text-sm font-medium text-white shadow-slate-200 transition-all hover:bg-slate-800 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+              className="font-regular inline-flex h-full min-h-[34px] w-auto cursor-pointer items-center justify-between gap-3 rounded-md bg-slate-800 pr-3 pl-4 text-xs text-white/90 transition-all hover:bg-slate-900"
             >
-              <Save strokeWidth={1.5} className="mr-1.5 h-4 w-4" />
-              {mutation.isPending ? "Updating..." : "Save"}
-            </Button>
+              {mutation.isPending ? "Updating..." : "Next"}
+              <ChevronRight strokeWidth={1.5} size={14} />
+            </button>
           </div>
         </form>
       </FormProvider>

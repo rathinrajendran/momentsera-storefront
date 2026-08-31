@@ -65,14 +65,9 @@ export function PreviewToolbar({
   };
 
   return (
-    <div className={`${className} relative z-10 flex h-[50px] items-center justify-between gap-3 border-b bg-white px-4`}>
-      <div className="flex md:w-[225px] md:max-w-[280px] md:min-w-[120px] lg:max-w-[330px] lg:min-w-[330px]">
-        <div className="min-w-0 items-center text-xs">
-          <div className="flex h-full items-center truncate font-medium" title={displayInviteUrl}>
-            <span className="hidden lg:block">{draft?.frontendUrl}/</span>
-            <span className="inline items-center truncate">{displayInviteUrl}</span>
-          </div>
-        </div>
+    <div className={`${className} absolute bottom-[20px] left-1/2 z-10 flex -translate-x-1/2 items-center gap-3`}>
+      <DeviceSwitcher device={device} onChange={onDeviceChange} className="hidden gap-1 rounded-md bg-[#ffffff] p-1 md:flex" />
+      <div className="flex h-full items-center gap-1 rounded-md bg-[#ffffff] p-1">
         <CustomizeDialog
           open={customizeDialogOpen}
           onOpenChange={onCustomizeDialogOpenChange}
@@ -82,10 +77,10 @@ export function PreviewToolbar({
         >
           <button
             type="button"
-            className="flex h-7 w-7 min-w-7 cursor-pointer items-center justify-center rounded-md transition hover:bg-slate-100"
+            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-md hover:bg-[#eaeef2]"
             aria-label="Edit invite URL"
           >
-            <Pen size={15} strokeWidth={1.75} />
+            <Pen className="w-[15px]" strokeWidth={0.9} stroke="#000000" />
           </button>
         </CustomizeDialog>
         <ShareDialog
@@ -98,24 +93,19 @@ export function PreviewToolbar({
         >
           <button
             type="button"
-            className="flex h-7 w-7 min-w-7 cursor-pointer items-center justify-center rounded-md transition hover:bg-slate-100"
+            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-md hover:bg-[#eaeef2]"
             aria-label="Share invitation"
           >
-            <Share2 size={15} strokeWidth={1.75} />
+            <Share2 className="w-[15px]" strokeWidth={0.9} stroke="#000000" />
           </button>
         </ShareDialog>
-      </div>
-
-      <DeviceSwitcher device={device} onChange={onDeviceChange} className="hidden w-[170px] md:flex" />
-      <div className="flex w-[520px] justify-end gap-2">
-        <Button
-          className="flex h-auto w-auto cursor-pointer items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-[0.6rem] font-bold tracking-widest text-black uppercase transition-all hover:bg-gray-200 md:h-9 md:w-auto"
-          onClick={handlePreview}
-        >
-          <Eye />
-          Preview
-        </Button>
-        <PublishButton className="block" />
+        <button className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-md hover:bg-[#eaeef2]" onClick={handlePreview}>
+          <Eye className="w-[15px]" strokeWidth={0.9} stroke="#000000" />
+        </button>
+        <PublishButton
+          className="flex h-10 cursor-pointer items-center justify-center rounded-md bg-cyan-700 px-5 text-[11px] font-light text-white hover:bg-cyan-900"
+          label={true}
+        />
       </div>
     </div>
   );

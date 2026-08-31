@@ -92,7 +92,7 @@ const QUALITY_OPTIONS = ["Standard", "HD", "Print", "4K"];
 
 const INCLUDE_OPTIONS = ["Banner", "Events", "Gallery", "Venue", "Couple Names", "Message"];
 
-export default function PrintEditor({ eventKey, onBack }: { eventKey: string; onBack: () => void }) {
+export default function PrintEditor({ onBack, handleBack, eventKey }: { onBack: () => void; handleBack: () => void; eventKey: string }) {
   const { draft, replaceSection, resetDraft } = usePreviewDraft();
 
   const exportRef = useRef<HTMLDivElement>(null);
@@ -198,7 +198,7 @@ export default function PrintEditor({ eventKey, onBack }: { eventKey: string; on
 
   return (
     <div className="animate-in fade-in flex h-full flex-col rounded-lg duration-500 md:rounded-none">
-      <EditorHeader title="Print" handleCancel={handleCancel} />
+      <EditorHeader title="Print" handleBack={handleBack} />
 
       <FormProvider {...form}>
         <form

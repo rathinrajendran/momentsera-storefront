@@ -6,6 +6,7 @@ import { buildShare } from "@/utils/share/builder";
 import { buildShareMessage } from "@/utils/share/message";
 import { SharePreviewType, type ShareCardData } from "@/utils/share/types";
 import { BasicCard, CoverCard, HeroCard, PremiumCard } from "@/utils/share/cards";
+import NotFound from "../not-found";
 
 export const runtime = "nodejs";
 
@@ -58,7 +59,7 @@ export default async function OpenGraphImage({ params }: Props) {
   }
 
   if (!event) {
-    return new ImageResponse(<NotFoundImage />, IMAGE_SIZE);
+    NotFound();
   }
 
   try {

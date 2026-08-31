@@ -3,7 +3,7 @@
 import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Trash2, X, Plus, Save, Palette } from "lucide-react";
+import { Trash2, X, Plus, Save, ChevronLeft, ChevronRight } from "lucide-react";
 import { usePreviewDraft } from "../PreviewDraftContext";
 import { useSaveEventSection } from "../../../../hooks/useEvents";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from "../../../../components/ui/form";
@@ -16,11 +16,8 @@ import { HexColorPicker } from "react-colorful";
 /* ---------------- SCHEMA ---------------- */
 const dressCodeItemSchema = z.object({
   id: z.string().optional(),
-
   title: z.string().trim().optional(),
-
   description: z.string().trim().optional(),
-
   hexColors: z.array(z.string().regex(/^#[0-9A-Fa-f]{6}$/, "Must be a valid hex color (#FFFFFF)")).max(5, "Maximum 5 colors allowed"),
 });
 
@@ -32,15 +29,23 @@ type FormValues = z.infer<typeof schema>;
 type DressCodeItem = FormValues["dressCode"][number];
 
 /* ---------------- COMPONENT ---------------- */
-export default function DressCodeEditor({ onBack, eventKey }: { onBack: () => void; eventKey: string }) {
+export default function DressCodeEditor({
+  onBack,
+  handleBack,
+  eventKey,
+}: {
+  onBack: () => void;
+  handleBack: () => void;
+  eventKey: string;
+}) {
   // Hooks
   const { draft, updateSection, resetDraft, refreshEvent } = usePreviewDraft();
   const eventId = draft.invite.id;
   const mutation = useSaveEventSection(eventKey, eventId);
-const [activePicker, setActivePicker] = useState<{
-  dressCodeIndex: number;
-  colorIndex: number;
-} | null>(null);
+  const [activePicker, setActivePicker] = useState<{
+    dressCodeIndex: number;
+    colorIndex: number;
+  } | null>(null);
   // Derived initial data structure with fallback mapping[cite: 2]
   const rawDressCode = Array.isArray(draft?.dressCode) ? draft.dressCode : Object.values(draft?.dressCode || {});
   const dressCodeData: DressCodeItem[] =
@@ -81,7 +86,7 @@ const [activePicker, setActivePicker] = useState<{
     name: "dressCode",
   });
 
-const hasIncompleteDressCode = watchedDressCode?.some((item) => item?.hexColors?.some((c) => !c));
+  const hasIncompleteDressCode = watchedDressCode?.some((item) => item?.hexColors?.some((c) => !c));
 
   // Live state syncing wrapper[cite: 2]
   function handleLiveChange() {
@@ -112,51 +117,40 @@ const hasIncompleteDressCode = watchedDressCode?.some((item) => item?.hexColors?
 
   return (
     <div className="animate-in fade-in flex h-full flex-col rounded-xl duration-500 md:rounded-none">
-      <EditorHeader title="Dress Code Guidelines" handleCancel={handleCancel} />
+      <EditorHeader title="Dress Code" handleBack={handleBack} />
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="relative flex flex-1 flex-col justify-between space-y-6 p-5 pb-0 md:min-h-[calc(100dvh-115px)] md:rounded-none [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-[2px] [&::-webkit-scrollbar-thumb]:rounded-[10px] [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-slate-100"
-        >
-          {/* Section 1: Dress Code Options */}
-          <section className="space-y-5 [&>*:last-child]:mb-6">
-            {fields.map((field, index) => {
-              const colors = watchedDressCode?.[index]?.hexColors || [];
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="overflow-auto p-5 md:h-[calc(100dvh-125px)] md:min-h-[calc(100dvh-125px)] md:rounded-none [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-[2px] [&::-webkit-scrollbar-thumb]:rounded-[10px] [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-slate-100">
+            <section>
+              {fields.map((field, index) => {
+                const colors = watchedDressCode?.[index]?.hexColors || [];
 
-              return (
-                <div
-                  key={field.id}
-                  className="group rounded-xl border border-slate-100 bg-slate-50/40 p-5 transition-all duration-300 hover:border-slate-200/80 hover:bg-white hover:shadow-xl hover:shadow-slate-100/50"
-                >
-                  {/* Delete Button */}
-                  {fields.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        remove(index);
-                        requestAnimationFrame(() => {
-                          handleLiveChange();
-                        });
-                      }}
-                      className="absolute top-4 right-4 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full text-slate-300 opacity-0 transition-all group-hover:opacity-100 hover:bg-red-50 hover:text-red-500"
-                    >
-                      <Trash2 size={13} />
-                    </button>
-                  )}
-
-                  <div className="space-y-4">
-                    {/* Theme Title */}
+                return (
+                  <div key={field.id} className="grid grid-cols-1 gap-4 sm:grid-cols-1">
+                    {fields.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          remove(index);
+                          requestAnimationFrame(() => {
+                            handleLiveChange();
+                          });
+                        }}
+                        className="absolute top-4 right-4 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full text-slate-300 opacity-0 transition-all group-hover:opacity-100 hover:bg-red-50 hover:text-red-500"
+                      >
+                        <Trash2 size={13} />
+                      </button>
+                    )}
                     <FormField
                       control={form.control}
                       name={`dressCode.${index}.title`}
                       render={({ field: titleField }) => (
-                        <FormItem className="space-y-1.5">
-                          <FormLabel className="text-xs font-semibold text-slate-700">Dress Code Theme Title</FormLabel>
+                        <FormItem className="flex flex-col gap-1">
+                          <FormLabel>Dress Code Theme Title</FormLabel>
                           <FormControl>
                             <Input
                               {...titleField}
                               placeholder="e.g. Traditional Elegance, Semi-Formal Smart Casual"
-                              className="h-9 border-slate-200 bg-white text-sm focus-visible:ring-1 focus-visible:ring-slate-400"
                               onChange={(e) => {
                                 titleField.onChange(e);
                                 handleLiveChange();
@@ -167,19 +161,16 @@ const hasIncompleteDressCode = watchedDressCode?.some((item) => item?.hexColors?
                         </FormItem>
                       )}
                     />
-
-                    {/* Dress Code Description Textarea */}
                     <FormField
                       control={form.control}
                       name={`dressCode.${index}.description`}
                       render={({ field: descField }) => (
-                        <FormItem className="space-y-1.5">
-                          <FormLabel className="text-xs font-semibold text-slate-700">Attire Instructions</FormLabel>
+                        <FormItem className="flex flex-col gap-1">
+                          <FormLabel >Attire Instructions</FormLabel>
                           <FormControl>
                             <Textarea
                               {...descField}
                               placeholder="e.g. Pastel shades are highly encouraged. Please avoid solid black or bright neon variants..."
-                              className="min-h-[80px] border-slate-200 bg-white text-sm focus-visible:ring-1 focus-visible:ring-slate-400"
                               onChange={(e) => {
                                 descField.onChange(e);
                                 handleLiveChange();
@@ -190,19 +181,16 @@ const hasIncompleteDressCode = watchedDressCode?.some((item) => item?.hexColors?
                         </FormItem>
                       )}
                     />
-
-                    {/* Color Palette Picker */}
-                    <div className="space-y-2.5">
+                    <div className="flex flex-col gap-1">
                       <div>
-                        <FormLabel className="flex items-center gap-1.5 text-xs font-semibold text-slate-800">
+                        <FormLabel>
                           <span>Color Theme Moodboard</span>
                         </FormLabel>
                         <FormDescription className="mt-0.5 text-[10px] text-slate-400">
                           Select up to 5 palette suggestions for guests to reference.
                         </FormDescription>
                       </div>
-
-                      <div className="flex flex-wrap items-center gap-2 pt-0.5">
+                      <div className="flex gap-1 h-[40px] items-end">
                         {colors.map((color, colorIdx) => (
                           <FormField
                             key={colorIdx}
@@ -212,7 +200,7 @@ const hasIncompleteDressCode = watchedDressCode?.some((item) => item?.hexColors?
                               <FormItem className="space-y-0">
                                 <FormControl>
                                   <div
-                                    className="flex h-8 items-center gap-2 rounded-full border border-slate-200 bg-white pr-2.5 pl-1.5 shadow-sm transition-all hover:border-slate-300 cursor-pointer"
+                                    className="flex h-8 cursor-pointer items-center gap-2 rounded-full border border-slate-200 bg-white pr-2.5 pl-1.5 shadow-sm transition-all hover:border-slate-300"
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       setActivePicker({
@@ -310,58 +298,45 @@ const hasIncompleteDressCode = watchedDressCode?.some((item) => item?.hexColors?
                         )}
                       </div>
                     </div>
+                    <hr className="mt-[20px] mr-[-20px] mb-[0] ml-[-20px] [&>*:last-child]:bg-white" />
                   </div>
-                </div>
-              );
-            })}
-          </section>
-
-          {/* Sticky Actions Footer */}
-          <div className="sticky bottom-0 z-[99] -mx-5 flex h-16 flex-col justify-center border-t border-slate-100 bg-white/90 px-5 backdrop-blur-md">
-            <div className="flex w-full items-center justify-between">
-              <Button
+                );
+              })}
+            </section>
+          </div>
+          <div className="relative flex h-[50px] items-center justify-between gap-3 border-t border-slate-100 bg-white px-5 py-2">
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="font-regular inline-flex h-full min-h-[34px] w-auto cursor-pointer items-center justify-between gap-3 rounded-md bg-gray-100 pr-4 pl-3 text-xs text-black/70 transition-all hover:bg-gray-200"
+            >
+              <ChevronLeft strokeWidth={1.5} size={14} />
+              <span>Previous</span>
+            </button>
+            <div className="flex items-center gap-2">
+              <button
                 type="button"
-                variant="ghost"
-                onClick={handleCancel}
-                className="h-9 text-xs font-semibold text-slate-400 transition-colors hover:bg-slate-50 hover:text-slate-900"
+                disabled={hasIncompleteDressCode}
+                onClick={() =>
+                  append({
+                    title: "",
+                    description: "",
+                    hexColors: ["#FFFFFF"],
+                  })
+                }
+                className="font-regular inline-flex h-full min-h-[34px] w-auto cursor-pointer items-center justify-between gap-3 rounded-md border border-gray-200 bg-white pr-3 pl-3 text-xs text-black/70 transition-all hover:bg-gray-200"
               >
-                <X strokeWidth={1.5} size={14} />
-                <span>Discard</span>
-              </Button>
-
-              <div className="flex gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  disabled={hasIncompleteDressCode}
-                  onClick={() =>
-                    append({
-                      title: "",
-                      description: "",
-                      hexColors: ["#FFFFFF"],
-                    })
-                  }
-                  className="h-9 rounded-lg border border-slate-200 bg-white px-4 text-xs font-semibold text-slate-600 transition-all hover:bg-slate-50 hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  <Plus className="mr-1 h-3 w-3" strokeWidth={2.5} /> Add Variant
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={!formState.isValid || mutation.isPending}
-                  className="h-9 rounded-lg bg-slate-900 px-8 text-xs font-semibold text-white shadow-md shadow-slate-100 transition-all hover:bg-slate-800 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  <Save strokeWidth={1.5} size={14} className="mr-1" />
-                  {mutation.isPending ? "Updating..." : "Save"}
-                </Button>
-              </div>
+                <Plus strokeWidth={1.5} size={14} />
+              </button>
+              <button
+                type="submit"
+                disabled={!formState.isValid || mutation.isPending}
+                className="font-regular inline-flex h-full min-h-[34px] w-auto cursor-pointer items-center justify-between gap-3 rounded-md bg-slate-800 pr-3 pl-4 text-xs text-white/90 transition-all hover:bg-slate-900"
+              >
+                {mutation.isPending ? "Updating..." : "Next"}
+                <ChevronRight strokeWidth={1.5} size={14} />
+              </button>
             </div>
-
-            {form.formState.errors.dressCode?.message && (
-              <p className="text-destructive animate-in fade-in slide-in-from-bottom-1 absolute -top-6 left-5 rounded-md border border-red-100 bg-white/80 px-2 py-0.5 text-[10px] font-medium shadow-sm">
-                {form.formState.errors.dressCode.message}
-              </p>
-            )}
           </div>
         </form>
       </Form>

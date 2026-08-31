@@ -264,7 +264,7 @@ export default function Nuvo({ data, eventKey, design, settings }: NuvoProps) {
             </motion.div>
           </div>
 
-          <div className="mx-auto grid max-w-[1240px] grid-cols-3 border-y md:grid-cols-3" style={{ borderColor: THEME_COLORS.line }}>
+          <div className="mx-auto grid max-w-[1240px] grid-cols-2 border-y md:grid-cols-3" style={{ borderColor: THEME_COLORS.line }}>
             {[
               ["DATE", primaryDateLabel || "16 NOV 2025"],
               ["TIME", primaryTime || "06:00 PM"],

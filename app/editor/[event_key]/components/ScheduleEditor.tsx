@@ -1,9 +1,8 @@
 "use client";
-
 import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Trash2, X, Plus, Save } from "lucide-react";
+import { Trash2, Plus, ChevronLeft, ChevronRight } from "lucide-react";
 import { usePreviewDraft } from "../PreviewDraftContext";
 import { useSaveEventSection } from "../../../../hooks/useEvents";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "../../../../components/ui/form";
@@ -31,26 +30,18 @@ function startOfDay(date: Date) {
 const scheduleItemSchema = z
   .object({
     id: z.string().optional(),
-
     title: z.string().trim().min(1, "Function title is required"),
-
-    /*
-     * Start date
-     */
     date: z
       .string({ message: "Date is required" })
       .min(1, "Date is required")
       .refine(
         (value) => {
           const selected = new Date(value);
-
           if (Number.isNaN(selected.getTime())) {
             return false;
           }
-
           const selectedDay = startOfDay(selected);
           const today = startOfDay(new Date());
-
           return selectedDay >= today;
         },
         {
@@ -58,77 +49,32 @@ const scheduleItemSchema = z
         },
       ),
 
-    /*
-     * Start datetime
-     */
     startTime: z.string().optional(),
-
-    /*
-     * End date
-     */
     endDate: z.string().optional(),
-
-    /*
-     * End datetime
-     */
     endTime: z.string().or(z.literal("")).optional(),
-
     locationName: z.string().optional(),
     locationAddress: z.string().optional(),
-
     locationUrl: z.string().url("Invalid URL format").or(z.literal("")).optional(),
-
     note: z.string().optional(),
-
     isPrimary: z.boolean(),
   })
   .superRefine((data, ctx) => {
-    /*
-     * End time is optional.
-     * If it doesn't exist, there is nothing
-     * to validate for the end date/time.
-     */
     if (!data.endTime) {
       return;
     }
-
-    /*
-     * End time exists, so end date must exist.
-     */
     if (!data.endDate) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["endDate"],
         message: "End date is required.",
       });
-
       return;
     }
-
-    /*
-     * Validate start datetime.
-     */
     const start = new Date(data.startTime || data.date);
-
-    /*
-     * Validate end datetime.
-     */
     const end = new Date(data.endTime);
-
     if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
       return;
     }
-
-    /*
-     * End datetime must be after start datetime.
-     *
-     * Example:
-     *
-     * Aug 10 11:00 PM
-     * Aug 11 01:00 AM
-     *
-     * is valid.
-     */
     if (end <= start) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -173,7 +119,7 @@ type ScheduleItem = FormValues["schedule"][number];
 /* Component                                                                  */
 /* -------------------------------------------------------------------------- */
 
-export default function ScheduleEditor({ onBack, eventKey }: { onBack: () => void; eventKey: string }) {
+export default function ScheduleEditor({ onBack, handleBack, eventKey }: { onBack: () => void; handleBack: () => void; eventKey: string }) {
   /* ------------------------------------------------------------------------ */
   /* Hooks                                                                    */
   /* ------------------------------------------------------------------------ */
@@ -223,14 +169,14 @@ export default function ScheduleEditor({ onBack, eventKey }: { onBack: () => voi
   /* Form                                                                     */
   /* ------------------------------------------------------------------------ */
 
-const form = useForm<FormValues>({
-  resolver: zodResolver(schema),
-  mode: "onChange",
-  reValidateMode: "onChange",
-  defaultValues: {
-    schedule: scheduleData,
-  },
-});
+  const form = useForm<FormValues>({
+    resolver: zodResolver(schema),
+    mode: "onChange",
+    reValidateMode: "onChange",
+    defaultValues: {
+      schedule: scheduleData,
+    },
+  });
 
   const { formState, control, handleSubmit } = form;
 
@@ -324,52 +270,30 @@ const form = useForm<FormValues>({
       {/* Header                                                               */}
       {/* -------------------------------------------------------------------- */}
 
-      <EditorHeader
-        title="Functions"
-        handleCancel={() => {
-          resetDraft();
-          onBack();
-        }}
-      />
+      <EditorHeader title="Functions" handleBack={handleBack} />
 
       <Form {...form}>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-1 flex-col justify-between space-y-5 overflow-auto p-5 pb-0 md:min-h-[calc(100dvh-115px)] [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-[2px] [&::-webkit-scrollbar-thumb]:rounded-[10px] [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-[#78909C]"
-        >
-          {/* ---------------------------------------------------------------- */}
-          {/* Functions                                                        */}
-          {/* ---------------------------------------------------------------- */}
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="overflow-auto p-5 md:h-[calc(100dvh-125px)] md:min-h-[calc(100dvh-125px)] md:rounded-none [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-[2px] [&::-webkit-scrollbar-thumb]:rounded-[10px] [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-slate-100">
+            {/* ---------------------------------------------------------------- */}
+            {/* Functions                                                        */}
+            {/* ---------------------------------------------------------------- */}
 
-          <section className="space-y-6">
-            {fields.map((field, index) => {
-              const currentHasEndTime = !!watchedFunctions?.[index]?.endTime;
-
-              const currentStartDate = watchedFunctions?.[index]?.date;
-
-              return (
-                <div
-                  key={field.id}
-                  className="group relative rounded-2xl border border-slate-100 p-5 transition-all duration-300 hover:shadow-xl"
-                >
-                  {/* -------------------------------------------------------- */}
-                  {/* Delete                                                     */}
-                  {/* -------------------------------------------------------- */}
-
-                  {fields.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => handleDelete(index)}
-                      className="absolute top-4 right-4 rounded-full p-1.5 text-slate-300 opacity-0 transition-all group-hover:opacity-100 hover:bg-red-50 hover:text-red-500"
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  )}
-
-                  <div className="space-y-4">
-                    {/* ------------------------------------------------------ */}
-                    {/* Primary Function                                       */}
-                    {/* ------------------------------------------------------ */}
+            <section>
+              {fields.map((field, index) => {
+                const currentHasEndTime = !!watchedFunctions?.[index]?.endTime;
+                const currentStartDate = watchedFunctions?.[index]?.date;
+                return (
+                  <div key={field.id} className="grid grid-cols-1 gap-4 sm:grid-cols-1">
+                    {fields.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(index)}
+                        className="absolute top-4 right-4 rounded-full p-1.5 text-slate-300 opacity-0 transition-all group-hover:opacity-100 hover:bg-red-50 hover:text-red-500"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    )}
 
                     {fields.length > 1 && (
                       <FormField
@@ -402,11 +326,6 @@ const form = useForm<FormValues>({
                         )}
                       />
                     )}
-
-                    {/* ------------------------------------------------------ */}
-                    {/* Function Title                                         */}
-                    {/* ------------------------------------------------------ */}
-
                     <FormField
                       control={control}
                       name={`schedule.${index}.title`}
@@ -430,140 +349,126 @@ const form = useForm<FormValues>({
                         </FormItem>
                       )}
                     />
+                    <div className="grid grid-cols-2 items-end gap-4">
+                      <FormField
+                        control={control}
+                        name={`schedule.${index}.date`}
+                        render={({ field: dateField }) => (
+                          <FormItem>
+                            <FormLabel>Date</FormLabel>
 
-                    {/* ------------------------------------------------------ */}
-                    {/* Start Date                                               */}
-                    {/* ------------------------------------------------------ */}
+                            <CustomDatePicker
+                              disabledDates={(date) => {
+                                const today = new Date();
 
-                    <FormField
-                      control={control}
-                      name={`schedule.${index}.date`}
-                      render={({ field: dateField }) => (
-                        <FormItem>
-                          <FormLabel>Date</FormLabel>
+                                today.setHours(0, 0, 0, 0);
 
-                          <CustomDatePicker
-                            disabledDates={(date) => {
-                              const today = new Date();
+                                return date < today;
+                              }}
+                              value={dateField.value ? new Date(dateField.value) : undefined}
+                              onChange={(selectedDate) => {
+                                if (!selectedDate) {
+                                  dateField.onChange("");
 
-                              today.setHours(0, 0, 0, 0);
+                                  handleLiveChange();
 
-                              return date < today;
-                            }}
-                            value={dateField.value ? new Date(dateField.value) : undefined}
-                            onChange={(selectedDate) => {
-                              if (!selectedDate) {
-                                dateField.onChange("");
+                                  return;
+                                }
 
-                                handleLiveChange();
+                                /*
+                                 * Preserve existing
+                                 * start time.
+                                 */
+                                const existingStartTime = form.getValues(`schedule.${index}.startTime`);
 
-                                return;
-                              }
+                                const updatedDate = new Date(selectedDate);
 
-                              /*
-                               * Preserve existing
-                               * start time.
-                               */
-                              const existingStartTime = form.getValues(`schedule.${index}.startTime`);
+                                if (existingStartTime) {
+                                  const existingTime = new Date(existingStartTime);
 
-                              const updatedDate = new Date(selectedDate);
+                                  updatedDate.setHours(existingTime.getHours());
 
-                              if (existingStartTime) {
-                                const existingTime = new Date(existingStartTime);
+                                  updatedDate.setMinutes(existingTime.getMinutes());
 
-                                updatedDate.setHours(existingTime.getHours());
+                                  updatedDate.setSeconds(0);
 
-                                updatedDate.setMinutes(existingTime.getMinutes());
+                                  updatedDate.setMilliseconds(0);
+                                }
 
-                                updatedDate.setSeconds(0);
+                                const isoString = updatedDate.toISOString();
 
-                                updatedDate.setMilliseconds(0);
-                              }
+                                dateField.onChange(isoString);
 
-                              const isoString = updatedDate.toISOString();
-
-                              dateField.onChange(isoString);
-
-                              /*
-                               * Keep startTime
-                               * synchronized.
-                               */
-                              if (existingStartTime) {
-                                form.setValue(`schedule.${index}.startTime`, isoString, {
-                                  shouldValidate: true,
-                                  shouldDirty: true,
-                                });
-                              }
-
-                              /*
-                               * If end time exists,
-                               * preserve its time and
-                               * move end date if the
-                               * old end date was the
-                               * same day as the old
-                               * start date.
-                               */
-                              const existingEndDate = form.getValues(`schedule.${index}.endDate`);
-
-                              const existingEndTime = form.getValues(`schedule.${index}.endTime`);
-
-                              if (existingEndDate && existingEndTime && dateField.value) {
-                                const oldStart = new Date(dateField.value);
-
-                                const oldEnd = new Date(existingEndDate);
-
-                                const wasSameDay = startOfDay(oldStart).getTime() === startOfDay(oldEnd).getTime();
-
-                                if (wasSameDay) {
-                                  const updatedEnd = new Date(selectedDate);
-
-                                  const endTime = new Date(existingEndTime);
-
-                                  updatedEnd.setHours(endTime.getHours());
-
-                                  updatedEnd.setMinutes(endTime.getMinutes());
-
-                                  updatedEnd.setSeconds(0);
-
-                                  updatedEnd.setMilliseconds(0);
-
-                                  const endIso = updatedEnd.toISOString();
-
-                                  form.setValue(`schedule.${index}.endDate`, endIso, {
-                                    shouldValidate: true,
-                                    shouldDirty: true,
-                                  });
-
-                                  form.setValue(`schedule.${index}.endTime`, endIso, {
+                                /*
+                                 * Keep startTime
+                                 * synchronized.
+                                 */
+                                if (existingStartTime) {
+                                  form.setValue(`schedule.${index}.startTime`, isoString, {
                                     shouldValidate: true,
                                     shouldDirty: true,
                                   });
                                 }
-                              }
 
-                              handleLiveChange();
-                            }}
-                          />
+                                /*
+                                 * If end time exists,
+                                 * preserve its time and
+                                 * move end date if the
+                                 * old end date was the
+                                 * same day as the old
+                                 * start date.
+                                 */
+                                const existingEndDate = form.getValues(`schedule.${index}.endDate`);
 
-                          <FormMessage className="text-[10px]" />
-                        </FormItem>
-                      )}
-                    />
+                                const existingEndTime = form.getValues(`schedule.${index}.endTime`);
 
-                    {/* ------------------------------------------------------ */}
-                    {/* Start Time / End Time                                   */}
-                    {/* ------------------------------------------------------ */}
+                                if (existingEndDate && existingEndTime && dateField.value) {
+                                  const oldStart = new Date(dateField.value);
 
-                    <div className="grid grid-cols-2 items-end gap-4">
-                      {/* ---------------------------------------------------- */}
-                      {/* Start Time                                             */}
-                      {/* ---------------------------------------------------- */}
+                                  const oldEnd = new Date(existingEndDate);
 
+                                  const wasSameDay = startOfDay(oldStart).getTime() === startOfDay(oldEnd).getTime();
+
+                                  if (wasSameDay) {
+                                    const updatedEnd = new Date(selectedDate);
+
+                                    const endTime = new Date(existingEndTime);
+
+                                    updatedEnd.setHours(endTime.getHours());
+
+                                    updatedEnd.setMinutes(endTime.getMinutes());
+
+                                    updatedEnd.setSeconds(0);
+
+                                    updatedEnd.setMilliseconds(0);
+
+                                    const endIso = updatedEnd.toISOString();
+
+                                    form.setValue(`schedule.${index}.endDate`, endIso, {
+                                      shouldValidate: true,
+                                      shouldDirty: true,
+                                    });
+
+                                    form.setValue(`schedule.${index}.endTime`, endIso, {
+                                      shouldValidate: true,
+                                      shouldDirty: true,
+                                    });
+                                  }
+                                }
+
+                                handleLiveChange();
+                              }}
+                            />
+
+                            <FormMessage className="text-[10px]" />
+                          </FormItem>
+                        )}
+                      />
                       <FormField
                         control={control}
                         name={`schedule.${index}.startTime`}
                         render={({ field: startField }) => (
-                          <FormItem className={currentHasEndTime ? "" : "col-span-2"}>
+                          <FormItem>
                             <FormLabel>{currentHasEndTime ? "Start Time" : "Time"}</FormLabel>
 
                             <TimePicker
@@ -640,56 +545,105 @@ const form = useForm<FormValues>({
                           </FormItem>
                         )}
                       />
+                    </div>
+                    <div className="grid grid-cols-2 items-end gap-4">
+                      {currentHasEndTime && (
+                        <FormField
+                          control={control}
+                          name={`schedule.${index}.endDate`}
+                          render={({ field: endDateField }) => (
+                            <FormItem>
+                              <FormLabel>End Date</FormLabel>
 
-                      {/* ---------------------------------------------------- */}
-                      {/* Add End Time                                           */}
-                      {/* ---------------------------------------------------- */}
+                              <CustomDatePicker
+                                disabledDates={(date) => {
+                                  if (!currentStartDate) {
+                                    return false;
+                                  }
 
+                                  const start = new Date(currentStartDate);
+
+                                  start.setHours(0, 0, 0, 0);
+
+                                  return date < start;
+                                }}
+                                value={endDateField.value ? new Date(endDateField.value) : undefined}
+                                onChange={(selectedDate) => {
+                                  if (!selectedDate) {
+                                    endDateField.onChange("");
+
+                                    form.setValue(`schedule.${index}.endTime`, "", {
+                                      shouldValidate: true,
+                                      shouldDirty: true,
+                                    });
+
+                                    handleLiveChange();
+
+                                    return;
+                                  }
+
+                                  const currentEndTime = form.getValues(`schedule.${index}.endTime`);
+
+                                  const updatedDate = new Date(selectedDate);
+
+                                  /*
+                                   * Preserve
+                                   * selected end
+                                   * time.
+                                   */
+                                  if (currentEndTime) {
+                                    const existingTime = new Date(currentEndTime);
+
+                                    updatedDate.setHours(existingTime.getHours());
+
+                                    updatedDate.setMinutes(existingTime.getMinutes());
+                                  }
+
+                                  updatedDate.setSeconds(0);
+
+                                  updatedDate.setMilliseconds(0);
+
+                                  const isoString = updatedDate.toISOString();
+
+                                  endDateField.onChange(isoString);
+
+                                  /*
+                                   * Synchronize
+                                   * endTime.
+                                   */
+                                  form.setValue(`schedule.${index}.endTime`, isoString, {
+                                    shouldValidate: true,
+                                    shouldDirty: true,
+                                  });
+
+                                  handleLiveChange();
+                                }}
+                              />
+
+                              <FormMessage className="text-[10px]" />
+                            </FormItem>
+                          )}
+                        />
+                      )}
                       {!currentHasEndTime ? (
-                        <Button
+                        <button
                           type="button"
-                          variant="ghost"
-                          size="sm"
-                          className="text-xs text-slate-500"
+                          className="font-regular inline-flex h-full min-h-[34px] w-auto cursor-pointer items-center gap-2 rounded-md border border-gray-200 bg-white pr-3 pl-3 text-[0.7rem] tracking-normal text-slate-700 capitalize transition-all hover:bg-gray-200"
                           onClick={() => {
                             const startDate = form.getValues(`schedule.${index}.date`);
-
                             const startTime = form.getValues(`schedule.${index}.startTime`);
-
-                            /*
-                             * Event date is
-                             * required.
-                             */
                             if (!startDate) {
                               return;
                             }
-
-                            /*
-                             * Use actual start
-                             * datetime when
-                             * available.
-                             */
                             const baseDate = startTime ? new Date(startTime) : new Date(startDate);
-
-                            /*
-                             * Default end:
-                             * 30 minutes later.
-                             */
                             baseDate.setMinutes(baseDate.getMinutes() + 30);
-
                             baseDate.setSeconds(0);
                             baseDate.setMilliseconds(0);
-
                             const endIso = baseDate.toISOString();
-
-                            /*
-                             * Store both.
-                             */
                             form.setValue(`schedule.${index}.endDate`, endIso, {
                               shouldValidate: true,
                               shouldDirty: true,
                             });
-
                             form.setValue(`schedule.${index}.endTime`, endIso, {
                               shouldValidate: true,
                               shouldDirty: true,
@@ -698,14 +652,10 @@ const form = useForm<FormValues>({
                             handleLiveChange();
                           }}
                         >
-                          <Plus className="mr-1 h-3 w-3" />
-                          Add End Time
-                        </Button>
+                          <Plus strokeWidth={1.5} size={14} />
+                          End Date
+                        </button>
                       ) : (
-                        /* -------------------------------------------------- */
-                        /* End Time                                             */
-                        /* -------------------------------------------------- */
-
                         <FormField
                           control={control}
                           name={`schedule.${index}.endTime`}
@@ -775,94 +725,6 @@ const form = useForm<FormValues>({
                         />
                       )}
                     </div>
-
-                    {/* ------------------------------------------------------ */}
-                    {/* End Date                                                 */}
-                    {/* ------------------------------------------------------ */}
-
-                    {currentHasEndTime && (
-                      <FormField
-                        control={control}
-                        name={`schedule.${index}.endDate`}
-                        render={({ field: endDateField }) => (
-                          <FormItem>
-                            <FormLabel>End Date</FormLabel>
-
-                            <CustomDatePicker
-                              disabledDates={(date) => {
-                                if (!currentStartDate) {
-                                  return false;
-                                }
-
-                                const start = new Date(currentStartDate);
-
-                                start.setHours(0, 0, 0, 0);
-
-                                return date < start;
-                              }}
-                              value={endDateField.value ? new Date(endDateField.value) : undefined}
-                              onChange={(selectedDate) => {
-                                if (!selectedDate) {
-                                  endDateField.onChange("");
-
-                                  form.setValue(`schedule.${index}.endTime`, "", {
-                                    shouldValidate: true,
-                                    shouldDirty: true,
-                                  });
-
-                                  handleLiveChange();
-
-                                  return;
-                                }
-
-                                const currentEndTime = form.getValues(`schedule.${index}.endTime`);
-
-                                const updatedDate = new Date(selectedDate);
-
-                                /*
-                                 * Preserve
-                                 * selected end
-                                 * time.
-                                 */
-                                if (currentEndTime) {
-                                  const existingTime = new Date(currentEndTime);
-
-                                  updatedDate.setHours(existingTime.getHours());
-
-                                  updatedDate.setMinutes(existingTime.getMinutes());
-                                }
-
-                                updatedDate.setSeconds(0);
-
-                                updatedDate.setMilliseconds(0);
-
-                                const isoString = updatedDate.toISOString();
-
-                                endDateField.onChange(isoString);
-
-                                /*
-                                 * Synchronize
-                                 * endTime.
-                                 */
-                                form.setValue(`schedule.${index}.endTime`, isoString, {
-                                  shouldValidate: true,
-                                  shouldDirty: true,
-                                });
-
-                                handleLiveChange();
-                              }}
-                            />
-
-                            <FormMessage className="text-[10px]" />
-                          </FormItem>
-                        )}
-                      />
-                    )}
-
-                    {/* ------------------------------------------------------ */}
-                    {/* Venue                                                    */}
-                    {/* ------------------------------------------------------ */}
-
                     <FormField
                       control={control}
                       name={`schedule.${index}.locationName`}
@@ -909,11 +771,6 @@ const form = useForm<FormValues>({
                         </FormItem>
                       )}
                     />
-
-                    {/* ------------------------------------------------------ */}
-                    {/* Map URL                                                  */}
-                    {/* ------------------------------------------------------ */}
-
                     <FormField
                       control={control}
                       name={`schedule.${index}.locationUrl`}
@@ -937,11 +794,6 @@ const form = useForm<FormValues>({
                         </FormItem>
                       )}
                     />
-
-                    {/* ------------------------------------------------------ */}
-                    {/* Note                                                     */}
-                    {/* ------------------------------------------------------ */}
-
                     <FormField
                       control={control}
                       name={`schedule.${index}.note`}
@@ -965,77 +817,55 @@ const form = useForm<FormValues>({
                         </FormItem>
                       )}
                     />
+                    <hr className="mt-[20px] mr-[-20px] mb-[0] ml-[-20px] [&>*:last-child]:bg-white" />
                   </div>
-                </div>
-              );
-            })}
-          </section>
-
-          {/* ---------------------------------------------------------------- */}
-          {/* Footer                                                           */}
-          {/* ---------------------------------------------------------------- */}
-
-          <div className="sticky bottom-0 z-[99] flex min-h-16 items-center justify-end gap-3 border-t bg-white px-5 py-3">
-            {/* -------------------------------------------------------------- */}
-            {/* Discard                                                         */}
-            {/* -------------------------------------------------------------- */}
-
-            <Button
+                );
+              })}
+            </section>
+          </div>
+          {/* Sticky Actions Footer */}
+          <div className="relative flex h-[50px] items-center justify-between gap-3 border-t border-slate-100 bg-white px-5 py-2">
+            <button
               type="button"
-              variant="ghost"
               onClick={() => {
                 resetDraft();
                 onBack();
               }}
+              className="font-regular inline-flex h-full min-h-[34px] w-auto cursor-pointer items-center justify-between gap-3 rounded-md bg-gray-100 pr-4 pl-3 text-xs text-black/70 transition-all hover:bg-gray-200"
             >
-              <X size={14} className="mr-1" />
-              Discard
-            </Button>
-
-            {/* -------------------------------------------------------------- */}
-            {/* Add Function                                                    */}
-            {/* -------------------------------------------------------------- */}
-
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              disabled={hasIncompleteFunction}
-              onClick={() =>
-                append({
-                  title: "",
-                  date: "",
-                  startTime: "",
-                  endDate: "",
-                  endTime: "",
-                  locationName: "",
-                  locationUrl: "",
-                  note: "",
-                  isPrimary: fields.length === 0,
-                })
-              }
-            >
-              <Plus className="mr-1 h-3 w-3" />
-              Add
-            </Button>
-
-            {/* -------------------------------------------------------------- */}
-            {/* Save                                                             */}
-            {/* -------------------------------------------------------------- */}
-
-            <Button type="submit" disabled={!formState.isValid || mutation.isPending}>
-              <Save className="mr-1 h-3 w-3" />
-
-              {mutation.isPending ? "Updating..." : "Save"}
-            </Button>
-
-            {/* -------------------------------------------------------------- */}
-            {/* Schedule Error                                                  */}
-            {/* -------------------------------------------------------------- */}
-
-            {form.formState.errors.schedule?.message && (
-              <p className="px-5 text-xs text-red-500">{form.formState.errors.schedule.message}</p>
-            )}
+              <ChevronLeft strokeWidth={1.5} size={14} />
+              <span>Previous</span>
+            </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                disabled={hasIncompleteFunction}
+                onClick={() =>
+                  append({
+                    title: "",
+                    date: "",
+                    startTime: "",
+                    endDate: "",
+                    endTime: "",
+                    locationName: "",
+                    locationUrl: "",
+                    note: "",
+                    isPrimary: fields.length === 0,
+                  })
+                }
+                className="font-regular inline-flex h-full min-h-[34px] w-auto cursor-pointer items-center justify-between gap-3 rounded-md border border-gray-200 bg-white pr-3 pl-3 text-xs text-black/70 transition-all hover:bg-gray-200"
+              >
+                <Plus strokeWidth={1.5} size={14} />
+              </button>
+              <button
+                type="submit"
+                disabled={!formState.isValid || mutation.isPending}
+                className="font-regular inline-flex h-full min-h-[34px] w-auto cursor-pointer items-center justify-between gap-3 rounded-md bg-slate-800 pr-3 pl-4 text-xs text-white/90 transition-all hover:bg-slate-900"
+              >
+                {mutation.isPending ? "Updating..." : "Next"}
+                <ChevronRight strokeWidth={1.5} size={14} />
+              </button>
+            </div>
           </div>
         </form>
       </Form>

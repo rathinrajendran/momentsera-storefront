@@ -3,7 +3,7 @@
 import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { X, Save, Plus, Trash2 } from "lucide-react";
+import { X, Save, Plus, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import { usePreviewDraft } from "../PreviewDraftContext";
 import { useSaveEventSection } from "../../../../hooks/useEvents";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "../../../../components/ui/form";
@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { CustomDatePicker } from "../../../../components/ui/CustomDatePicker";
 import { Textarea } from "../../../../components/ui/textarea";
 import { LabelForm } from "../../../../components/ui/LabelForm";
+import EditorHeader from "./EditorHeader";
 const DEFAULT_QUESTIONS = [
   {
     id: crypto.randomUUID(),
@@ -55,7 +56,7 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 /* ---------------- COMPONENT ---------------- */
-export default function RSVPEditor({ onBack, eventKey }: { onBack: () => void; eventKey: string }) {
+export default function RSVPEditor({ onBack, handleBack, eventKey }: { onBack: () => void; handleBack: () => void; eventKey: string }) {
   // Hooks
   const { draft, updateSection, resetDraft, refreshEvent } = usePreviewDraft();
   const eventId = draft.invite.id;
@@ -82,9 +83,11 @@ export default function RSVPEditor({ onBack, eventKey }: { onBack: () => void; e
     name: "custom_questions",
   });
 
-console.log("form data", form);
-
-
+  console.log("form data", form);
+  function handleCancel() {
+    resetDraft();
+    onBack();
+  }
   return (
     // <div>
     //   <Button
@@ -170,226 +173,239 @@ console.log("form data", form);
     //     </div>
     //   ))}
     // </div>
-    <Form {...form}>
-      <form className="flex h-full flex-col justify-between">
-        <div className="flex-1 space-y-6 overflow-y-auto p-5">
-          {/* RSVP Deadline */}
-          <section className="space-y-4">
-            <FormField
-              control={form.control}
-              name="rsvp_deadline"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Deadline</FormLabel>
-                  <FormControl>
-                    <CustomDatePicker value={field.value} onChange={field.onChange} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </section>
-
-          {/* Guest Options */}
-          <section className="space-y-4">
-            <FormField
-              control={form.control}
-              name="allow_plus_one"
-              render={({ field }) => (
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">Allow Plus One</p>
-                    <p className="text-xs text-slate-500">Let guests bring additional people.</p>
-                  </div>
-
-                  <Switch checked={field.value} onCheckedChange={field.onChange} />
-                </div>
-              )}
-            />
-
-            {form.watch("allow_plus_one") && (
-              <FormField
-                control={form.control}
-                name="max_plus_ones"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Maximum Additional Guests</FormLabel>
-                    <FormControl>
-                      <Input type="number" min={1} max={10} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
-          </section>
-
-          {/* Preferences */}
-          <section className="space-y-4">
-            <FormField
-              control={form.control}
-              name="collect_dietary"
-              render={({ field }) => (
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">Dietary Restrictions</p>
-                    <p className="text-xs text-slate-500">Ask about allergies and food restrictions.</p>
-                  </div>
-
-                  <Switch checked={field.value} onCheckedChange={field.onChange} />
-                </div>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="collect_meal_preference"
-              render={({ field }) => (
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">Meal Preference</p>
-                    <p className="text-xs text-slate-500">Ask guests to choose their meal.</p>
-                  </div>
-
-                  <Switch checked={field.value} onCheckedChange={field.onChange} />
-                </div>
-              )}
-            />
-          </section>
-
-          {/* RSVP Note */}
-          <section className="space-y-4">
-            <FormField
-              control={form.control}
-              name="custom_rsvp_note"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Message</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      {...field}
-                      rows={4}
-                      placeholder="We kindly request your response before the RSVP deadline..."
-                      className="min-h-24 border-slate-200 bg-white text-sm focus-visible:ring-1 focus-visible:ring-slate-400"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </section>
-
-          {/* Questions */}
-          <section className="space-y-4">
-            {fields.map((field, index) => (
-              <div key={field.id} className="group relative space-y-4">
-                <div className="flex justify-between items-center">
-                  <h6 className="font-bold text-xs uppercase">Question {index + 1}</h6>
-                  <Button
-                    size="icon"
-                    type="button"
-                    variant="ghost"
-                    onClick={() => remove(index)}
-                    className="relative opacity-0 transition group-hover:opacity-100"
-                  >
-                    <Trash2 className="h-4 w-4 text-red-500" />
-                  </Button>
-                </div>
-
-                <div className="grid gap-4 md:grid-cols-1">
+    <div className="animate-in fade-in flex h-full flex-col rounded-xl bg-white duration-500 md:rounded-none">
+      <EditorHeader title="Announcement" handleBack={handleBack} />
+      <Form {...form}>
+        <form>
+          <div className="overflow-auto p-5 md:h-[calc(100dvh-125px)] md:min-h-[calc(100dvh-125px)] md:rounded-none [&::-webkit-scrollbar]:h-0 [&::-webkit-scrollbar]:w-[2px] [&::-webkit-scrollbar-thumb]:rounded-[10px] [&::-webkit-scrollbar-thumb]:bg-slate-300 [&::-webkit-scrollbar-track]:rounded-[10px] [&::-webkit-scrollbar-track]:bg-slate-100">
+            <section className="space-y-5">
+              <div className="flex-1 space-y-6 overflow-y-auto">
+                {/* RSVP Deadline */}
+                <section className="space-y-4">
                   <FormField
                     control={form.control}
-                    name={`custom_questions.${index}.label`}
+                    name="rsvp_deadline"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Question</FormLabel>
+                        <FormLabel>Deadline</FormLabel>
                         <FormControl>
-                          <Input {...field} placeholder="Enter question" />
+                          <CustomDatePicker value={field.value} onChange={field.onChange} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+                </section>
+
+                {/* Guest Options */}
+                <section className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="allow_plus_one"
+                    render={({ field }) => (
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium">Allow Plus One</p>
+                          <p className="text-xs text-slate-500">Let guests bring additional people.</p>
+                        </div>
+
+                        <Switch checked={field.value} onCheckedChange={field.onChange} />
+                      </div>
+                    )}
+                  />
+
+                  {form.watch("allow_plus_one") && (
+                    <FormField
+                      control={form.control}
+                      name="max_plus_ones"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Maximum Additional Guests</FormLabel>
+                          <FormControl>
+                            <Input type="number" min={1} max={10} {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
+                </section>
+
+                {/* Preferences */}
+                <section className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="collect_dietary"
+                    render={({ field }) => (
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium">Dietary Restrictions</p>
+                          <p className="text-xs text-slate-500">Ask about allergies and food restrictions.</p>
+                        </div>
+
+                        <Switch checked={field.value} onCheckedChange={field.onChange} />
+                      </div>
+                    )}
+                  />
 
                   <FormField
                     control={form.control}
-                    name={`custom_questions.${index}.type`}
+                    name="collect_meal_preference"
+                    render={({ field }) => (
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium">Meal Preference</p>
+                          <p className="text-xs text-slate-500">Ask guests to choose their meal.</p>
+                        </div>
+
+                        <Switch checked={field.value} onCheckedChange={field.onChange} />
+                      </div>
+                    )}
+                  />
+                </section>
+
+                {/* RSVP Note */}
+                <section className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="custom_rsvp_note"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Answer Type</FormLabel>
-
-                        <Select value={field.value} onValueChange={field.onChange}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                          </FormControl>
-
-                          <SelectContent>
-                            <SelectItem value="text">Short Text</SelectItem>
-
-                            <SelectItem value="textarea">Paragraph</SelectItem>
-
-                            <SelectItem value="boolean">Yes / No</SelectItem>
-
-                            <SelectItem value="number">Number</SelectItem>
-
-                            <SelectItem value="select">Dropdown</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <FormLabel>Message</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            {...field}
+                            rows={4}
+                            placeholder="We kindly request your response before the RSVP deadline..."
+                            className="min-h-24 border-slate-200 bg-white text-sm focus-visible:ring-1 focus-visible:ring-slate-400"
+                          />
+                        </FormControl>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
-                </div>
+                </section>
 
-                <FormField
-                  control={form.control}
-                  name={`custom_questions.${index}.required`}
-                  render={({ field }) => (
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <LabelForm className="font-medium">Required Question</LabelForm>
-                        <p className="text-xs text-slate-500">Guests must answer this question.</p>
+                {/* Questions */}
+                <section className="space-y-4">
+                  {fields.map((field, index) => (
+                    <div key={field.id} className="group relative space-y-4">
+                      <div className="flex items-center justify-between">
+                        <h6 className="text-xs font-bold uppercase">Question {index + 1}</h6>
+                        <Button
+                          size="icon"
+                          type="button"
+                          variant="ghost"
+                          onClick={() => remove(index)}
+                          className="relative opacity-0 transition group-hover:opacity-100"
+                        >
+                          <Trash2 className="h-4 w-4 text-red-500" />
+                        </Button>
                       </div>
 
-                      <Switch checked={field.value} onCheckedChange={field.onChange} />
+                      <div className="grid gap-4 md:grid-cols-1">
+                        <FormField
+                          control={form.control}
+                          name={`custom_questions.${index}.label`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Question</FormLabel>
+                              <FormControl>
+                                <Input {...field} placeholder="Enter question" />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name={`custom_questions.${index}.type`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Answer Type</FormLabel>
+
+                              <Select value={field.value} onValueChange={field.onChange}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                </FormControl>
+
+                                <SelectContent>
+                                  <SelectItem value="text">Short Text</SelectItem>
+
+                                  <SelectItem value="textarea">Paragraph</SelectItem>
+
+                                  <SelectItem value="boolean">Yes / No</SelectItem>
+
+                                  <SelectItem value="number">Number</SelectItem>
+
+                                  <SelectItem value="select">Dropdown</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <FormField
+                        control={form.control}
+                        name={`custom_questions.${index}.required`}
+                        render={({ field }) => (
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <LabelForm className="font-medium">Required Question</LabelForm>
+                              <p className="text-xs text-slate-500">Guests must answer this question.</p>
+                            </div>
+
+                            <Switch checked={field.value} onCheckedChange={field.onChange} />
+                          </div>
+                        )}
+                      />
                     </div>
-                  )}
-                />
+                  ))}
+
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() =>
+                      append({
+                        id: crypto.randomUUID(),
+                        label: "",
+                        type: "text",
+                        required: false,
+                      })
+                    }
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add Question
+                  </Button>
+                </section>
               </div>
-            ))}
-
-            <Button
+            </section>
+          </div>
+          <div className="relative flex h-[50px] items-center justify-between gap-3 border-t border-slate-100 bg-white px-5 py-2">
+            <button
               type="button"
-              variant="outline"
-              onClick={() =>
-                append({
-                  id: crypto.randomUUID(),
-                  label: "",
-                  type: "text",
-                  required: false,
-                })
-              }
+              // onClick={handleCancel}
+              className="font-regular inline-flex h-full min-h-[34px] w-auto cursor-pointer items-center justify-between gap-3 rounded-md bg-gray-100 pr-4 pl-3 text-xs text-black/70 transition-all hover:bg-gray-200"
             >
-              <Plus className="mr-2 h-4 w-4" />
-              Add Question
-            </Button>
-          </section>
-        </div>
-
-        {/* Footer */}
-        <div className="sticky bottom-0 flex items-center justify-between border-t bg-white p-5">
-          <Button variant="ghost" type="button">
-            <X className="mr-2 h-4 w-4" />
-            Discard
-          </Button>
-
-          <Button type="submit">
-            <Save className="mr-2 h-4 w-4" />
-            Save
-          </Button>
-        </div>
-      </form>
-    </Form>
+              <ChevronLeft strokeWidth={1.5} size={14} />
+              <span>Previous</span>
+            </button>
+            <button
+              type="submit"
+              disabled={mutation.isPending}
+              className="font-regular inline-flex h-full min-h-[34px] w-auto cursor-pointer items-center justify-between gap-3 rounded-md bg-slate-800 pr-3 pl-4 text-xs text-white/90 transition-all hover:bg-slate-900"
+            >
+              {mutation.isPending ? "Updating..." : "Next"}
+              <ChevronRight strokeWidth={1.5} size={14} />
+            </button>
+          </div>
+          {/* Footer */}
+        </form>
+      </Form>
+    </div>
   );
 }

@@ -15,23 +15,18 @@ export default function GalleryPreview({ items, maxImages, onRemove }: Props) {
   const visible = items.filter((i) => !i._deleted);
 
   return (
-    <div className="grid gap-1">
-      {/* Header row */}
+    <>
       <div className="flex items-center justify-between">
         <LabelForm>Gallery Preview</LabelForm>
         <LabelForm>
           {visible.length} / {maxImages}
         </LabelForm>
       </div>
-
-      {/* Empty state */}
       {visible.length === 0 && (
         <div className="rounded-3xl border border-dashed border-slate-200 bg-slate-50/30 p-10 text-center">
           <p className="text-sm text-slate-500">No gallery images uploaded yet.</p>
         </div>
       )}
-
-      {/* Thumbnail grid */}
       <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
         {visible.map((item, index) => (
           <div key={item.temp_id ?? item.file_url ?? index} className="group relative aspect-[4/3] overflow-hidden rounded-md bg-slate-100">
@@ -53,6 +48,6 @@ export default function GalleryPreview({ items, maxImages, onRemove }: Props) {
           </div>
         ))}
       </div>
-    </div>
+    </>
   );
 }

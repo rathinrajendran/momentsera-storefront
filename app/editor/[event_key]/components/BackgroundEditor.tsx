@@ -282,7 +282,7 @@ function ThemeCard({ themeKey, active, onClick }: { themeKey: ThemeKey; active: 
 /* COMPONENT                                                                  */
 /* -------------------------------------------------------------------------- */
 
-export default function BackgroundEditor({ eventKey, onBack }: { eventKey: string; onBack: () => void }) {
+export default function BackgroundEditor({ onBack, handleBack, eventKey }: { onBack: () => void; handleBack: () => void; eventKey: string }) {
   /* ---------------- HOOKS ---------------- */
 
   const { draft, replaceSection, resetDraft, refreshEvent } = usePreviewDraft();
@@ -516,7 +516,7 @@ export default function BackgroundEditor({ eventKey, onBack }: { eventKey: strin
       {/* HEADER                                                             */}
       {/* ------------------------------------------------------------------ */}
 
-      <EditorHeader title="Background" handleCancel={handleCancel} />
+      <EditorHeader title="Background" handleBack={handleBack} />
 
       <FormProvider {...form}>
         <form
