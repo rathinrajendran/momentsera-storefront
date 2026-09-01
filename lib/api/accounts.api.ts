@@ -32,9 +32,7 @@ export async function checkAccountExists(params: {
 }) {
   const qs = new URLSearchParams(params as any).toString();
 
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API}/accounts/check?${qs}`
-  );
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/accounts/check?${qs}`);
 
   if (!res.ok) {
     throw new Error("Check failed");

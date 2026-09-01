@@ -89,13 +89,9 @@ const GridMotion: FC<GridMotionProps> = ({
                 const content = combinedItems[rowIndex * 7 + itemIndex];
 
                 return (
-                  <div key={itemIndex} className="row__item">
-                    <div
-                      className="row__item-inner"
-                      style={{ backgroundColor: "#111" }}
-                    >
-                      {typeof content === "string" &&
-                      content.startsWith("http") ? (
+                  <div key={`grid-item-${rowIndex}-${itemIndex}`} className="row__item">
+                    <div className="row__item-inner" style={{ backgroundColor: "#111" }}>
+                      {typeof content === "string" && content.startsWith("http") ? (
                         <div
                           className="row__item-img"
                           style={{
@@ -103,9 +99,7 @@ const GridMotion: FC<GridMotionProps> = ({
                           }}
                         />
                       ) : (
-                        <div className="row__item-content">
-                          {content}
-                        </div>
+                        <div className="row__item-content">{content}</div>
                       )}
                     </div>
                   </div>

@@ -4,7 +4,7 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import ReactCrop, { Crop, PixelCrop, centerCrop, makeAspectCrop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import { toast } from "sonner";
-import { Trash2, X, Upload, Camera, Save, Check, ChevronRight, ChevronLeft } from "lucide-react";
+import { Trash2, X, Upload, Camera, Check, ChevronRight } from "lucide-react";
 import { usePreviewDraft } from "../PreviewDraftContext";
 import { useSaveEventSection } from "../../../../hooks/useEvents";
 import { Input } from "../../../../components/ui/input";
@@ -79,7 +79,7 @@ export default function AnnouncementEditor({
   eventKey: string;
 }) {
   // Hooks
-  const { draft, updateSection, resetDraft, refreshEvent } = usePreviewDraft();
+  const { draft, updateSection, refreshEvent } = usePreviewDraft();
   const eventId = draft?.invite?.id;
 
   // React hooks must be called unconditionally. Use 0 as a safe placeholder
@@ -349,7 +349,7 @@ export default function AnnouncementEditor({
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-1">
               {fieldRules.map((section) => {
                 return (
-                  <>
+                  <div key={section.key} className="grid grid-cols-1 gap-4 sm:grid-cols-1">
                     {section.fields.map((field) => {
                       if (field.type === "group" || field.type === "repeater") {
                         return null;
@@ -403,7 +403,7 @@ export default function AnnouncementEditor({
                         </div>
                       );
                     })}
-                  </>
+                  </div>
                 );
               })}
 
@@ -497,7 +497,7 @@ export default function AnnouncementEditor({
                     const previewUrl = item?._deleted ? null : item?.temp_url || (item?.file_url ? resolveMediaUrl(item.file_url) : null);
 
                     return (
-                      <>
+                      <div key={rule.key} className="grid grid-cols-1 gap-4 sm:grid-cols-1">
                         <div className="flex flex-col gap-1">
                           <div>
                             <LabelForm>{rule.label}</LabelForm>
@@ -591,7 +591,7 @@ export default function AnnouncementEditor({
                             />
                           </div>
                         )}
-                      </>
+                      </div>
                     );
                   })}
                 </>

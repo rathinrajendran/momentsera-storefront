@@ -189,7 +189,7 @@ function ThemeCard({ themeKey, active, onClick }: { themeKey: ThemeKey; active: 
       )}
     >
       {/* Palette */}
-      <div className="mb-3 flex h-8 w-22 overflow-hidden rounded-md border border-black/[0.06]">
+      <div className="mb-3 flex h-8 w-22 overflow-hidden rounded-sm border border-black/[0.06]">
         <span className="flex-1" style={{ backgroundColor: colors.primary }} />
         <span className="flex-1" style={{ backgroundColor: colors.secondary }} />
         <span className="flex-1" style={{ backgroundColor: colors.text_primary }} />

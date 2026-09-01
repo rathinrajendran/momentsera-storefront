@@ -4,7 +4,6 @@ import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Bell, ChevronDown, LayoutDashboard, User, Settings, Heart, LogOut, Sparkles } from "lucide-react";
-import { NavMenu } from "./NavMenu";
 import { useRouter } from "next/navigation";
 import { H2 } from "../../../../components/ui/H2";
 import { H6 } from "../../../../components/ui/H6";
@@ -24,7 +23,7 @@ export function Header({ className }: headerProps) {
   const [profileOpen, setProfileOpen] = React.useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const lastScrollY = React.useRef(0);
-  const { user, isAuthenticated: isLoggedIn, loading, refresh } = useSession();
+  const { isAuthenticated: isLoggedIn, loading } = useSession();
   const { logout } = useLogout();
   console.log("isLoggedIn", isLoggedIn);
 
@@ -70,7 +69,7 @@ export function Header({ className }: headerProps) {
           ───────────────────── */}
             <div className="flex items-center gap-1">
               <Link href="/" className="tracking-[0.2rem]">
-               <Image src={logo} alt="Logo" width={160} />
+                <Image src={logo} alt="Logo" width={160} />
                 {/* <LogoBy
               width={150}
               height={30}
@@ -107,10 +106,10 @@ export function Header({ className }: headerProps) {
             <div className="flex min-w-[180px] items-center justify-end gap-3">
               {/* GUEST */}
 
-              {!isLoggedIn && (
+              {!loading && !isLoggedIn && (
                 <button
                   onClick={() => router.push("/account/login")}
-                  className="cursor-pointer text-[10px] font-bold tracking-[0.25em] text-white uppercase transition-all bg-[var(--accent-primary)] hover:text-[var(--accent-primary)] py-3 px-6 rounded-full"
+                  className="cursor-pointer rounded-full bg-[var(--accent-primary)] px-6 py-3 text-[10px] font-bold tracking-[0.25em] text-white uppercase transition-all hover:text-[var(--accent-primary)]"
                 >
                   Login
                 </button>
@@ -142,7 +141,7 @@ export function Header({ className }: headerProps) {
 
               {/* LOGGED USER */}
 
-              {isLoggedIn && (
+              {!loading && isLoggedIn && (
                 <>
                   {/* Notifications */}
 

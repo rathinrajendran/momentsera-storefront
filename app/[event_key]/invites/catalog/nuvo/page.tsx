@@ -505,9 +505,9 @@ export default function Nuvo({ data, eventKey, design, settings }: NuvoProps) {
               ) : (
                 <div className="border-t pt-5" style={{ borderColor: THEME_COLORS.line }}>
                   <div className="flex gap-2">
-                    {[THEME_COLORS.burgundy, THEME_COLORS.burgundy, THEME_COLORS.paper].map((color) => (
+                    {[THEME_COLORS.burgundy, THEME_COLORS.burgundy, THEME_COLORS.paper].map((color, index) => (
                       <span
-                        key={color}
+                        key={index}
                         className="h-7 w-7 rounded-full border"
                         style={{ backgroundColor: color, borderColor: THEME_COLORS.line }}
                       />

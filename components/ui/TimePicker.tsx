@@ -165,7 +165,7 @@ const handleOpenChange = React.useCallback(
       {/* Selectable Snapping Items */}
       {items.map((item, index) => (
         <div
-          key={item}
+          key={index}
           onClick={() => handleItemClick(item, index, ref, type)}
           className={cn(
             "text-md pointer-events-auto z-20 flex h-12 cursor-pointer snap-center items-center justify-center transition-all",
