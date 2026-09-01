@@ -25,7 +25,6 @@ export function Header({ className }: headerProps) {
   const lastScrollY = React.useRef(0);
   const { isAuthenticated: isLoggedIn, loading } = useSession();
   const { logout } = useLogout();
-  console.log("isLoggedIn", isLoggedIn);
 
   /* ─────────────────────────────
      SCROLL HIDE

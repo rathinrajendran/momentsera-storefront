@@ -111,7 +111,6 @@ export default function Luna({ data, eventKey, motionData, settings, music }: Lu
     : "";
 
   const primaryVenue = primaryFunction?.locationName ?? "";
-  console.log("primaryFunction", music);
 
   return (
     <main

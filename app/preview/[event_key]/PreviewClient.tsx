@@ -12,7 +12,6 @@ export default function PreviewClient({ initialData, eventKey }: PreviewClientPr
   const [data, setData] = useState(initialData);
   const previousDataRef = useRef(initialData);
 
-  console.log("initialData", initialData);
 
   // 1. Hard refresh state alignment
   useEffect(() => {

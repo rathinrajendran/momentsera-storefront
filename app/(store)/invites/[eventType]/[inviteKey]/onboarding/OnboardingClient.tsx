@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { ChevronLeft, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import WeddingForm from "./_forms/WeddingForm";
-import BirthdayForm from "./_forms/BirthdayForm";
+// import BirthdayForm from "./_forms/BirthdayForm";
 import GridMotion from "../../../../../../components/ui/GridMotion";
 import { Header } from "../../../../../(marketing)/components/header/Header";
 import { Para } from "../../../../../../components/ui/Para";
@@ -43,7 +43,7 @@ const items: (string | ReactNode)[] = [
 
 const FORM_MAP: Record<string, React.ComponentType<any>> = {
   wedding: WeddingForm,
-  birthday: BirthdayForm,
+  // birthday: BirthdayForm,
   corporate: CorporateForm,
   housewarming: HousewarmingForm,
   anniversary: AnniversaryForm,

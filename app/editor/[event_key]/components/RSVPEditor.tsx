@@ -83,7 +83,6 @@ export default function RSVPEditor({ onBack, handleBack, eventKey }: { onBack: (
     name: "custom_questions",
   });
 
-  console.log("form data", form);
   function handleCancel() {
     resetDraft();
     onBack();

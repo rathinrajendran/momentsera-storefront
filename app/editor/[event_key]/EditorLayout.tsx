@@ -548,8 +548,6 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent, 
     [handlePreview, handleShare, handleInviteLink],
   );
 
-  console.log(!showMenuLayer, "showMenuLayer");
-
   return (
     <HomeWrapper
       className="relative overflow-hidden"
@@ -676,8 +674,6 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent, 
               showMenuLayer ? "h-[45dvh] md:h-[calc(100dvh)]" : "h-[calc(100dvh-0px)] py-0 pb-[72px] md:h-[calc(100dvh)] md:py-0 md:pb-0"
             } overflow-hidden`}
           >
-            <PreviewPanel device={device} splitScreen={showMenuLayer && isMobile} eventKey={eventKey} />
-
             <PreviewToolbar
               inviteUrl={eventKey}
               onInviteUrlChange={handleInviteUrlChange}
@@ -689,6 +685,7 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent, 
               onCustomizeDialogOpenChange={setCustomizeDialogOpen}
               className="hidden md:flex"
             />
+            <PreviewPanel device={device} splitScreen={showMenuLayer && isMobile} eventKey={eventKey} />
           </div>
           <div
             className={`${isFullscreen ? "fixed top-0 left-0 h-full rounded-none" : ""} mob-view flex w-full flex-col justify-center overflow-hidden p-3 md:w-[350px] md:max-w-[350px] md:min-w-[350px] md:p-0 lg:w-[380px] lg:max-w-[380px] lg:min-w-[380px]`}
@@ -820,7 +817,7 @@ export default function EditorLayout({ eventKey, eventId, KeyInvite, typeEvent, 
                     splitScreen ? "w-full" : "w-full"
                   } menu-layer flex flex-col overflow-hidden rounded-2xl bg-[#ffffff] md:relative md:w-full`}
                 >
-                  <div className="h-auto w-full overflow-y-auto md:h-[calc(100dvh-25px)] [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]">
+                  <div className="animate-in fade-in h-auto w-full overflow-y-auto md:h-[calc(100dvh-25px)] [&::-webkit-scrollbar]:h-[0px] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar-thumb]:rounded-md [&::-webkit-scrollbar-thumb]:bg-[#c1c1c1] [&::-webkit-scrollbar-track]:rounded-md [&::-webkit-scrollbar-track]:bg-[#78909C]">
                     <EditorPanel
                       activeSection={activeSection}
                       onSectionChange={setActiveSection}

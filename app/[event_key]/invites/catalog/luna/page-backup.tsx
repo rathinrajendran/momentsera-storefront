@@ -34,7 +34,6 @@ export default function Luna({ data, eventKey, motionData, settings }: LunaProps
   const gallery = getSectionConfig(settings.section_visibility, "gallery");
   const wishes = getSectionConfig(settings.section_visibility, "wishes");
   const { unlockedSections, setUnlockedSections } = useUnlockedSections(eventKey);
-  console.log("data values", data);
 
   return (
     <div

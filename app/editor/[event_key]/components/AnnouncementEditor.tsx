@@ -338,7 +338,6 @@ export default function AnnouncementEditor({
       },
     );
   }
-  console.log("mutation.isPending", mutation.isPending);
 
   return (
     <div className="animate-in fade-in flex h-full flex-col rounded-xl bg-white duration-500 md:rounded-none">

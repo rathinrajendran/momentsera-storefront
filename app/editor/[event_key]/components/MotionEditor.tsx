@@ -102,10 +102,6 @@ export default function MotionEditor({ onBack, handleBack, eventKey }: { onBack:
   const eventId = draft.invite.id;
   const mutation = useSaveEventSection(eventKey, eventId);
 
-  /* ---------------- FORM ---------------- */
-
-  console.log("draft.motion.animation_style", draft.motion.animation_style);
-
   const form = useForm<DesignForm>({
     defaultValues: {
       ...draft.motion,

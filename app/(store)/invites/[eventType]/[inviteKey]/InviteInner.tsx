@@ -174,8 +174,6 @@ export default function InviteInner({ invite }: any) {
     router.push(`/invites/${invite.main_category}/${invite.invite_key}/onboarding`);
   };
 
-  console.log("invite data", invite);
-
   return (
     <main className="relative min-h-screen w-full overflow-hidden bg-[var(--background)] text-[var(--text-primary)] selection:bg-[var(--accent-primary)] selection:text-white">
       <Header />
@@ -201,7 +199,7 @@ export default function InviteInner({ invite }: any) {
           {/* LEFT */}
           <div className="md:col-span-5 lg:col-span-5">
             <button
-              className="flex h-8 w-auto cursor-pointer items-center justify-center text-xs mb-2 -ml-1"
+              className="mb-2 -ml-1 flex h-8 w-auto cursor-pointer items-center justify-center text-xs"
               onClick={() => router.push(`/invites/`)}
             >
               <ChevronLeftIcon strokeWidth={1} className="h-5 w-5" /> Back to invites

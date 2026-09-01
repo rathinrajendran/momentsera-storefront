@@ -52,7 +52,7 @@ export function PublishButton({ className, type, onClick, label }: Props) {
 
   return (
     <button type="button" onClick={clickHandler} className={`flex h-9 items-center justify-center gap-2 ${className}`}>
-      {label ? buttonLabel : ""}
+      <span className="hidden lg:block">{label ? buttonLabel : ""}</span>
       <Rocket className="w-[15px]" strokeWidth={1.3} stroke="#ffffff" />
     </button>
   );

@@ -12,26 +12,21 @@ import {
   Clock3,
   Heart,
   LockKeyhole,
-  MapPin,
   Music2,
   Send,
   Sparkles,
-  Users,
 } from "lucide-react";
 
 import { Header } from "../components/header/Header";
 import { Footer } from "../components/footer/Footer";
-
 import mockup from "../../../public/images/banner/mockup.png";
 import mockup1 from "../../../public/images/banner/mockup1.png";
 import mockup2 from "../../../public/images/banner/mockup2.png";
 import grid from "../../../public/images/banner/grid.jpg";
-
 import celeb1 from "../../../public/images/celebrations/1.webp";
 import celeb2 from "../../../public/images/celebrations/2.webp";
 import celeb3 from "../../../public/images/celebrations/3.webp";
 import celeb4 from "../../../public/images/celebrations/4.webp";
-
 import HeartBeat from "../../[event_key]/invites/catalog/components/icons/Heart";
 import AudioPlayerWave from "../../[event_key]/invites/catalog/components/icons/AudioPlayerWave";
 import AnimatedGalleryIcon from "../../[event_key]/invites/catalog/components/icons/AnimatedGalleryIcon";

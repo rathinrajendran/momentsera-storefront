@@ -74,10 +74,6 @@ export default function Catalog({ data, design, settings, eventKey, isLive = fal
   const inviteUnlocked = unlockedSections.includes(MAIN_ACCESS_KEY);
   const showInvitePassword = inviteProtected && invitePassword && !inviteUnlocked;
 
-
-console.log("motion data", data);
-
-
   /* ─────────────────────────────────────────────
       THEME & COLORS
     ───────────────────────────────────────────── */
@@ -371,11 +367,7 @@ console.log("motion data", data);
         } as React.CSSProperties
       }
     >
-      {settings?.print?.enable ? (
-        <>testttt</>
-      ) : (
-        <ThemeComponent data={data} design={design} settings={settings} eventKey={eventKey} />
-      )}
+      {settings?.print?.enable ? <>testttt</> : <ThemeComponent data={data} design={design} settings={settings} eventKey={eventKey} />}
 
       {/* CALENDAR */}
       {settings?.show_calendar && primaryFunction && (
