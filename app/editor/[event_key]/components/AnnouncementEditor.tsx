@@ -79,7 +79,7 @@ export default function AnnouncementEditor({
   eventKey: string;
 }) {
   // Hooks
-  const { draft, updateSection, refreshEvent } = usePreviewDraft();
+  const { draft, updateSection, refreshEvent, setSaveStatus, setIssueCount, setValidationIssues } = usePreviewDraft();
   const eventId = draft?.invite?.id;
 
   // React hooks must be called unconditionally. Use 0 as a safe placeholder
@@ -121,11 +121,6 @@ export default function AnnouncementEditor({
     const updatedAnnouncement = setNestedValue(announcement, keyPath, value);
     updateSection("announcement", updatedAnnouncement);
   }
-
-  const handleSaveSuccess = async () => {
-    await refreshEvent(eventKey);
-    onBack();
-  };
 
   const onPickFile = useCallback((key: AnnouncementImageKey, file: File) => {
     if (!file.type.startsWith("image/")) {
@@ -247,29 +242,23 @@ export default function AnnouncementEditor({
       media: nextMedia,
     });
   }
+  function validateAnnouncement(): ValidationIssue[] {
+    const issues: ValidationIssue[] = [];
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-
-    if (mutation.isPending) return;
-
-    if (!eventId) {
-      toast.error("Event ID is missing. Please reload the invitation.");
-      return;
-    }
-    // Validate only required fields from the current editor page.
-    // fieldRules contains sections, so validation must walk section.fields.
     for (const section of fieldRules) {
       for (const field of section.fields) {
-        // Announcement currently uses flat fields. Groups/repeaters belong to
-        // their own page-specific renderers and are intentionally skipped here.
-        if (field.type === "group" || field.type === "repeater") continue;
+        if (field.type === "group" || field.type === "repeater") {
+          continue;
+        }
 
         if (field.required) {
           const val = getNestedValue(announcement, field.key);
-          if (!val || !val.trim()) {
-            toast.error(`${field.label} is required`);
-            return;
+
+          if (!val.trim()) {
+            issues.push({
+              key: field.key,
+              label: `${field.label} is required`,
+            });
           }
         }
       }
@@ -279,15 +268,50 @@ export default function AnnouncementEditor({
       const item = announcementMedia?.[rule.key];
 
       if (rule.required && (!item?.file_url || item?._deleted)) {
-        toast.error(`${rule.label} is required`);
-        return;
+        issues.push({
+          key: rule.key,
+          label: `${rule.label} is required`,
+        });
       }
 
       if (rule.descriptionRequired && !item?.description?.trim()) {
-        toast.error(`${rule.descriptionLabel ?? "Image Description"} is required`);
-        return;
+        issues.push({
+          key: `${rule.key}.description`,
+          label: `${rule.descriptionLabel ?? "Image Description"} is required`,
+        });
       }
     }
+
+    return issues;
+  }
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    if (mutation.isPending) return;
+
+    if (!eventId) {
+      setSaveStatus("error");
+      toast.error("Event ID is missing. Please reload the invitation.");
+      return;
+    }
+
+    const issues = validateAnnouncement();
+
+    if (issues.length > 0) {
+      setIssueCount(issues.length);
+      setValidationIssues(issues);
+      setSaveStatus("validation");
+
+      return;
+    }
+
+    /*
+     * Validation passed.
+     * Clear previous validation state and start saving.
+     */
+    setIssueCount(0);
+    setValidationIssues([]);
+    setSaveStatus("saving");
 
     const finalMedia: Record<string, any> = {};
 
@@ -303,7 +327,11 @@ export default function AnnouncementEditor({
         finalMedia[rule.key] = {
           file_url: item.file_url,
           media_type: "image",
-          ...(item.description?.trim() ? { description: item.description.trim() } : {}),
+          ...(item.description?.trim()
+            ? {
+                description: item.description.trim(),
+              }
+            : {}),
         };
       }
     }
@@ -319,12 +347,27 @@ export default function AnnouncementEditor({
       },
       {
         onSuccess: async () => {
-          toast.success("Announcement saved successfully");
-          await handleSaveSuccess();
+          try {
+            await refreshEvent(eventKey);
+
+            setIssueCount(0);
+            setValidationIssues([]);
+            setSaveStatus("saved");
+
+            onBack();
+          } catch (error) {
+            console.error("Failed to refresh announcement:", error);
+
+            setSaveStatus("error");
+
+            toast.error("Saved successfully, but failed to refresh the editor.");
+          }
         },
 
         onError: (error: any) => {
           console.error("Announcement save failed:", error);
+
+          setSaveStatus("error");
 
           const message =
             error?.message ||
@@ -338,6 +381,7 @@ export default function AnnouncementEditor({
       },
     );
   }
+  console.log("mutation.isPending", mutation.isPending);
 
   return (
     <div className="animate-in fade-in flex h-full flex-col rounded-xl bg-white duration-500 md:rounded-none">
@@ -604,7 +648,7 @@ export default function AnnouncementEditor({
             disabled={mutation.isPending}
             className="font-regular inline-flex h-full min-h-[34px] w-auto cursor-pointer items-center justify-between gap-3 rounded-md bg-slate-800 pr-3 pl-4 text-xs text-white/90 transition-all hover:bg-slate-900"
           >
-            {mutation.isPending ? "Updating..." : "Next"}
+            {mutation.isPending ? "Saving..." : "Next"}
             <ChevronRight strokeWidth={1.5} size={14} />
           </button>
         </div>

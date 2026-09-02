@@ -312,7 +312,7 @@ export default function Home() {
 
       {/* HERO */}
       <section ref={heroRef} className="relative h-[155vh] px-0 sm:h-[160vh] md:h-[170vh]">
-        <div className="sticky top-0 mx-2 h-[calc(100svh-64px)] min-h-[560px] overflow-hidden  md:mx-4 md:h-[calc(100svh-72px)] md:min-h-[650px] ">
+        <div className="sticky top-0 mx-2 h-[calc(100svh-64px)] min-h-[560px] overflow-hidden rounded-[30px] border border-[#6D3A5C]/[0.06] bg-white shadow-[0_25px_90px_rgba(0,0,0,.05)] sm:mx-3 sm:rounded-[40px] md:mx-4 md:h-[calc(100svh-72px)] md:min-h-[650px] md:rounded-[56px]">
           <div className="pointer-events-none absolute inset-0">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_65%_42%,rgba(255,255,255,.98),transparent_30%),radial-gradient(circle_at_48%_85%,rgba(215,226,220,.30),transparent_34%)]" />
             <div className="absolute inset-0 [background-image:linear-gradient(rgba(0,0,0,.7)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,.7)_1px,transparent_1px)] [background-size:80px_80px] opacity-[0.035]" />
